@@ -26,10 +26,6 @@ export default new Router({
       children: [
           {
               path:'/',
-              redirect:'ad'
-          },
-          {
-              path: 'ad',
               name: 'ad',
               component: () => import('./views/Ad.vue')
           },
