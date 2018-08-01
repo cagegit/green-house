@@ -47,7 +47,7 @@
         },
         methods: {
             toNextPage() {
-                this.$router.replace("/monitor/ssjc");
+                this.$router.push("/monitor/ssjc");
             }
         }
     }
