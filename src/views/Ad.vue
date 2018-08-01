@@ -16,7 +16,7 @@
         },
         mounted() {
             setTimeout(() => {
-                this.$router.replace("/monitor/main");
+                this.$router.push("/monitor/main");
             }, 3000);
         }
     }
