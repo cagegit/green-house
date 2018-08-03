@@ -91,6 +91,7 @@
             align-items: center;
             i,span {
                 color: #B2B2B2;
+                font-size: 14px;
             }
         }
         img {

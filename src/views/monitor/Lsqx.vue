@@ -3,12 +3,12 @@
         <HeadBar title="历史曲线" link="/monitor/main"></HeadBar>
         <DpTab :active="3"></DpTab>
         <div class="main-body">
-            <div class="input-box">
+            <div class="sb-input-box">
                 <button><div class="in-box"><span>温度</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <div class="date-panel">
                 <van-tabs v-model="active">
-                    <van-tab v-for="item in dataList" :title="item.title">
+                    <van-tab class="sb-tab" v-for="item in dataList" :title="item.title">
                         content of tab {{ item.index }}
                     </van-tab>
                 </van-tabs>
@@ -42,8 +42,9 @@
 
     }
 </script>
-<style lang="scss" scoped>
-    .input-box {
+<style lang="scss">
+    @import "../../sass/variable";
+    .sb-input-box {
         margin: 10px auto;
        button{
            border: none;
@@ -75,5 +76,11 @@
         margin: 15px auto;
         padding: 10px 15px;
         line-height: 24px;
+        .van-tab--active span{
+                color: $main-border-color !important;
+        }
+        .van-tabs__line {
+            background-color: $main-border-color !important;
+        }
     }
 </style>
