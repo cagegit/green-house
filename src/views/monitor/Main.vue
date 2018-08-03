@@ -94,6 +94,7 @@
                 line-height: 30px;
                 text-align: left;
                 cursor:pointer;
+                background-color: #fff;
             }
             .in-box{
                 display: flex;
