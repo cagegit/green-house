@@ -9,24 +9,22 @@
                 <button><div class="in-box"><span>地区1</span> <img src="@/assets/img/Group 3.png"/></div></button>
                 <button><div class="in-box"><span>园区1</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
-            <van-cell-group>
-                <van-cell title="一号大棚" icon="location" @click.native="toNextPage()"/>
-            </van-cell-group>
-            <van-cell-group >
-                <van-cell title="一号大棚" icon="location" @click.native="toNextPage()"/>
-            </van-cell-group>
-            <van-cell-group >
-                <van-cell title="一号大棚" icon="location" @click.native="toNextPage()"/>
-            </van-cell-group>
-            <van-cell-group>
-                <van-cell title="一号大棚" icon="location" @click.native="toNextPage()"/>
-            </van-cell-group>
-            <van-cell-group >
-                <van-cell title="一号大棚" icon="location" @click.native="toNextPage()"/>
-            </van-cell-group>
-            <van-cell-group >
-                <van-cell title="一号大棚" icon="location" @click.native="toNextPage()"/>
-            </van-cell-group>
+            <!--<div class="dp-box">-->
+                <!--<img src="@/assets/img/dp@2x.png">-->
+                <!--<span>1号西红柿大棚</span>-->
+                <!--<div class="mark">-->
+                    <!--<i class="mark-con"></i>-->
+                    <!--<span>告警</span>-->
+                <!--</div>-->
+            <!--</div>-->
+            <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>
+            <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>
+            <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>
+            <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>
+            <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>
+            <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>
+            <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>
+            <div style="margin-bottom: 60px;"></div>
         </div>
         <FootBar :active="0"></FootBar>
     </div>
@@ -35,11 +33,18 @@
     import { Cell, CellGroup,Row, Col } from 'vant';
     import HeadBar from '../../components/HeadBar'
     import FootBar from "../../components/FootBar";
+    import DapCell from "../../components/DpCell";
     export default {
         name: 'MonitorMain',
+        data() {
+            return {
+                src: require('@/assets/img/dp@2x.png')
+            }
+        },
         components: {
             FootBar,
             HeadBar,
+            DapCell,
             [CellGroup.name]: CellGroup,
             [Cell.name]: Cell,
             [Row.name]:Row,
@@ -68,6 +73,12 @@
         .van-cell-group{
             margin-top: 5px;
             text-align: left;
+            background: transparent ;
+        }
+        .van-cell {
+            background: #FFFFFF;
+            box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
+            border-radius: 5PX;
         }
         .select-box {
             display: flex;

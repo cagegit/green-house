@@ -9,8 +9,9 @@
    }
 </script>
 <style lang="scss">
-.monitor{
-    width: 100%;
-    height: 100%;
-}
+    .monitor{
+        width: 100%;
+        height: 100%;
+        text-align: left;
+    }
 </style>
