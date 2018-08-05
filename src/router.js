@@ -3,6 +3,7 @@ import Router from 'vue-router'
 // import Home from './views/Home.vue'
 import Monitor from './views/Monitor.vue'
 import Ad from './views/Ad.vue'
+import Finding from './views/Findings.vue'
 Vue.use(Router);
 
 export default new Router({
@@ -55,6 +56,10 @@ export default new Router({
               component: () => import('./views/monitor/Ssxx.vue')
           }
       ]
-    }
+    },{
+          path: '/finding',
+          name: 'finding',
+          component: () => import('./views/Findings.vue')
+      },
   ]
 })
