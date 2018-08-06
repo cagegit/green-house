@@ -2,67 +2,46 @@
     <div class="content-warp">
         <div class="find-txt">发现</div>
         <div class="switch-tab flex">
-            <div class="mess active-tab">消息</div>
-            <div class="mess train">培训</div>
+            <div class="mess"
+             v-for="tab in tabs"
+             :key="tab" 
+             v-bind:class="{ 'active-tab':currentTab==tab }"
+             v-on:click="switchBtn(tab)"
+            >{{tab}}</div>
+            <!-- <div class="mess">培训</div> -->
         </div>
-        <div class="card-list" v-for="item in cardList"  :key="item.id">
-            <div class="card-img">
-                <img src="@/assets/img/topimg@2x.png" alt=""/>
-                <div class="card-date flex"><span>{{item.date}}</span><span>{{item.time}}</span></div>
-            </div>
-            <div class="card-txt flex">
-                {{item.tit}}
-            </div>
-        </div>
-        <FootBar></FootBar>
+        <router-view></router-view>
+        <FootBar :active="3"></FootBar>
     </div>
 </template>
 <script>
     import { Tab, Tabs } from 'vant'
-    import HeadBar from '@/components/HeadBar'
     import FootBar from '@/components/FootBar'
 
     export default {
-    name: "Findings",
-    components: {
-        [Tabs.name]: Tabs,
-        [Tab.name]: Tab,
-        HeadBar,
-        FootBar
-    },
-    data() {
-        return {
-            cardList: [{
-                id:1,
-                imgUrl:"@/assets/img/topimg@2x.png",
-                date:"8月12日",
-                time:"16:25",
-                tit:"我是文章题目我是文章题目1"
-            },
-            {
-                id:2,
-                imgUrl:"@/assets/img/topimg@2x.png",
-                date:"8月12日",
-                time:"16:25",
-                tit:"我是文章题目我是文章题目2"
-            },
-            {
-                id:3,
-                imgUrl:"@/assets/img/topimg@2x.png",
-                date:"8月12日",
-                time:"16:25",
-                tit:"我是文章题目我是文章题目3"
-            },
-            {
-                id:4,
-                imgUrl:"@/assets/img/topimg@2x.png",
-                date:"8月12日",
-                time:"16:25",
-                tit:"我是文章题目我是文章题目4"
+        name: "Findings",
+        components: {
+            [Tabs.name]: Tabs,
+            [Tab.name]: Tab,
+            FootBar
+        },
+        data() {
+            return {
+               currentTab: '消息',
+               tabs: ['消息', '培训']
             }
-            ]
+        },
+        methods:{
+            switchBtn(el){
+                this.currentTab=el;
+                console.log(this.$data.currentTab)
+                if(el=="消息"){
+                    this.$router.push("/findings/message");
+                }else{
+                     this.$router.push("/findings/training");
+                }
+            }
         }
-    }
     }
 </script>
 <style lang="scss" scoped>
@@ -100,41 +79,5 @@
     .active-tab{
         background: #44E3A8;
         color:#ffffff;
-    }
-    .card-list{
-        background: #FFFFFF;
-        box-shadow: 0 0.08rem 0.133333rem 0 rgba(190,190,190,0.20);
-        border-radius: 0.266667rem;
-        width:8.933333rem;
-        height:4.106667rem;
-        margin-bottom:0.4rem;
-    }
-    .card-img{
-        height:2.666667rem;
-        position:relative;
-        img{
-            height:2.666667rem;
-            width:100%;
-            display:block;
-        }
-    }
-    .card-txt{
-        font-size:0.453333rem;
-        margin-top:0.4rem;
-    }
-    .card-date{
-        padding:0 0.32rem;
-        height:0.586667rem;
-        background: rgba(0,0,0,0.40);    
-        position:absolute;
-        top:0;
-        right:0;
-        border-top-right-radius:0.266667rem;
-        span{
-            color:#fff;
-            font-size:0.373333rem;
-            margin-right:0.16rem;
-        }
-        
     }
 </style>

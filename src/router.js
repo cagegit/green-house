@@ -57,9 +57,42 @@ export default new Router({
           }
       ]
     },{
-          path: '/finding',
-          name: 'finding',
-          component: () => import('./views/Findings.vue')
+          path: '/findings',
+          name: 'findings',
+          component: () => import('./views/Findings.vue'),
+          children: [
+          {
+              path:'/',
+              name: 'message',
+              component: () => import('./views/findings/Message.vue')
+          },
+          {
+              path: 'message',// 消息页面
+              name: 'message',
+              component: () => import('./views/findings/Message.vue')
+          },
+          {
+              path: 'training',// 培训页面
+              name: 'training',
+              component: () => import('./views/findings/Training.vue')
+          },
+      ]
+      },{
+          path: '/about',
+          name: 'about',
+          component: () => import('./views/About.vue'),
+          children: [
+          {
+              path:'/',
+              name: 'userMess',
+              component: () => import('./views/about/UserMess.vue')
+          },
+          {
+              path: 'usermess',// 消息页面
+              name: 'usermess',
+              component: () => import('./views/about/UserMess.vue')
+          },
+      ]
       },
   ]
 })
