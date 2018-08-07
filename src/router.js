@@ -92,6 +92,15 @@ export default new Router({
               name: 'usermess',
               component: () => import('./views/about/UserMess.vue')
           },
+          {
+              path: 'modifypassword',// 修改密码
+              name: 'modifypassword',
+              component: () => import('./views/about/ModifyPassword.vue')
+          },{
+              path: 'aboutme',// 关于
+              name: 'aboutme',
+              component: () => import('./views/about/AboutMe.vue')
+          }
       ]
       },
   ]

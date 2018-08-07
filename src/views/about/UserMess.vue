@@ -55,26 +55,31 @@
             </div>
         </div>
         <div class="contact-way">
-            <div class="contact-item flex">
-                <div class="item-name flex">
-                    <img src="@/assets/img/my/lock.png" alt="">
-                    <span>修改密码</span>
+            <router-link to="/about/modifypassword">
+                <div class="contact-item flex">
+                    <div class="item-name flex">
+                        <img src="@/assets/img/my/lock.png" alt="">
+                        <span>修改密码</span>
+                    </div>
+                    <div class="item-value flex">
+                        <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
+                    </div>
                 </div>
-                <div class="item-value flex">
-                    <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                </div>
-            </div>
+            </router-link>
+            
         </div>
         <div class="contact-way">
-            <div class="contact-item flex">
-                <div class="item-name flex">
-                    <img src="@/assets/img/my/about.png" alt="">
-                    <span>关于</span>
+            <router-link to="/about/aboutme">
+                <div class="contact-item flex">
+                    <div class="item-name flex">
+                        <img src="@/assets/img/my/about.png" alt="">
+                        <span>关于</span>
+                    </div>
+                    <div class="item-value flex">
+                        <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
+                    </div>
                 </div>
-                <div class="item-value flex">
-                    <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                </div>
-            </div>
+            </router-link>
         </div>
         <div class="return-btn flex">
             <span >退出</span>
@@ -174,12 +179,13 @@
     }
     .contact-way{
         background:#fff;
-        border-radius:0.266667rem;
         padding:0 0.533333rem 0 0.4rem;
         margin-bottom:0.4rem;
+        box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
+        border-radius: 0.266667rem;
     }
     .contact-item{
-        height:1.44rem;
+        height:1.653333rem;
         justify-content:space-between;
         font-size:0.4rem;
     }
