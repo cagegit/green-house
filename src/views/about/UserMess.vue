@@ -18,7 +18,7 @@
                     <img src="@/assets/img/my/user-name.png" alt="">
                     <span>用户名</span>
                 </div>
-                <div class="item-value">
+                <div class="item-value flex">
                     189****8721
                 </div>
             </div>
@@ -27,7 +27,7 @@
                     <img src="@/assets/img/my/tele-ico.png" alt="">
                     <span>其它联系方式</span>
                 </div>
-                <div class="item-value">
+                <div class="item-value flex">
                     156****2557
                 </div>
             </div>
@@ -36,8 +36,8 @@
                     <img src="@/assets/img/my/add-ico.png" alt="">
                     <span>地址</span>
                 </div>
-                <div class="item-value flex">
-                    辽宁省沈阳市皇姑屯
+                <div class="item-value flex" @click="chooseAddr">
+                    {{userAddr}}
                     <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
                 </div>
             </div>
@@ -80,14 +80,14 @@
             <span >退出</span>
             <img src="@/assets/img/return-press.png" alt="">
         </div>
-        <van-actionsheet v-model="show" :actions="actions" cancel-text="取消"/>
-            <van-area :area-list="areaList" />
-        </van-actionsheet>
+        <van-popup v-model="show" position="bottom">
+            <van-area :area-list="areaList" @confirm="addrSure" @cancel="addrCancle"/>
+        </van-popup>
         <FootBar :active="3"></FootBar>
     </div>
 </template>
 <script>
-    import { Area,Actionsheet } from 'vant'
+    import { Area,Popup } from 'vant'
     import FootBar from '@/components/FootBar'
     import areaList from '@/plugins/area.js'
 
@@ -95,40 +95,35 @@
         name: "Findings",
         components: {
             [Area.name]: Area,
-            [Actionsheet.name]: Actionsheet,
+            [Popup.name]: Popup,
             FootBar
         },
         data() {
             return {
                 areaLis:"",
-                show:true,
-                actions: [
-                            {
-                              name: '选项',
-                              callback: this.onClick
-                            },
-                            {
-                              name: '选项',
-                              subname: '描述信息'
-                            },
-                            {
-                              name: '选项',
-                              loading: true
-                            },
-                            {
-                              name: '禁用选项',
-                              disabled: true
-                            }
-                        ]
+                show:false,
+                userAddr:"辽宁省沈阳市皇姑屯",
             }
         },
         created: function () {
             this.areaList = areaList
         },
         methods:{
-            onClick(item) {
-                Toast(item.name);
-            }
+           chooseAddr(){
+                this.show = true;
+           },
+           addrSure(content){
+                console.log("content:");
+                console.log(content);
+                this.userAddr = "";
+                for(let i=0;i<content.length;i++){
+                    this.userAddr =this.userAddr + content[i].name + " ";
+                }
+                this.show = false;
+           },
+           addrCancle(){
+                this.show = false;
+           }
         }
     }
 </script>
@@ -198,6 +193,7 @@
     }
     .item-value{
         color:#B2B2B2;
+        height: 1.44rem;
     }
     .add-img{
         display:inline-block;
