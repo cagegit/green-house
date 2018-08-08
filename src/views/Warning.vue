@@ -16,11 +16,7 @@
     import FootBar from '@/components/FootBar'
     export default {
         name: "Warning",
-<<<<<<< HEAD
-        components: {
-=======
          components: {
->>>>>>> 74b80b8534b854d1ad3953d164f3b8fa004f969a
             FootBar
         },
         data() {
