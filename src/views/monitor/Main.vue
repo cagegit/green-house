@@ -1,7 +1,7 @@
 <template>
     <div class="monitor-main">
         <HeadBar title="监测" :left="false" link=""></HeadBar>
-        <div class="body">
+        <div class="main-body">
             <div class="banner">
                 <img src="@/assets/img/topimg@2x.png" alt=""/>
             </div>
@@ -26,7 +26,7 @@
             <DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>
             <div style="margin-bottom: 60px;"></div>
         </div>
-        <FootBar :active="0"></FootBar>
+        <FootBar></FootBar>
     </div>
 </template>
 <script>
