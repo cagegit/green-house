@@ -102,6 +102,22 @@ export default new Router({
               component: () => import('./views/about/AboutMe.vue')
           }
       ]
-      },
+      },{
+          path: '/warning',   //告警
+          name: 'warning',
+          component: () => import('./views/Warning.vue'),
+          children: [
+            {
+                path:'/',
+                name: 'warning',
+                component: () => import('./views/Warning.vue')
+            },
+            {
+                path: 'warningDetail',// 告警详情页
+                name: 'warningDetail',
+                component: () => import('./views/warning/WarningDetail.vue')
+            }
+        ]
+      }
   ]
 })
