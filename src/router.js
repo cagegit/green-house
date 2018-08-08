@@ -108,9 +108,19 @@ export default new Router({
           component: () => import('./views/Warning.vue'),
           children: [
             {
-                path:'/',
+                path:'',
                 name: 'warning',
-                component: () => import('./views/Warning.vue')
+                component: () => import('./views/warning/CurrentWarn.vue')
+            },
+            {
+                path:'currentwarn',//当前警告
+                name: 'currentwarn',
+                component: () => import('./views/warning/CurrentWarn.vue')
+            },
+            {
+                path:'historywarn',//历史警告
+                name: 'historywarn',
+                component: () => import('./views/warning/HistoryWarn.vue')
             },
             {
                 path: 'warningDetail',// 告警详情页
