@@ -1,14 +1,15 @@
 <template>
     <div class="content-warp">
        waring
+        <FootBar></FootBar>
     </div>
 </template>
 <script>
-
+    import FootBar from '@/components/FootBar'
     export default {
         name: "Warning",
         components: {
-
+            FootBar
         },
         data() {
             return {

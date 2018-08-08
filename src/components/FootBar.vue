@@ -1,10 +1,10 @@
 <template>
     <van-tabbar v-model="activeNum" class="foot-bar">
-        <van-tabbar-item icon="shop" @click.native="moveTo(1)">监测</van-tabbar-item>
-        <van-tabbar-item icon="chat" @click.native="moveTo(2)">控制</van-tabbar-item>
-        <van-tabbar-item icon="records" @click.native="moveTo(3)" dot>告警</van-tabbar-item>
-        <van-tabbar-item icon="gold-coin" @click.native="moveTo(4)">发现</van-tabbar-item>
-        <van-tabbar-item icon="gold-coin" @click.native="moveTo(5)">我</van-tabbar-item>
+        <van-tabbar-item icon="shop" @click.native="moveTo(0)">监测</van-tabbar-item>
+        <van-tabbar-item icon="chat" @click.native="moveTo(1)">控制</van-tabbar-item>
+        <van-tabbar-item icon="records" @click.native="moveTo(2)" dot>告警</van-tabbar-item>
+        <van-tabbar-item icon="gold-coin" @click.native="moveTo(3)">发现</van-tabbar-item>
+        <van-tabbar-item icon="gold-coin" @click.native="moveTo(4)">我</van-tabbar-item>
     </van-tabbar>
 </template>
 <script>
@@ -31,30 +31,32 @@
             }
         },
         methods: {
+            ...mapActions([
+                'changeTab'
+            ]),
             onClickLeft() {
                 this.$router.back();
             },
             moveTo(num) {
                switch (num){
-                   case 1 : {
+                   case 0 : {
                        this.$router.push('/monitor/main');
                        break;
                    }
+                   case 1 :{
+                       this.$router.push('/control');
+                       break;
+                   }
                    case 2 :{
-                       this.$router.push('/kong/main');
-                       // this.changeTab(2);
+                       this.$router.push('/warning');
                        break;
                    }
                    case 3 :{
-                       this.$router.push('/alarm/main');
+                       this.$router.push('/findings');
                        break;
                    }
                    case 4 :{
-                       this.$router.push('/find/main');
-                       break;
-                   }
-                   case 5 :{
-                       this.$router.push('/mine/main');
+                       this.$router.push('/about');
                        break;
                    }
                    default: {
