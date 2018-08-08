@@ -105,17 +105,27 @@ export default new Router({
           name: 'warning',
           component: () => import('./views/Warning.vue'),
           children: [
-              {
-                  path: '/',
-                  name: 'warning',
-                  component: () => import('./views/Warning.vue')
-              },
-              {
-                  path: 'warningDetail',// 告警详情页
-                  name: 'warningDetail',
-                  component: () => import('./views/warning/WarningDetail.vue')
-              }
-          ]
+            {
+                path:'',
+                name: 'warning',
+                component: () => import('./views/warning/CurrentWarn.vue')
+            },
+            {
+                path:'currentwarn',//当前警告
+                name: 'currentwarn',
+                component: () => import('./views/warning/CurrentWarn.vue')
+            },
+            {
+                path:'historywarn',//历史警告
+                name: 'historywarn',
+                component: () => import('./views/warning/HistoryWarn.vue')
+            },
+            {
+                path: 'warningDetail',// 告警详情页
+                name: 'warningDetail',
+                component: () => import('./views/warning/WarningDetail.vue')
+            }
+        ]
       }
   ]
 })
