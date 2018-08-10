@@ -1,6 +1,14 @@
 <template>
+    <div>
+        <div class="switch-tab flex">
+        <div class="mess active-tab"
+        >当前警告</div>
+        <div class="mess"
+        @click="switchBtn"
+        >历史警告</div>
+    </div>
     <div class="warn-list">
-        <div class="warn-item" v-for="item in warnList" :key="item.id">
+        <div class="warn-item" v-for="item in warnList" :key="item.id" @click="toDetail">
             <div class="flex item-top">
                 <div class="house-name">{{item.houseName}}</div>   
                 <div class="warn-time"><span>{{item.date}}  </span><span> {{item.time}}</span></div>
@@ -12,6 +20,9 @@
             </div>      
         </div>
     </div>
+    <FootBar :active="3"></FootBar>
+    </div>
+    
 </template>
 <script>
     import FootBar from '@/components/FootBar'
@@ -68,6 +79,12 @@
              
         },
         methods:{
+            toDetail(){
+                this.$router.push("/warning/warningDetail");
+            },
+            switchBtn(){
+                this.$router.push("/warning/historywarn");
+            }
         }
     }
 </script>
@@ -77,9 +94,32 @@
         justify-content:center;
         align-items:center;
     }
-    .content-warp {
-        padding: 0 0.533333rem;
-        margin-bottom:1.733333rem;
+    .switch-tab{
+        margin-bottom:0.733333rem;
+        flex-wrap:nowrap;
+        justify-content:flex-start;
+        margin-top:0.293333rem;
+    }
+    .mess {
+        width: 3.2rem;
+        font-family: PingFangSC-Regular;
+        height: 1.013333rem;     
+        border-radius:0.4rem;
+        text-align:center;
+        line-height:0.8rem;
+        border:1px solid #eee;
+        margin-right:0.306667rem;
+        font-size:0.453333rem;
+        font-weight:500;
+        color: #A1ABB7;
+        line-height: 0.933333rem;
+        box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
+    }
+    
+    .active-tab{
+        background: #44E3A8;
+        font-size: 0.64rem;
+        color: #202323;
     }
     .warn-list{
         padding-bottom:1.5rem;
