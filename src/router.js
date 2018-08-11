@@ -54,6 +54,11 @@ export default new Router({
                   path: 'ssxx',// 设施信息页面
                   name: 'ssxx',
                   component: () => import('./views/monitor/Ssxx.vue')
+              },
+              {
+                  path: 'fjsb',// 风机设备控制页
+                  name: 'fjsb',
+                  component: () => import('./views/monitor/Fjsb.vue')
               }
           ]
       }, {

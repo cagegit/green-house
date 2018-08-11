@@ -8,7 +8,7 @@
                      <img src="@/assets/img/fengj@2x.png">
                      <span>风机设备</span>
                  </div>
-                 <div class="sb-c-right">
+                 <div class="sb-c-right" @click="toSetPage(1)">
                      <span>开启</span>
                      <i class="van-icon van-icon-arrow"></i>
                  </div>
@@ -96,10 +96,15 @@
         components: {
             HeadBar,
             DpTab
+        },
+        methods: {
+           toSetPage(num) {
+               this.$router.push('/monitor/fjsb');
+           }
         }
     }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     .sb-cell {
         background: #FFFFFF;
         box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);

@@ -1,5 +1,6 @@
 <template>
     <van-nav-bar
+            class="head-bar"
             :title="title"
             :right-text="rightTxt"
             :left-arrow="left"
@@ -38,6 +39,15 @@
         }
     };
 </script>
-<style>
-
+<style lang="scss">
+    .van-nav-bar .van-icon {
+        color: #4B4A4A;
+    }
+    .van-nav-bar {
+        background-color: transparent;
+        .van-nav-bar__title {
+            color: #202323;
+            letter-spacing: 1.7px;
+        }
+    }
 </style>
