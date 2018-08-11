@@ -2,7 +2,7 @@
     <div class="monitor">
         <HeadBar title="风机" link="/control"></HeadBar>
         <div class="main-body">
-            <div class="fj-cell">
+            <div class="fj-cell" style="margin-top: 10px">
                 <div class="sb-c-left">
                     <img src="@/assets/img/fengj@2x.png">
                     <span>风机设备</span>

@@ -12,8 +12,13 @@
 
             <div class="ss-card">
                 <div class="ss-line">
-                    <div class="ss-title">温度情况</div>
-                    <div @click="changeWaring(1)"><van-icon name="wap-nav" /></div>
+                    <div class="ss-title">
+                        <img src="@/assets/img/wd@2x.png"/>
+                        <span>温度情况</span>
+                    </div>
+                    <div @click="changeWaring(1)">
+                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                    </div>
                 </div>
                 <div class="ss-line-no-icon">
                     <span>温度</span>
@@ -30,8 +35,13 @@
             </div>
             <div class="ss-card">
                 <div class="ss-line">
-                    <div class="ss-title">土壤情况</div>
-                    <div @click="changeWaring(1)"><van-icon name="wap-nav" /></div>
+                    <div class="ss-title">
+                        <img src="@/assets/img/tr@2x.png"/>
+                        <span>土壤情况</span>
+                    </div>
+                    <div @click="changeWaring(1)">
+                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                    </div>
                 </div>
                 <div class="ss-line-no-icon">
                     <span>温度</span>
@@ -48,8 +58,13 @@
             </div>
             <div class="ss-card">
                 <div class="ss-line">
-                    <div class="ss-title">PH值情况</div>
-                    <div @click="changeWaring(1)"><van-icon name="wap-nav" /></div>
+                    <div class="ss-title">
+                        <img src="@/assets/img/PH@2x.png"/>
+                        <span>PH值情况</span>
+                    </div>
+                    <div @click="changeWaring(1)">
+                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                    </div>
                 </div>
                 <div class="ss-line-no-icon">
                     <span>温度</span>
@@ -66,8 +81,13 @@
             </div>
             <div class="ss-card">
                 <div class="ss-line">
-                    <div class="ss-title">PH值情况</div>
-                    <div @click="changeWaring(1)"><van-icon name="wap-nav" /></div>
+                    <div class="ss-title">
+                        <img src="@/assets/img/PH@2x.png"/>
+                        <span>PH值情况</span>
+                    </div>
+                    <div @click="changeWaring(1)">
+                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                    </div>
                 </div>
                 <div class="ss-line-no-icon">
                     <span>温度</span>
@@ -84,8 +104,13 @@
             </div>
             <div class="ss-card">
                 <div class="ss-line">
-                    <div class="ss-title">土壤情况</div>
-                    <div @click="changeWaring(1)"><van-icon name="wap-nav" /></div>
+                    <div class="ss-title">
+                        <img src="@/assets/img/tr@2x.png"/>
+                        <span>土壤情况</span>
+                    </div>
+                    <div @click="changeWaring(1)">
+                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                    </div>
                 </div>
                 <div class="ss-line-no-icon">
                     <span>温度</span>
@@ -181,6 +206,18 @@
             .ss-title {
                 color: #191919 !important;
                 font-size: 14px;
+                img {
+                    width: 18px;
+                    height: 18px;
+                    vertical-align: text-bottom;
+                }
+                span {
+                    padding-left: 5px;
+                }
+            }
+            .ss-xq {
+                width: 14px;
+                height: 14px;
             }
         }
         .ss-line-no-icon {
@@ -189,7 +226,7 @@
             flex: 1;
             color: #777777 !important;
             span:first-child {
-                padding-left: 10px;
+                padding-left: 24px;
             }
         }
     }
