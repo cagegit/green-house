@@ -43,7 +43,7 @@
                     </div>
                     <div class="fj-in-flex">
                         <div class="sb-c-left">
-                            <span>重置</span>
+                            <span>重复</span>
                         </div>
                         <div class="sb-c-right">
                             <input type="text" placeholder="请选择" readonly/>
