@@ -13,7 +13,7 @@
                 </div>
                 <div class="fj-content">
                     <div class="fj-slider">
-                        <van-slider v-model="current" :step="25" bar-height="5px" />
+                        <van-slider v-model="current" :step="25" bar-height="8px" />
                         <div class="slider-kd">
                             <span>关闭</span>
                             <span>25%</span>
@@ -203,6 +203,7 @@
             span {
                 display: block;
                 padding-top: 5px;
+                color: #B2B2B2;
             }
             .active {
                color:  #16CF9D;
@@ -211,6 +212,11 @@
         .sb-c-left {
             display: flex;
             align-items: center;
+            span {
+                font-size: 16px;
+                color: #202323;
+                padding-left: 10px;
+            }
         }
         .sb-c-right {
             display: flex;
@@ -225,10 +231,6 @@
             display: inline-block;
             border: 0;
         }
-        > span {
-            font-size: 16px;
-            color: #202323;
-            padding-left: 10px;
-        }
+
     }
 </style>
