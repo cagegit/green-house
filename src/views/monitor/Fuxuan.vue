@@ -114,6 +114,7 @@
             line-height: 50px;
             overflow: hidden;
             border-bottom: 1px solid #E9E7E1;
+            font-size: 14px;
             .sb-c-left span{
                 color: #202323;
                 font-weight: bold;
