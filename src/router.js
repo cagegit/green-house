@@ -64,7 +64,12 @@ export default new Router({
                   path: 'fjs',// 风机组控制页
                   name: 'fjs',
                   component: () => import('./views/monitor/Fjs.vue')
-              }
+              },
+              {
+                  path: 'fuxuan',// 重复选择页
+                  name: 'fuxuan',
+                  component: () => import('./views/monitor/Fuxuan.vue')
+              },
           ]
       }, {
           path: '/control',

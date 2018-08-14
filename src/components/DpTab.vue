@@ -30,20 +30,4 @@
  }
 </script>
 <style lang="scss" scoped>
-   .dp-tab {
-      margin: 15px auto;
-      display: flex;
-      justify-content: space-around;
-      flex: 1;
-      button {
-          border-radius: 100px;
-          background-color: #fff;
-          padding: 5px 10px;
-          color: #4D5251;
-          &.active {
-              background-color: #44E3A8;
-              color: #fff;
-          }
-      }
-   }
 </style>

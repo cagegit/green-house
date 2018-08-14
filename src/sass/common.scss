@@ -168,3 +168,38 @@ html, body {
   text-align: center;
   margin: 0 30px;
 }
+.dp-tab {
+  margin: 15px auto;
+  display: flex;
+  justify-content: space-around;
+  flex: 1;
+  button {
+    border-radius: 100px;
+    background-color: #fff;
+    padding: 5px 10px;
+    color: #4D5251;
+    &.active {
+      background-color: #44E3A8;
+      color: #fff;
+    }
+  }
+}
+.dp-tab2 {
+  margin: 15px auto;
+  display: flex;
+  justify-content: left;
+  flex: 1;
+  button {
+    border-radius: 100px;
+    background-color: #fff;
+    padding: 5px 20px;
+    color: #4D5251;
+    &.active {
+      background-color: #44E3A8;
+      color: #fff;
+    }
+  }
+  & > button:last-child {
+    margin-left: 10px;
+  }
+}
