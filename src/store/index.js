@@ -6,7 +6,12 @@ const state = {
     activeTab: 0,
     fxType:0,// 0: 周，1：月
     fxWeek: [],
-    fxMonth: []
+    fxMonth: [],
+    sbInfo: {
+        name: '一号西红柿大棚',
+        type: '非转基因西红柿',
+        size: '200*800'
+    }
 };
 
 export default new Vuex.Store({
@@ -25,7 +30,10 @@ export default new Vuex.Store({
            } else {
                state.fxMonth = value;
            }
-       }
+       },
+        sbinfo(state, sb) {
+           state.sbInfo = Object.assign(state.sbInfo,sb);
+        }
     },
     actions: {
         changeTab ({ commit },num) {
@@ -33,6 +41,9 @@ export default new Vuex.Store({
         },
         fxAction({ commit }, {type,value}) {
             commit('changeFx',{type,value});
+        },
+        sbInfoAction({ commit },sb) {
+            commit('sbinfo',sb);
         }
     }
 })

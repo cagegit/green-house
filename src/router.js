@@ -70,6 +70,24 @@ export default new Router({
                   name: 'fuxuan',
                   component: () => import('./views/monitor/Fuxuan.vue')
               },
+              {
+                  path: 'dp-name',// 修改大棚名称
+                  name: 'dp-name',
+                  component: () => import('./views/monitor/DpName.vue'),
+                  props: true
+              },
+              {
+                  path: 'dp-type',// 修改作物种类
+                  name: 'dp-type',
+                  component: () => import('./views/monitor/DpType.vue'),
+                  props: true
+              },
+              {
+                  path: 'dp-size',// 修改大棚尺寸
+                  name: 'dp-size',
+                  component: () => import('./views/monitor/DpSize.vue'),
+                  props: true
+              }
           ]
       }, {
           path: '/control',

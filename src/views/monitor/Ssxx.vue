@@ -16,8 +16,8 @@
                 <div class="sb-c-left">
                     <span>大棚名称</span>
                 </div>
-                <div class="sb-c-right">
-                    <span>一号西红柿大棚</span>
+                <div class="sb-c-right" @click="editSbxx(1)">
+                    <span>{{sbInfo.name}}</span>
                     <i class="van-icon van-icon-arrow"></i>
                 </div>
             </div>
@@ -25,8 +25,8 @@
                 <div class="sb-c-left">
                     <span>作物种类</span>
                 </div>
-                <div class="sb-c-right">
-                    <span>非转基因西红柿</span>
+                <div class="sb-c-right" @click="editSbxx(2)">
+                    <span>{{sbInfo.type}}</span>
                     <i class="van-icon van-icon-arrow"></i>
                 </div>
             </div>
@@ -34,8 +34,8 @@
                 <div class="sb-c-left">
                     <span>大棚尺寸</span>
                 </div>
-                <div class="sb-c-right">
-                    <span>200*800</span>
+                <div class="sb-c-right" @click="editSbxx(3)">
+                    <span>{{sbInfo.size}}</span>
                     <i class="van-icon van-icon-arrow"></i>
                 </div>
             </div>
@@ -49,8 +49,6 @@
                 </div>
             </div>
 
-
-
         </div>
     </div>
 </template>
@@ -62,6 +60,22 @@
         components: {
             HeadBar,
             DpTab
+        },
+        data() {
+           return {
+               sbInfo: this.$store.state.sbInfo
+           }
+        },
+        methods: {
+            editSbxx(num) {
+                if(num===1) {
+                    this.$router.push({name:'dp-name'});
+                } else if(num===2) {
+                    this.$router.push({name:'dp-type'});
+                } else {
+                    this.$router.push({name:'dp-size'});
+                }
+            }
         }
     }
 </script>

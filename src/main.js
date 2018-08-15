@@ -27,6 +27,7 @@ router.beforeEach((to, from,next) => {
     }
     next();
 });
+Vue.prototype.$eventHub = new Vue();// 设置全局$emit $on
 new Vue({
   router,
   store,
