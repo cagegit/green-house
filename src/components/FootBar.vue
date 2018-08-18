@@ -1,10 +1,25 @@
 <template>
     <van-tabbar v-model="activeNum" class="foot-bar">
-        <van-tabbar-item icon="shop" @click.native="moveTo(0)">监测</van-tabbar-item>
-        <van-tabbar-item icon="chat" @click.native="moveTo(1)">控制</van-tabbar-item>
-        <van-tabbar-item icon="records" @click.native="moveTo(2)" dot>告警</van-tabbar-item>
-        <van-tabbar-item icon="gold-coin" @click.native="moveTo(3)">发现</van-tabbar-item>
-        <van-tabbar-item icon="gold-coin" @click.native="moveTo(4)">我</van-tabbar-item>
+        <van-tabbar-item icon="shop" @click.native="moveTo(0)">
+            <span>监测</span>
+            <img slot="icon" slot-scope="props" :src="props.active ? tab.jc_0 : tab.jc_1"/>
+        </van-tabbar-item>
+        <van-tabbar-item icon="chat" @click.native="moveTo(1)">
+            <span>控制</span>
+            <img slot="icon" slot-scope="props" :src="props.active ? tab.kz_0 : tab.kz_1"/>
+        </van-tabbar-item>
+        <van-tabbar-item icon="chat" dot @click.native="moveTo(2)">
+            <span>告警</span>
+            <img slot="icon" slot-scope="props" :src="props.active ? tab.gj_0 : tab.gj_1"/>
+        </van-tabbar-item>
+        <van-tabbar-item icon="chat" @click.native="moveTo(3)">
+            <span>发现</span>
+            <img slot="icon" slot-scope="props" :src="props.active ? tab.fx_0 : tab.fx_1"/>
+        </van-tabbar-item>
+        <van-tabbar-item icon="chat" @click.native="moveTo(4)">
+            <span>我</span>
+            <img slot="icon" slot-scope="props" :src="props.active ? tab.me_0 : tab.me_1"/>
+        </van-tabbar-item>
     </van-tabbar>
 </template>
 <script>
@@ -14,7 +29,19 @@
         name: "FootBar",
         data(){
             return {
-                active: this.$store.state.activeTab
+                active: this.$store.state.activeTab,
+                tab: {
+                    jc_0: require('@/assets/img/tab/nav1-press@2x.png'),
+                    jc_1: require('@/assets/img/tab/nav1-normal@2x.png'),
+                    kz_0: require('@/assets/img/tab/nav2-press@2x.png'),
+                    kz_1: require('@/assets/img/tab/nav2-normal@2x.png'),
+                    gj_0: require('@/assets/img/tab/nav3-press@2x.png'),
+                    gj_1: require('@/assets/img/tab/nav3-normal@2x.png'),
+                    fx_0: require('@/assets/img/tab/nav4-press@2x.png'),
+                    fx_1: require('@/assets/img/tab/nav4-normal@2x.png'),
+                    me_0: require('@/assets/img/tab/nav5-press@2x.png'),
+                    me_1: require('@/assets/img/tab/nav5-normal@2x.png'),
+                }
             }
         },
         components: {
