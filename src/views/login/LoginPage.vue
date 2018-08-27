@@ -1,10 +1,34 @@
 <template>
-    <router-view></router-view>
+    <div class="wrap flex">
+        <div class="welcom-top">
+            WELCOME
+        </div>
+        <div class="welcom">
+            欢迎来到紫藤农业
+        </div>
+        <div class="login-area">
+            <div>
+                账户
+            </div>
+            <van-field v-model="username" placeholder="请输入用户名" />
+            <div class="pass-txt">
+                密码
+            </div>
+            <van-field v-model="password" class="pass-input" type="password" placeholder="请输入密码" />
+        </div>
+        <div class="forget flex">
+            <router-link to="/login/findPassword">忘记密码？</router-link>
+        </div>
+        <div class="flex login-btn-bottom">
+            <router-link to="/monitor/main"><van-button type="primary" class="login-btn">登录</van-button></router-link>
+        	
+        </div>
+    </div>
 </template>
 <script>
 import { Field, CellGroup,Button } from 'vant';
 export default {
-    name: "Login",
+    name: "LoginPage",
     data() {
         return {
             username: "",
