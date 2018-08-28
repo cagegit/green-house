@@ -18,16 +18,16 @@ export const resetPwd = (name, pwd, sms, token) => axios.post('/apps/resetPwd',
 /**
  * 获取地区园区列表
  * */
-export const getLocates = (token) => axios.get('/apps/locates?token='+token);
+export const getLocates = (token) => axios.get('/apps/locates?token='+encodeURIComponent(token));
 /**
  * 获取大棚列表
  * */
-export const getUtilities = (pid,token) => axios.get('/apps/utilities?token='+token+'&pid='+pid);
+export const getUtilities = (pid,token) => axios.get('/apps/utilities?token='+encodeURIComponent(token)+'&pid='+pid);
 /**
  * 获取传感器列表
  * */
-export const getSensors = (pid,token) => axios.get('/apps/sensors?token='+token+'&pid='+pid+'&num='+new Date().getTime());
+export const getSensors = (pid,token) => axios.get('/apps/sensors?token='+encodeURIComponent(token)+'&pid='+pid+'&num='+new Date().getTime());
 /**
  * 获取控制器列表
  * */
-export const getControllers = (pid,token) => axios.post('/apps/controllers?token='+token+'&pid='+pid);
+export const getControllers = (pid,token) => axios.post('/apps/controllers?token='+encodeURIComponent(token)+'&pid='+pid);
