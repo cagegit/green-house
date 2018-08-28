@@ -2,10 +2,10 @@
     <div class="content-warp">
         <div class="top-avater flex">
             <div class="name-mes">
-                <div class="user-name flex">李宇航</div>
+                <div class="user-name flex">{{user.name}}</div>
                 <div class="user-id flex">
                     <img src="@/assets/img/my/user-id-ico.png">
-                    <div>130***********2235</div>
+                    <div>{{user.phone}}</div>
                 </div>
             </div>
             <div class="user-avater">
@@ -19,7 +19,7 @@
                     <span>用户名</span>
                 </div>
                 <div class="item-value flex">
-                    189****8721
+                    {{user.name}}
                 </div>
             </div>
             <div class="contact-item flex">
@@ -28,7 +28,7 @@
                     <span>其它联系方式</span>
                 </div>
                 <div class="item-value flex">
-                    156****2557
+                    {{user.phone}}
                 </div>
             </div>
             <div class="contact-item flex">
@@ -105,13 +105,23 @@
         },
         data() {
             return {
+                user: {
+                    name: '李宇航',
+                    phone: '156****2557'
+                },
                 areaLis:"",
                 show:false,
                 userAddr:"辽宁省沈阳市皇姑屯",
             }
         },
         created: function () {
-            this.areaList = areaList
+            this.areaList = areaList;
+        },
+        mounted() {
+            console.log(this.$store.state.user);
+            if(JSON.stringify(this.$store.state.user)!=='{}') {
+                this.user = Object.assign({},this.$store.state.user);
+            }
         },
         methods:{
            chooseAddr(){

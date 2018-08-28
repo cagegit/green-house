@@ -12,7 +12,8 @@ const state = {
         name: '一号西红柿大棚',
         type: '非转基因西红柿',
         size: '200*800'
-    }
+    },
+    user: {}
 };
 
 export default new Vuex.Store({
@@ -37,6 +38,9 @@ export default new Vuex.Store({
         },
         setToken(state, token) {
            state.token = token;
+        },
+        setUser(state, user) {
+           state.user = Object.assign({},user);
         }
     },
     actions: {

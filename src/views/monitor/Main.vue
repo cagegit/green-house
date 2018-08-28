@@ -199,7 +199,7 @@
         }
         .select{
             //用div的样式代替select的样式
-            padding: 0 5px;
+            /*padding: 0 5px;*/
             border-radius: 5px;
             position: relative;
             background: transparent;

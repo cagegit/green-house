@@ -53,6 +53,9 @@ export default {
                         duration: 500
                     });
                     this.$store.commit('setToken',res.data.token);
+                    if(res.data.user && res.data.user.length>0) {
+                        this.$store.commit('setUser',res.data.user[0]);
+                    }
                     localStorage.setItem('token',res.data.token);
                     this.$router.push('/monitor/main');
                 } else {
