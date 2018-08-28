@@ -236,7 +236,7 @@
                 //通过定位将图标放在合适的位置
                 position: absolute;
                 border-radius: 100%;
-                right: 20px;
+                right: 15px;
                 top: 7px;
                 //给自定义的图标实现点击下来功能
                 pointer-events: none;
