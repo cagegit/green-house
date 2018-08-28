@@ -3,7 +3,7 @@ import './plugins/axios'
 import App from './App.vue'
 import router from './router'
 import store from './store/index'
-import 'lib-flexible/flexible.js'   //移动端布局框架
+import 'lib-flexible'   //移动端布局框架
 
 
 Vue.config.productionTip = false;

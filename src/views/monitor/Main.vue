@@ -27,7 +27,7 @@
                     <!--<span>告警</span>-->
                 <!--</div>-->
             <!--</div>-->
-            <DapCell v-for="item in daList" :title="item.name" :src="src" :isMark="true" @click.native="toNextPage(item.pid)"></DapCell>
+            <DapCell v-for="item in daList" :key="item.id" :title="item.name" :src="src" :isMark="true" @click.native="toNextPage(item.pid)"></DapCell>
             <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>-->
             <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>-->
             <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>-->
@@ -71,18 +71,22 @@
         },
         mounted() {
             // this.login(this.token);
-            this.token = this.token || localStorage.getItem('token');
+            if(!this.token) {
+                this.$router.replace('/login');
+            }
             console.log(this.token);
             this.locates(this.token);
         },
         methods: {
             toNextPage(pid) {
                 console.log('pid:'+pid);
+                pid = 176;
                 getSensors(176,this.token).then(res => {
                     console.log(res.data);
                 }).catch(err => {
                     console.log(err);
                 });
+                this.$store.commit('setPid',176);
                 this.$router.push("/monitor/ssjc");
             },
             async locates(token) {

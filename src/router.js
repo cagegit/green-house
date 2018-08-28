@@ -74,7 +74,8 @@ export default new Router({
               {
                   path: 'fjsb',// 风机设备控制页
                   name: 'fjsb',
-                  component: () => import('./views/monitor/Fjsb.vue')
+                  component: () => import('./views/monitor/Fjsb.vue'),
+                  props: true
               },
               {
                   path: 'fjs',// 风机组控制页
