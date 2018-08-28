@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 const state = {
+    token:'',// 登录之后的token
     activeTab: 0,
     fxType:0,// 0: 周，1：月
     fxWeek: [],
@@ -33,6 +34,9 @@ export default new Vuex.Store({
        },
         sbinfo(state, sb) {
            state.sbInfo = Object.assign(state.sbInfo,sb);
+        },
+        setToken(state, token) {
+           state.token = token;
         }
     },
     actions: {

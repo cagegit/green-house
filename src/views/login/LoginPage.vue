@@ -20,13 +20,14 @@
             <router-link to="/login/findPassword">忘记密码？</router-link>
         </div>
         <div class="flex login-btn-bottom">
-            <router-link to="/monitor/main"><van-button type="primary" class="login-btn">登录</van-button></router-link>
-        	
+            <!--<router-link to="/monitor/main"></router-link>-->
+            <van-button type="primary" class="login-btn"  @click="login()">登录</van-button>
         </div>
     </div>
 </template>
 <script>
-import { Field, CellGroup,Button } from 'vant';
+import { Field, CellGroup,Button,Toast } from 'vant';
+import {loginIn} from '@/service';
 export default {
     name: "LoginPage",
     data() {
@@ -40,7 +41,29 @@ export default {
         [CellGroup.name]: CellGroup,
         [Field.name]: Field,
         [Button.name]: Button,
+        [Toast.name]: Toast
     },
+    methods: {
+        async login() {
+            try {
+                const res = await loginIn(this.username, this.password);
+                if(res.data.code===1) {
+                    Toast.success({
+                        message: '登录成功',
+                        duration: 500
+                    });
+                    this.$store.commit('setToken',res.data.token);
+                    localStorage.setItem('token',res.data.token);
+                    this.$router.push('/monitor/main');
+                } else {
+                    Toast.success('登录失败');
+                }
+            }catch (err) {
+                console.log(err);
+                Toast.success('网络错误');
+            }
+        }
+    }
 }
 </script>
 <style scoped>
