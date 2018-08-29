@@ -18,7 +18,7 @@
                  { name:'实时监测', url: '/monitor/ssjc', active: this.active===1 },
                  { name:'设备控制', url: '/monitor/sbkz', active: this.active===2 },
                  { name:'历史曲线', url: '/monitor/lsqx', active: this.active===3 },
-                 { name:'设备信息', url: '/monitor/ssxx', active: this.active===4 }
+                 { name:'设施信息', url: '/monitor/ssxx', active: this.active===4 }
              ]
          }
      },
