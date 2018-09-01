@@ -116,9 +116,6 @@
                     console.log(err);
                 }
             },
-            changeArea(picker,value) {
-                this.area = value;
-            },
             dpConfirm(value) {
                 this.dqShow = false;
                 this.area = value;
@@ -140,13 +137,13 @@
                         this.daList = [];
                         this.yqList = [];
                         this.yqNameList = [];
-                        this.yq = '';
+                        this.yq = '无';
                     }
                 } else {
                     this.daList = [];
                     this.yqList = [];
                     this.yqNameList = [];
-                    this.yq = '';
+                    this.yq = '无';
                 }
             },
             yqConfirm(value) {
