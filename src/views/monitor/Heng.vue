@@ -6,7 +6,6 @@
 </template>
 <script>
     import F2 from '@antv/f2/lib';
-    import {getDayLs,getMonthLs,getYearLs} from '../../service';
     import {Icon } from 'vant';
     function initChart(data) {
         const chart = new F2.Chart({
@@ -15,7 +14,6 @@
             width: document.body.offsetWidth,
             height: document.body.offsetHeight
         });
-
         const defs = {
             ctime: {
                 type: 'timeCat',
@@ -64,50 +62,43 @@
     }
     export default {
         name: "Heng",
-        props: {
-            dateType: {
-                type: String,
-                default:''
-            }
-        },
         components: {
             [Icon.name]:Icon
         },
         data() {
             return {
                 isShow:false,
-                showTime: 6000,
-                chartData: []
+                chartData: [],
+                showTime: 6000
             }
         },
-        created() {
-            console.log('dateType:'+this.dateType);
+        mounted() {
+            const arr = this.$store.state.chartData;
+            const newArr = [];
+            if(arr) {
+                arr.forEach(v => {
+                   newArr.push({ctime:v.ctime,data:v.data});
+                });
+            }
+            this.chartData = newArr;
+            console.log(this.chartData);
+            const that = this;
+            initChart(that.chartData);
             if(screen.orientation) {
                 console.log('Orientation is ' + screen.orientation.type);
                 screen.orientation.lock('landscape');
+                // screen.orientation.onchange =  function(){
+                //     initChart(that.chartData);
+                // };
             }
-            this.drawDayChart(261,1,20180901);
-            const that = this;
             window.onresize = function () {
-                console.log('app width:'+document.body.offsetWidth);
-                console.log('app height:'+document.body.offsetHeight);
                 initChart(that.chartData);
-            }
+            };
+            setTimeout(() => {
+                initChart(that.chartData);
+            },500);
         },
         methods: {
-            drawDayChart(id,type,day) {
-                getDayLs(id,type,day).then(res => {
-                    if(res.data && res.data.results) {
-                        this.chartData =res.data.results.map(val => {
-                            const ctime = val.day.toString().replace(/^(\d{4})(\d{2})(\d{2})/,'$1-$2-$3') + " "+val.hour+':'+val.min;
-                            return {data:val.data,ctime:ctime};
-                        });
-                        initChart(this.chartData);
-                    }
-                }).catch(err => {
-                    console.log(err);
-                });
-            },
             showClose() {
                 this.isShow = true;
                 setTimeout(() => {

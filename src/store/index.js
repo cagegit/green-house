@@ -23,7 +23,8 @@ const state = {
     warnings: 0,
     relations: [], // 图片对应关系
     tasks: [],
-    ctrlId: 0
+    ctrlId: 0,
+    chartData: []
 };
 
 export default new Vuex.Store({
@@ -79,6 +80,9 @@ export default new Vuex.Store({
         },
         setCtrlId(state,ctrlId){
            state.ctrlId = ctrlId;
+        },
+        setChartData(state,data) {
+           state.chartData = data;
         }
     },
     actions: {

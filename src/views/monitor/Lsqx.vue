@@ -193,7 +193,8 @@
                 this.$router.push({name:'main'});
             },
             toHengPage() {
-                this.$router.push({name:'heng',params:{dateType: this.currentIndex}});
+                this.$store.commit('setChartData',this.chartData);
+                this.$router.push({name:'heng'});
             }
         }
 

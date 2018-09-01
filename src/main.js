@@ -55,7 +55,7 @@ if(process.env.NODE_ENV === 'production') {
     const deviceReady = function() {
         window.open = cordova.InAppBrowser.open; // 替换 window.open方法
         if (cordova.platformId === 'android') {
-            StatusBar.backgroundColorByHexString("#F5F7F9");
+            StatusBar.backgroundColorByHexString("#95abc0");
         }
         if(screen.orientation) {
             screen.orientation.lock('portrait');
