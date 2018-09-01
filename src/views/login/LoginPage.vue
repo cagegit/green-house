@@ -4,7 +4,7 @@
             WELCOME
         </div>
         <div class="welcom">
-            欢迎来到紫藤农业
+            欢迎来到康吉物联
         </div>
         <div class="login-area">
             <div>

@@ -8,7 +8,7 @@
         />
         <div class="logo-box flex">
             <img src="@/assets/img/logo-ico.png" alt="" class="logo-ico">
-            <div class="logo-txt">紫藤农业 V1.1.0</div>
+            <div class="logo-txt">康吉物联 V1.1.0</div>
         </div>
         <div class="contact-way">
             <div class="contact-item flex">
@@ -32,7 +32,7 @@
         </div>
         <div class="flex">
             <div class="copyright">
-                版权所有copyright(c)北京紫藤农业科技有限公司
+                版权所有copyright(c)北京康吉讯通科技有限公司
             </div>
         </div>
     </div>

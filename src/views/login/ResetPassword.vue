@@ -13,6 +13,7 @@
 <script>
 import { Field, CellGroup, Button, NavBar } from 'vant';
 import HeadBar from '../../components/HeadBar';
+import {resetPwd} from '@/service';
 export default {
     name: "FindPassword",
     components: {
