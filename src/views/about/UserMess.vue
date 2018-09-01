@@ -69,6 +69,17 @@
             
         </div>
         <div class="contact-way">
+            <div class="contact-item flex">
+                <div class="item-name flex">
+                    <img src="@/assets/img/my/tele-ico.png" alt="">
+                    <span>客服电话</span>
+                </div>
+                <div class="item-value flex">
+                    400-960-0727
+                </div>
+            </div>
+        </div>
+        <div class="contact-way">
             <router-link to="/about/aboutme">
                 <div class="contact-item flex">
                     <div class="item-name flex">

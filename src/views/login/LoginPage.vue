@@ -16,9 +16,9 @@
             </div>
             <van-field v-model="password" class="pass-input" type="password" placeholder="请输入密码" />
         </div>
-        <div class="forget flex">
-            <router-link to="/login/findPassword">忘记密码？</router-link>
-        </div>
+
+            <router-link to="/login/findPassword" class="forget flex"><div>忘记密码？</div></router-link>
+
         <div class="flex login-btn-bottom">
             <!--<router-link to="/monitor/main"></router-link>-->
             <van-button type="primary" class="login-btn"  @click="login()">登录</van-button>
@@ -133,6 +133,7 @@ export default {
 	justify-content:flex-end;
 	width:100%;
 	margin-top:0.373333rem;
+    float:right;
 }
 .login-btn-bottom{
 	width:100%;

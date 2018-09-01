@@ -20,16 +20,16 @@
                 </div>
             </div>
         </div>
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <div class="item-name flex">
-                    <span>热线</span>
-                </div>
-                <div class="item-value flex">
-                    400-960-0727
-                </div>
-            </div>
-        </div>
+        <!--<div class="contact-way">-->
+            <!--<div class="contact-item flex">-->
+                <!--<div class="item-name flex">-->
+                    <!--<span>热线</span>-->
+                <!--</div>-->
+                <!--<div class="item-value flex">-->
+                    <!--400-960-0727-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="flex">
             <div class="copyright">
                 版权所有copyright(c)北京康吉讯通科技有限公司
