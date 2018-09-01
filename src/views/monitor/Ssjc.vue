@@ -293,7 +293,7 @@
                 border-radius: 5px;
                 padding: 0 5px;
                 text-align: center;
-                height: 40px;
+                height: 30px;
             }
         }
     }
