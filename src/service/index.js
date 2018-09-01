@@ -39,3 +39,22 @@ export const setController = (deviceId,sensorChannel,val,gatewayID) => axios.get
  *  获取监控列表
  * */
 export const getLssj = (sensorId) => axios.get(`http://39.104.67.142:3030/gateway/historydata?sensor_id=${sensorId}`);
+/**
+ *  获取我的
+ * */
+export const getAbout = (token) => axios.get(`/apps/about?token=`+encodeURIComponent(token));
+/**
+ *  修改地址电话
+ * */
+export const modifyAddrAndTel = (token,userName,address,phone) =>{
+	var url = "/apps/updateEmployee?token=" + encodeURIComponent(token) + "&loginname=" + userName;
+	if(address!=false){
+		url = url + "&address=" + address;
+	}
+	if(phone!=false){
+		url = url + "&phone=" + phone;
+	}
+	return axios.get(url);
+} 
+
+

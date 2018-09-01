@@ -31,13 +31,13 @@
                     {{user.phone}}
                 </div>
             </div>
-            <div class="contact-item flex">
+            <div class="contact-item flex" @click="toModifyAddr(user.address)">
                 <div class="item-name flex">
                     <img src="@/assets/img/my/add-ico.png" alt="">
                     <span>地址</span>
                 </div>
                 <div class="item-value flex" @click="chooseAddr">
-                    {{userAddr}}
+                    {{user.address}}
                     <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
                 </div>
             </div>
@@ -75,7 +75,7 @@
                     <span>客服电话</span>
                 </div>
                 <div class="item-value flex">
-                    400-960-0727
+                    {{aboutInfo.tel}}
                 </div>
             </div>
         </div>
@@ -96,9 +96,9 @@
             <span >退出</span>
             <img src="@/assets/img/return-press.png" alt="">
         </div>
-        <van-popup v-model="show" position="bottom">
+       <!--  <van-popup v-model="show" position="bottom">
             <van-area :area-list="areaList" @confirm="addrSure" @cancel="addrCancle"/>
-        </van-popup>
+        </van-popup> -->
         <FootBar :active="3"></FootBar>
     </div>
 </template>
@@ -106,6 +106,7 @@
     import { Area,Popup } from 'vant'
     import FootBar from '@/components/FootBar'
     import areaList from '@/plugins/area.js'
+    import { getAbout } from '@/service';
 
     export default {
         name: "Findings",
@@ -116,46 +117,55 @@
         },
         data() {
             return {
-                user: {
-                    name: '李宇航',
-                    phone: '156****2557'
-                },
+                user: {},
                 areaLis:"",
                 show:false,
-                userAddr:"",
+                aboutInfo:{}
             }
         },
         created: function () {
             this.areaList = areaList;
         },
         mounted() {
-            console.log(this.$store.state.user);
+            this.getAbout(this.$store.state.token)
             if(JSON.stringify(this.$store.state.user)!=='{}') {
                 this.user = Object.assign({},this.$store.state.user);
-                if(typeof(this.$store.state.user.address)!="undefined" && typeof(this.$store.state.user.address)!="null"){
-                    this.userAddr = this.$store.state.user.address
-
-                }
             }
         },
         methods:{
            chooseAddr(){
-                this.show = true;
-           },
-           addrSure(content){
-                console.log("content:");
-                console.log(content);
-                this.userAddr = "";
-                for(let i=0;i<content.length;i++){
-                    this.userAddr =this.userAddr + content[i].name + " ";
-                }
                 this.show = false;
            },
+           // addrSure(content){
+           //      console.log("content:");
+           //      console.log(content);
+           //      this.userAddr = "";
+           //      for(let i=0;i<content.length;i++){
+           //          this.userAddr =this.userAddr + content[i].name + " ";
+           //      }
+           //      this.show = false;
+           // },
            addrCancle(){
                 this.show = false;
            },
             logOut() {
                this.$router.replace('/login')
+            },
+            getAbout(token){
+                try{
+                    if(token){
+                        getAbout(token).then((res)=>{
+                            this.aboutInfo = res.data.results
+                            this.$store.commit("setAboutMes",res.data.results)
+
+                        })
+                    }
+                }catch (err) {
+                    console.log(err);
+                }
+            },
+            toModifyAddr(addr){
+                this.$router.push({ name: 'modifyaddr', params: { name: addr }});
             }
         }
     }

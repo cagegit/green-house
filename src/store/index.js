@@ -15,7 +15,8 @@ const state = {
         type: '非转基因西红柿',
         size: '200*800'
     },
-    user: {}
+    user: {},
+    aboutMes:{}
 };
 
 export default new Vuex.Store({
@@ -49,6 +50,9 @@ export default new Vuex.Store({
         },
         setPropertys(state, pro) {
            state.propertys = pro;
+        },
+        setAboutMes(state, aboutMes){
+          state.aboutMes = aboutMes;
         }
     },
     actions: {

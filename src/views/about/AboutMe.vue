@@ -16,7 +16,7 @@
                     <span>关于</span>
                 </div>
                 <div class="item-value flex">
-                    http://zitengnongye.com/
+                    {{this.$store.state.aboutMes.websate}}
                 </div>
             </div>
         </div>
