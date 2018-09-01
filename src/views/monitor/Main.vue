@@ -1,6 +1,6 @@
 <template>
     <div class="monitor-main">
-        <HeadBar title="监测" :left="false" link=""></HeadBar>
+        <HeadBar :title="user.corpname" :left="false" link=""></HeadBar>
         <div class="main-body">
             <div class="banner">
                 <img src="@/assets/img/topimg@2x.png" alt=""/>
@@ -75,6 +75,12 @@
             // this.login(this.token);
             if(!this.token) {
                 this.$router.replace('/login');
+            }
+            if(JSON.stringify(this.$store.state.user)!=='{}') {
+                console.log("this.$store.state.user")
+                console.log(this.$store.state.user)
+                this.user = Object.assign({},this.$store.state.user);
+                // this.user.phone = this.user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
             }
             console.log(this.token);
             this.locates(this.token);

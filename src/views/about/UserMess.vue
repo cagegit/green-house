@@ -3,10 +3,10 @@
         <div class="top-avater flex">
             <div class="name-mes">
                 <div class="user-name flex">{{user.name}}</div>
-                <div class="user-id flex">
+                <!-- <div class="user-id flex">
                     <img src="@/assets/img/my/user-id-ico.png">
                     <div>{{user.phone}}</div>
-                </div>
+                </div> -->
             </div>
             <div class="user-avater">
                 <img src="@/assets/img/Bitmap.png">
@@ -42,18 +42,18 @@
                 </div>
             </div>
         </div>
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <div class="item-name flex">
-                    <img src="@/assets/img/my/planet.png" alt="">
-                    <span>主要作物品类</span>
-                </div>
-                <div class="item-value flex">
-                    西红柿、黄瓜……
-                    <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                </div>
-            </div>
-        </div>
+        <!--<div class="contact-way">-->
+            <!--<div class="contact-item flex">-->
+                <!--<div class="item-name flex">-->
+                    <!--<img src="@/assets/img/my/planet.png" alt="">-->
+                    <!--<span>主要作物品类</span>-->
+                <!--</div>-->
+                <!--<div class="item-value flex">-->
+                    <!--西红柿、黄瓜……-->
+                    <!--<img class="add-img" src="@/assets/img/ion-chevron.png" alt="">-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="contact-way">
             <router-link to="/about/modifypassword">
                 <div class="contact-item flex">
@@ -67,6 +67,17 @@
                 </div>
             </router-link>
             
+        </div>
+        <div class="contact-way">
+            <div class="contact-item flex">
+                <div class="item-name flex">
+                    <img src="@/assets/img/my/tele-ico.png" alt="">
+                    <span>客服电话</span>
+                </div>
+                <div class="item-value flex">
+                    400-960-0727
+                </div>
+            </div>
         </div>
         <div class="contact-way">
             <router-link to="/about/aboutme">
@@ -111,7 +122,7 @@
                 },
                 areaLis:"",
                 show:false,
-                userAddr:"辽宁省沈阳市皇姑屯",
+                userAddr:"",
             }
         },
         created: function () {
@@ -121,7 +132,10 @@
             console.log(this.$store.state.user);
             if(JSON.stringify(this.$store.state.user)!=='{}') {
                 this.user = Object.assign({},this.$store.state.user);
-                this.user.phone = this.user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                if(typeof(this.$store.state.user.address)!="undefined" && typeof(this.$store.state.user.address)!="null"){
+                    this.userAddr = this.$store.state.user.address
+
+                }
             }
         },
         methods:{
