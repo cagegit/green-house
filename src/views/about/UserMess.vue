@@ -81,7 +81,7 @@
                 </div>
             </router-link>
         </div>
-        <div class="return-btn flex">
+        <div class="return-btn flex" @click="logOut()">
             <span >退出</span>
             <img src="@/assets/img/return-press.png" alt="">
         </div>
@@ -139,7 +139,10 @@
            },
            addrCancle(){
                 this.show = false;
-           }
+           },
+            logOut() {
+               this.$router.replace('/login')
+            }
         }
     }
 </script>

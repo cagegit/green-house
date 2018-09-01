@@ -4,6 +4,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 const state = {
     token:'',// 登录之后的token
+    pid:'',// 当前pid
+    propertys: null, // 当前ctrl的propertys
     activeTab: 0,
     fxType:0,// 0: 周，1：月
     fxWeek: [],
@@ -41,6 +43,12 @@ export default new Vuex.Store({
         },
         setUser(state, user) {
            state.user = Object.assign({},user);
+        },
+        setPid(state, id) {
+           state.pid = id;
+        },
+        setPropertys(state, pro) {
+           state.propertys = pro;
         }
     },
     actions: {

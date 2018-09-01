@@ -28,6 +28,7 @@
 <script>
 import { Field, CellGroup,Button,Toast } from 'vant';
 import {loginIn} from '@/service';
+import MD5 from 'js-md5';
 export default {
     name: "LoginPage",
     data() {
@@ -46,7 +47,8 @@ export default {
     methods: {
         async login() {
             try {
-                const res = await loginIn(this.username, this.password);
+                
+                const res = await loginIn(this.username, this.toMd5(this.password));
                 if(res.data.code===1) {
                     Toast.success({
                         message: '登录成功',
@@ -65,6 +67,9 @@ export default {
                 console.log(err);
                 Toast.success('网络错误');
             }
+        },
+        toMd5(str) {
+            return MD5(str);
         }
     }
 }

@@ -30,4 +30,12 @@ export const getSensors = (pid,token) => axios.get('/apps/sensors?token='+encode
 /**
  * 获取控制器列表
  * */
-export const getControllers = (pid,token) => axios.post('/apps/controllers?token='+encodeURIComponent(token)+'&pid='+pid);
+export const getControllers = (pid,token) => axios.get('/apps/controllers?token='+encodeURIComponent(token)+'&pid='+pid);
+/**
+ * 设置值
+ * */
+export const setController = (deviceId,sensorChannel,val,gatewayID) => axios.get(`http://39.104.67.142:3030/gateway/tcpcmd?cmd=control_power&value=${deviceId}:${sensorChannel}*${val}&gatewayId=${gatewayID}`);
+/**
+ *  获取监控列表
+ * */
+export const getLssj = (sensorId) => axios.get(`http://39.104.67.142:3030/gateway/historydata?sensor_id=${sensorId}`);

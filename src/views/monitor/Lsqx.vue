@@ -4,14 +4,14 @@
         <DpTab :active="3"></DpTab>
         <div class="main-body">
             <div class="sb-input-box">
-                <button><div class="in-box"><span>温度</span> <img src="@/assets/img/Group 3.png"/></div></button>
+                <button><div class="in-box"><span>光照</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <div class="date-panel">
                 <van-tabs v-model="active">
                     <van-tab class="sb-tab" v-for="item in dataList" :key="item.index" :title="item.title">
                         <div class="time-control">
                             <span class="ctrl"><van-icon name="arrow-left" /></span>
-                            <span class="title">2017-10-20</span>
+                            <span class="title">{{currentTime}}</span>
                             <span class="ctrl"><van-icon name="arrow" /></span>
                         </div>
                     </van-tab>
@@ -28,38 +28,38 @@
     import DpTab from '../../components/DpTab'
     import { Tab, Tabs,Icon } from 'vant';
     import F2 from '@antv/f2/lib';
+    import {getLssj} from '../../service';
     import _ from 'lodash/fp';
-    function initChart() {
-        const data =
-            [{
-            time: '2016-08-08 00:00:00',
-            tem: 10
-        }, {
-            time: '2016-08-08 00:10:00',
-            tem: 22
-        }, {
-            time: '2016-08-08 00:30:00',
-            tem: 20
-        }, {
-            time: '2016-08-09 00:35:00',
-            tem: 26
-        }, {
-            time: '2016-08-09 01:00:00',
-            tem: 20
-        }, {
-            time: '2016-08-09 01:20:00',
-            tem: 26
-        }, {
-            time: '2016-08-10 01:40:00',
-            tem: 28
-        }, {
-            time: '2016-08-10 02:00:00',
-            tem: 20
-        }, {
-            time: '2016-08-10 02:20:00',
-            tem: 18
-        }];
-
+    function initChart(data) {
+        // const data =
+        //     [{
+        //     time: '2016-08-08 00:00:00',
+        //     tem: 10
+        // }, {
+        //     time: '2016-08-08 00:10:00',
+        //     tem: 22
+        // }, {
+        //     time: '2016-08-08 00:30:00',
+        //     tem: 20
+        // }, {
+        //     time: '2016-08-09 00:35:00',
+        //     tem: 26
+        // }, {
+        //     time: '2016-08-09 01:00:00',
+        //     tem: 20
+        // }, {
+        //     time: '2016-08-09 01:20:00',
+        //     tem: 26
+        // }, {
+        //     time: '2016-08-10 01:40:00',
+        //     tem: 28
+        // }, {
+        //     time: '2016-08-10 02:00:00',
+        //     tem: 20
+        // }, {
+        //     time: '2016-08-10 02:20:00',
+        //     tem: 18
+        // }];
         const chart = new F2.Chart({
             id: 'mountNode',
             width: document.getElementById('app').offsetWidth - 50,
@@ -67,27 +67,27 @@
         });
 
         const defs = {
-            time: {
+            ctime: {
                 type: 'timeCat',
                 mask: 'HH:MM',
                 tickCount: 4,
                 range: [0, 1]
             },
-            tem: {
+            data: {
                 tickCount: 5,
                 min: 0,
-                alias: '日均温度'
+                alias: '日均光照'
             }
         };
         chart.source(data, defs);
-        chart.axis('tem',{
+        chart.axis('data',{
             label: function () {
                 return {
                     fill: '#fff'
                 };
             }
         });
-        chart.axis('time', {
+        chart.axis('ctime', {
             label: function label(text, index, total) {
                 let textCfg = {};
                 if (index === 0) {
@@ -102,11 +102,11 @@
         chart.tooltip({
             showCrosshairs: true
         });
-        chart.line().position('time*tem').shape('smooth').style({
+        chart.line().position('ctime*data').shape('smooth').style({
             stroke: '#fff',
-            lineWidth: 3
+            lineWidth: 1
         });
-        chart.point().position('time*tem').shape('smooth').style({
+        chart.point().position('ctime*data').shape('smooth').style({
             stroke: '#fff',
             lineWidth: 6
         });
@@ -122,7 +122,9 @@
                     {title:'月',index:2},
                     {title:'年',index:3},
                     {title:'历年',index:4}
-                ]
+                ],
+                chartData: [],
+                currentTime:'2017-10-20'
             };
         },
         components: {
@@ -133,10 +135,22 @@
             DpTab
         },
         mounted() {
-            initChart();
+            getLssj(261).then(res => {
+                console.log(res.data);
+                if(res.data && res.data.results) {
+                   this.chartData =res.data.results;
+                   if(this.chartData.length>0) {
+                       this.currentTime = this.chartData[0].ctime.substr(0,10);
+                   }
+                   initChart(this.chartData.slice(0,10));
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+           const that = this;
             window.onresize = function () {
                _.debounce(function () {
-                   initChart();
+                   initChart(that.chartData.slice(0,10));
                },300);
             };
         }
