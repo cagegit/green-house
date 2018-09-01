@@ -154,6 +154,11 @@ export default new Router({
                   path: 'aboutme',// 关于
                   name: 'aboutme',
                   component: () => import('./views/about/AboutMe.vue')
+              },  {
+                  path: 'modifyaddr',// 修改地址
+                  name: 'modifyaddr',
+                  component: () => import('./views/about/ModifyAddr.vue'),
+                  props: true
               }
           ]
       }, {
