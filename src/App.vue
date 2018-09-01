@@ -27,4 +27,11 @@
     .main-body {
         padding: 0 10px;
     }
+   .van-dialog__confirm, .van-dialog__confirm:active {
+       color: $btn-color !important;
+   }
+   .van-picker__cancel, .van-picker__confirm {
+       color: $btn-color !important;
+       font-size: 16px;
+   }
 </style>

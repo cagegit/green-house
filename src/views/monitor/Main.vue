@@ -6,18 +6,8 @@
                 <img src="@/assets/img/topimg@2x.png" alt=""/>
             </div>
             <div class="select-box">
-                <div class="select">
-                    <select v-model="area" @change="changeArea()">
-                        <option v-for="item in areaList" :key="item.id" :value="item.name" >{{ item.name }}</option>
-                    </select>
-                </div>
-                <div class="select">
-                    <select v-model="yq" @change="chagneYq()">
-                        <option v-for="item in yqList" :key="item.id" :value="item.id">{{ item.name }}</option>
-                    </select>
-                </div>
-                <!--<select><div class="in-box"><span>地区1</span> <img src="@/assets/img/Group 3.png"/></div></select>-->
-                <!--<select><div class="in-box"><span>园区1</span> <img src="@/assets/img/Group 3.png"/></div></select>-->
+                <button @click="dqShow = true"><div class="in-box"><span>{{area}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
+                <button @click="yqShow = true"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <!--<div class="dp-box">-->
                 <!--<img src="@/assets/img/dp@2x.png">-->
@@ -36,12 +26,18 @@
             <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>-->
             <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>-->
             <div style="margin-bottom: 60px;"></div>
+            <van-popup v-model="dqShow" position="bottom">
+                <van-picker show-toolbar :columns="areaNameList" @cancel="dqShow=false" @confirm="dpConfirm"/>
+            </van-popup>
+            <van-popup v-model="yqShow" position="bottom">
+                <van-picker show-toolbar :columns="yqNameList" @cancel="yqShow=false" @confirm="yqConfirm"/>
+            </van-popup>
         </div>
         <FootBar></FootBar>
     </div>
 </template>
 <script>
-    import { Cell, CellGroup,Row, Col } from 'vant';
+    import { Cell, CellGroup,Row, Col,Popup,Picker } from 'vant';
     import HeadBar from '../../components/HeadBar'
     import FootBar from "../../components/FootBar";
     import DapCell from "../../components/DpCell";
@@ -54,10 +50,14 @@
                 src: require('@/assets/img/dp@2x.png'),
                 area:'',
                 areaList: [],
+                areaNameList:[],
                 yq: '',
                 yqList: [],
+                yqNameList:[],
                 daList: [],
-                token: this.$store.state.token
+                token: this.$store.state.token,
+                dqShow: false,
+                yqShow: false
             }
         },
         components: {
@@ -67,7 +67,9 @@
             [CellGroup.name]: CellGroup,
             [Cell.name]: Cell,
             [Row.name]:Row,
-            [Col.name]:Col
+            [Col.name]:Col,
+            [Popup.name]:Popup,
+            [Picker.name]:Picker
         },
         mounted() {
             // this.login(this.token);
@@ -93,20 +95,29 @@
                 try {
                     const res = await getLocates(token);
                     console.log(res.data);
-                    this.areaList = Object.assign([],res.data.results) || [];
-                    if(this.areaList.length>0) {
-                        this.area = this.areaList[0].name;
-                        this.yqList = this.areaList[0].children;
-                        if(this.yqList.length>0) {
-                            this.yq = this.yqList[0].id;
-                            this.getDp(this.yq);
+                    if(res.data && res.data.results) {
+                        this.areaList = Object.assign([],res.data.results) || [];
+                        if(this.areaList.length>0) {
+                            this.areaNameList = this.areaList.map(v => v.name);
+                            this.area = this.areaList[0].name;
+                            this.yqList = this.areaList[0].children;
+                            if(this.yqList.length>0) {
+                                this.yqNameList = this.areaList.map(v => v.name);
+                                this.yq = this.yqList[0].name;
+                                this.getDp(this.yqList[0].id);
+                            }
                         }
                     }
                 }catch (err) {
                     console.log(err);
                 }
             },
-            changeArea() {
+            changeArea(picker,value) {
+                this.area = value;
+            },
+            dpConfirm(value) {
+                this.dqShow = false;
+                this.area = value;
                 let area = '';
                 this.areaList.forEach((val) => {
                     if(this.area === val.name) {
@@ -114,25 +125,34 @@
                     }
                 });
                 if(area && area.children) {
-                    console.log(area.children);
                     if(area.children.length>0) {
-                        this.yqList = Object.assign([],area.children);
-                        this.yq = this.yqList[0].id;
-                        this.daList = this.getDp(this.yqList[0].pid);
+                        this.yqList = Object.assign([],area.children) || [];
+                        this.yqNameList = this.yqList.map(v => v.name);
+                        if(this.yqList.length>0){
+                            this.yq = this.yqList[0].name;
+                            this.getDp(this.yqList[0].id);
+                        }
                     } else {
                         this.daList = [];
                         this.yqList = [];
+                        this.yqNameList = [];
+                        this.yq = '';
                     }
                 } else {
                     this.daList = [];
+                    this.yqList = [];
+                    this.yqNameList = [];
+                    this.yq = '';
                 }
             },
-            chagneYq() {
+            yqConfirm(value) {
+                this.yq = value;
+                this.yqShow = false;
                 this.yqList.forEach(val => {
-                    if(val.id === this.yq) {
-                        this.getDp(this.yq);
+                    if(val.name === this.yq) {
+                        this.getDp(val.id);
                     }
-                })
+                });
             },
             async login() {
                 const res = await loginIn('wq','123456');
@@ -193,59 +213,17 @@
                 justify-content: space-between;
                 flex: 1;
                 padding: 0 15px;
-            }
-            img {
-                width: 16px;
-                height: 16px;
-                display: inline-block;
-                padding-top: 6px;
-            }
-        }
-        .select{
-            //用div的样式代替select的样式
-            /*padding: 0 5px;*/
-            border-radius: 5px;
-            position: relative;
-            background: transparent;
-            select{
-                //清除select的边框样式
-                border: none;
-                //清除select聚焦时候的边框颜色
-                outline: none;
-                //将select的宽高等于div的宽高
-                border-radius: 100px;
-                width: 150px;
-                height: 30px;
-                line-height: 30px;
-                text-align: center;
-                cursor:pointer;
-                background-color: #fff;
-                //隐藏select的下拉图标
-                appearance: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                //通过padding-left的值让文字居中
-                padding-left: 15px;
-            }
-            option {
-                background-color: #fff;
-            }
-            //使用伪类给select添加自己想用的图标
-            &:after{
-                content: "";
-                width: 16px;
-                height: 16px;
-                background: url('../../assets/img/Group 3.png') no-repeat center;
-                background-size: contain;
-                //通过定位将图标放在合适的位置
-                position: absolute;
-                border-radius: 100%;
-                right: 15px;
-                top: 7px;
-                //给自定义的图标实现点击下来功能
-                pointer-events: none;
+                span{
+                    overflow: hidden;
+                }
+                img {
+                    width: 16px;
+                    height: 16px;
+                    display: inline-block;
+                    padding-top: 6px;
+                    padding-left: 5px;
+                }
             }
         }
-
     }
 </style>

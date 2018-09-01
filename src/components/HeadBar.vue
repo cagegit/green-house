@@ -40,14 +40,17 @@
     };
 </script>
 <style lang="scss">
+    @import "../sass/variable";
     .van-nav-bar .van-icon {
         color: #4B4A4A;
+        font-weight: bold;
     }
     .van-nav-bar {
         background-color: transparent;
         .van-nav-bar__title {
-            color: #202323;
+            color: $head-bar-color;
             letter-spacing: 1.7px;
+            font-size: 14px;
         }
     }
 </style>
