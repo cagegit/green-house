@@ -10,12 +10,12 @@
                     </div>
                     <div class="sb-c-right">
                         <span v-if="item.properties.ctrl==='1' || item.properties.ctrl==='2'">{{item.status?'开启':'关闭'}}</span>
-                        <span v-else-if="item.properties.ctrl==='3'">
+                        <span v-if="item.properties.ctrl==='3'">
                             <i v-if="item.status===0">停止</i>
                             <i v-if="item.status===-1">左转</i>
                             <i v-if="item.status===1">右转</i>
                         </span>
-                        <span v-else="item.properties.ctrl==='4'">{{item.status+'档'}}</span>
+                        <span v-if="item.properties.ctrl==='4'">{{item.status+'档'}}</span>
                         <i class="van-icon van-icon-arrow"></i>
                     </div>
                 </div>

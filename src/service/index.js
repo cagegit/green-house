@@ -231,3 +231,21 @@ export const modifyAutoTask = (controllerid,token,content,status,type) => {
 export const addAutoTasks = (controllerid,token,content,status,type) => {
     return axios.get(`/apps/createtask?controllerid=${controllerid}&content=${JSON.stringify(content)}&status=${status}&type=${type}&token=${encodeURIComponent(token)}`);
 };
+
+/**
+ * 查询上下限
+ * @param pid 大棚id
+ * @param sensorld 设备id
+ */
+export const getLimitValue = (pid,sensorld) => {
+    return axios.get(`${DEVICE_URL}/device/warningConfig?pengId=${pid}&sensorId=${sensorld}`);
+};
+
+/**
+ * 设定上下限值
+ * @param pid 大棚id
+ * @param sensorld 设备id
+ */
+export const setLimitValue = (limitArr) => {
+    return axios.post(`${DEVICE_URL}/device/warningConfig`,limitArr);
+};

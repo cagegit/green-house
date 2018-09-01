@@ -155,7 +155,9 @@
                         if(this.chartData.length>0) {
                             this.currentTime = this.chartData[0].ctime.substr(0,10);
                         }
-                        initChart(this.chartData);
+                        setTimeout(() => {
+                           initChart(this.chartData);
+                        },500);
                     }
                 }).catch(err => {
                     console.log(err);

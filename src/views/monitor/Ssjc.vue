@@ -16,7 +16,7 @@
                             <div class="ss-title">
                                 <span>{{item.name}}</span>
                             </div>
-                            <div @click="changeWaring(item.properties)">
+                            <div @click="getLimitRequest(item.pid,item.properties.sensorId)">
                                 <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
                             </div>
                         </div>
@@ -32,25 +32,41 @@
                     </div>
                     <div style="height: 100px;"></div>
                 </div>
-            <van-dialog v-model="show" :show-cancel-button="true">
-                <div class="dia-content">
-                    <div class="title">告警值设置</div>
+            <van-dialog class="dialog-wrap" :closeOnClickOverlay="true"	 v-model="show" :show-cancel-button="true">
+                <div class="dia-content" v-for="(item,index) in sendLimitArr">
+                    <div class="title">{{item.name}}值设置</div>
                     <div class="gj-box">
                         <div class="flex-st">
                             <div class="st-left">上限</div>
-                            <div class="gj-set">
-                                <button type="button">-</button>
-                                <div class="sb"><input type="text" :value="limit_high"/></div>
-                                <button type="button">+</button>
-                            </div>
+                            <van-stepper
+                                    class="gj-set"
+                                    v-model="sendLimitArr[index].max"
+                                    integer
+                                    :min="sendLimitArr[index].min"
+                                    :max="limitValue[index].max"
+                                    :step="1"
+                            />
+                            <!--<div class="gj-set">-->
+                                <!--<button type="button">-</button>-->
+                                <!--<div class="sb"><input type="text" :value="limit_high"/></div>-->
+                                <!--<button type="button">+</button>-->
+                            <!--</div>-->
                         </div>
                         <div class="flex-st">
                             <div class="st-left">下限</div>
-                            <div class="gj-set">
-                                <button type="button">-</button>
-                                <div class="sb"><input type="text" :value="limit_low"/></div>
-                                <button type="button">+</button>
-                            </div>
+                            <van-stepper
+                                    class="gj-set"
+                                    v-model="sendLimitArr[index].min"
+                                    integer
+                                    :min="limitValue[index].min"
+                                    :max="sendLimitArr[index].max"
+                                    :step="1"
+                            />
+                            <!--<div class="gj-set">-->
+                                <!--<button type="button">-</button>-->
+                                <!--<div class="sb"><input type="text" :value="limit_low"/></div>-->
+                                <!--<button type="button">+</button>-->
+                            <!--</div>-->
                         </div>
                     </div>
                 </div>
@@ -59,12 +75,12 @@
     </v-touch>
 </template>
 <script>
-    import { Tabbar, TabbarItem,Icon,Dialog } from 'vant'
+    import { Tabbar, TabbarItem,Icon,Dialog,Stepper } from 'vant'
     import Vue from 'vue'
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
     import Weather from '../../components/Weather'
-    import {getWarings,getSensors,getLatestSensorData} from '../../service'
+    import {getWarings,getSensors,getLatestSensorData,getLimitValue,setLimitValue} from '../../service'
     Date.prototype.dateFormat = function(fmt) { //author: meizz
         let o = {
             "M+" : this.getMonth()+1,                 //月份
@@ -90,6 +106,7 @@
             [Tabbar.name]:Tabbar,
             [TabbarItem.name]:TabbarItem,
             [Icon.name]:Icon,
+            [Stepper.name]:Stepper,
             HeadBar,
             DpTab
         },
@@ -105,7 +122,9 @@
                 phImg: require("@/assets/img/PH@2x.png"),
                 wdImg: require("@/assets/img/wd@2x.png"),
                 limit_low:0,
-                limit_high:0
+                limit_high:0,
+                limitValue:[],
+                sendLimitArr:[]
             }
         },
         created(){
@@ -124,6 +143,44 @@
                 this.limit_low = limit_low+readout_unit;
                 this.limit_high = limit_high+readout_unit;
                 this.show = true;
+            },
+            getLimitRequest(pid,sensorld){
+                console.log(sensorld)
+                getLimitValue(175,326).then(res=>{
+                    console.log("limitValue:")
+                    console.log(res)
+                    this.limitValue = this.coppyArray(res.data.results);
+                    this.sendLimitArr = this.coppyArray(res.data.results);
+                    this.show = true;
+                })
+            },
+            sendLimitRequest(limitArr){
+                let sendLimitArr = new Array();
+                sendLimitArr.length = limitArr.length;
+                limitArr.map((item,index) =>{
+                    if(typeof(limitArr[index].warningId) != "undefined" && typeof(limitArr[index].min) != "undefined" && typeof(limitArr[index].max) != "undefined"){
+                        sendLimitArr[index].warningId = item.warningId;
+                        sendLimitArr[index].min = item.min;
+                        sendLimitArr[index].max = item.max;
+                    }
+
+                })
+                console.log("sendLimitArr：")
+                console.log(sendLimitArr)
+                setLimitValue(sendLimitArr).then(res=>{
+                    console.log("res  setLimitValue:")
+                    console.log(res)
+                    this.show = true;
+                })
+            },
+            coppyArray(arr){
+                return arr.map((e)=>{
+                    if(typeof e==='object'){
+                        return Object.assign({},e);
+                    }else{
+                        return e;
+                    }
+                })
             },
             countWarings() {
                 // type=3 //1：按级别 2：按日期 3：按大棚 &corp_id=1// 客户id&status=1 // 1:报警中 0：历史报警
@@ -278,8 +335,13 @@
         border: 1px solid $sbjc-green;
         padding: 0 3px !important;
     }
+    .dialog-wrap{
+        height:450px;
+        overflow: scroll;
+    }
     .dia-content {
         padding: 20px;
+        border-bottom:1px solid #ccc;
         .title{
             font-size: 16px;
             /*font-weight: bold;*/
@@ -305,7 +367,7 @@
             display: flex;
             flex: 1;
             justify-content: space-between;
-            width: 70%;
+            width: 100%;
             .sb {
                 text-align: center;
             }
