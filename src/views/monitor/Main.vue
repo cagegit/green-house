@@ -57,7 +57,8 @@
                 daList: [],
                 token: this.$store.state.token,
                 dqShow: false,
-                yqShow: false
+                yqShow: false,
+                user: {}
             }
         },
         components: {
@@ -77,10 +78,7 @@
                 this.$router.replace('/login');
             }
             if(JSON.stringify(this.$store.state.user)!=='{}') {
-                console.log("this.$store.state.user")
-                console.log(this.$store.state.user)
                 this.user = Object.assign({},this.$store.state.user);
-                // this.user.phone = this.user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
             }
             console.log(this.token);
             this.locates(this.token);
