@@ -96,13 +96,11 @@
                 this.$router.push("/monitor/ssjc");
             },
             showDqPanel(){
-                console.log('dq panel');
                 if(this.areaNameList.length>0){
                     this.dqShow = true;
                 }
             },
             showYqPanel(){
-                console.log('yq panel');
                 if(this.yqNameList.length>0){
                     this.yqShow = true;
                 }
