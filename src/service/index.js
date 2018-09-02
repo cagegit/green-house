@@ -36,9 +36,17 @@ export const getControllers = (pid,token) => axios.get('/apps/controllers?token=
  * */
 export const setController = (deviceId,sensorChannel,val,gatewayID) => axios.get(`http://39.104.67.142:3030/gateway/tcpcmd?cmd=control_power&value=${deviceId}:${sensorChannel}*${val}&gatewayId=${gatewayID}`);
 /**
- *  获取监控列表
+ *  获取日 监控数据
  * */
-export const getLssj = (sensorId) => axios.get(`http://39.104.67.142:3030/gateway/historydata?sensor_id=${sensorId}`);
+export const getDayLs = (id,type,day) => axios.get(`http://giot.kjxt.tech:3030/stat/sensordata?id=${id}&type=${type}&day=${day}`);
+/**
+ *  获取月 监控数据
+ * */
+export const getMonthLs = (id,type,month) => axios.get(`http://giot.kjxt.tech:3030/stat/sensordata?id=${id}&type=${type}&month=${month}`);
+/**
+ *  获取年 监控数据
+ * */
+export const getYearLs = (id,type,year) => axios.get(`http://giot.kjxt.tech:3030/stat/sensordata?id=${id}&type=${type}&yeart=${year}`);
 /**
  *  获取我的
  * */

@@ -7,12 +7,12 @@
                 <button><div class="in-box"><span>光照</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <div class="date-panel">
-                <van-tabs v-model="active">
+                <van-tabs v-model="active" @click="tabChange">
                     <van-tab class="sb-tab" v-for="item in dataList" :key="item.index" :title="item.title">
                         <div class="time-control">
-                            <span class="ctrl"><van-icon name="arrow-left" /></span>
+                            <span class="ctrl" @click="preByTab"><van-icon name="arrow-left" /></span>
                             <span class="title">{{currentTime}}</span>
-                            <span class="ctrl"><van-icon name="arrow" /></span>
+                            <span class="ctrl" @click="nextByTab"><van-icon name="arrow" /></span>
                         </div>
                     </van-tab>
                 </van-tabs>
@@ -28,7 +28,7 @@
     import DpTab from '../../components/DpTab'
     import { Tab, Tabs,Icon } from 'vant';
     import F2 from '@antv/f2/lib';
-    import {getLssj} from '../../service';
+    import {getDayLs,getMonthLs,getYearLs} from '../../service';
     import _ from 'lodash/fp';
     function initChart(data) {
         // const data =
@@ -70,7 +70,7 @@
             ctime: {
                 type: 'timeCat',
                 mask: 'HH:MM',
-                tickCount: 4,
+                tickCount: 5,
                 range: [0, 1]
             },
             data: {
@@ -135,24 +135,79 @@
             DpTab
         },
         mounted() {
-            getLssj(261).then(res => {
-                console.log(res.data);
-                if(res.data && res.data.results) {
-                   this.chartData =res.data.results;
-                   if(this.chartData.length>0) {
-                       this.currentTime = this.chartData[0].ctime.substr(0,10);
-                   }
-                   initChart(this.chartData.slice(0,10));
-                }
-            }).catch(err => {
-                console.log(err);
-            });
+           // this.tabChange(1);
+            this.drawDayChart(261,1,20180901);
            const that = this;
             window.onresize = function () {
                _.debounce(function () {
-                   initChart(that.chartData.slice(0,10));
+                   initChart(that.chartData);
                },300);
             };
+        },
+        methods: {
+            tabChange(index) {
+                console.log(index);
+               if(index ===1) { // 按月统计
+                  //this.drawMonthChart(261,2,201809);
+                  this.currentTime = '2018-09';
+               } else if(index ===2) {// 按年统计
+                   // this.drawYearChart(261,3,2018);
+                   this.currentTime = '2018';
+               } else if(index ===3) {// 历年统计
+
+               } else { // 按日统计
+                 // this.drawDayChart(261,1,20180901);
+                   this.currentTime = '2018-09-01'
+               }
+            },
+            preByTab() {
+                console.log(this.active);
+            },
+            nextByTab() {
+                console.log(this.active);
+            },
+            drawDayChart(id,type,day) {
+                getDayLs(id,type,day).then(res => {
+                    console.log(res.data);
+                    if(res.data && res.data.results) {
+                        this.chartData =res.data.results;
+                        if(this.chartData.length>0) {
+                            this.currentTime = this.chartData[0].ctime.substr(0,10);
+                        }
+                        initChart(this.chartData);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            },
+            drawMonthChart(id,type,month) {
+                getMonthLs(id,type,month).then(res => {
+                    console.log(res.data);
+                    if(res.data && res.data.results) {
+                        this.chartData =res.data.results;
+                        if(this.chartData.length>0) {
+                            this.currentTime = this.chartData[0].ctime.substr(0,10);
+                        }
+                        initChart(this.chartData);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            },
+            drawYearChart(id,type,year) {
+                getYearLs(id,type,year).then(res => {
+                    console.log(res.data);
+                    if(res.data && res.data.results) {
+                        this.chartData =res.data.results;
+                        if(this.chartData.length>0) {
+                            this.currentTime = this.chartData[0].ctime.substr(0,10);
+                        }
+                        initChart(this.chartData);
+                    }
+                }).catch(err => {
+                    console.log(err);
+                });
+            }
         }
 
     }
