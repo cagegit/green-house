@@ -6,8 +6,8 @@
                 <img src="@/assets/img/topimg@2x.png" alt=""/>
             </div>
             <div class="select-box">
-                <button @click="dqShow = true"><div class="in-box"><span>{{area}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
-                <button @click="yqShow = true"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
+                <button @click="showDqPanel"><div class="in-box"><span>{{area}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
+                <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <!--<div class="dp-box">-->
                 <!--<img src="@/assets/img/dp@2x.png">-->
@@ -95,10 +95,22 @@
                 this.$store.commit('setPid',176);
                 this.$router.push("/monitor/ssjc");
             },
+            showDqPanel(){
+                console.log('dq panel');
+                if(this.areaNameList.length>0){
+                    this.dqShow = true;
+                }
+            },
+            showYqPanel(){
+                console.log('yq panel');
+                if(this.yqNameList.length>0){
+                    this.yqShow = true;
+                }
+            },
             async locates(token) {
                 try {
                     const res = await getLocates(token);
-                    console.log(res.data);
+                    // console.log(res.data);
                     if(res.data && res.data.results) {
                         this.areaList = Object.assign([],res.data.results) || [];
                         if(this.areaList.length>0) {
@@ -106,7 +118,7 @@
                             this.area = this.areaList[0].name;
                             this.yqList = this.areaList[0].children;
                             if(this.yqList.length>0) {
-                                this.yqNameList = this.areaList.map(v => v.name);
+                                this.yqNameList = this.yqList.map(v => v.name);
                                 this.yq = this.yqList[0].name;
                                 this.getDp(this.yqList[0].id);
                             }
