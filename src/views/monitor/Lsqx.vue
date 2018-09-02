@@ -124,7 +124,7 @@
                     {title:'历年',index:4}
                 ],
                 chartData: [],
-                currentTime:'2017-10-20'
+                currentTime:'2018-09-20'
             };
         },
         components: {
@@ -136,7 +136,7 @@
         },
         mounted() {
            // this.tabChange(1);
-            this.drawDayChart(261,1,20180901);
+           this.drawDayChart(261,1,20180901);
            const that = this;
             window.onresize = function () {
                _.debounce(function () {
@@ -170,7 +170,10 @@
                 getDayLs(id,type,day).then(res => {
                     console.log(res.data);
                     if(res.data && res.data.results) {
-                        this.chartData =res.data.results;
+                        this.chartData =res.data.results.map(val => {
+                            const ctime = val.day.toString().replace(/^(\d{4})(\d{2})(\d{2})/,'$1-$2-$3') + " "+val.hour+':'+val.min;
+                            return {data:val.data,ctime:ctime};
+                        });
                         if(this.chartData.length>0) {
                             this.currentTime = this.chartData[0].ctime.substr(0,10);
                         }
