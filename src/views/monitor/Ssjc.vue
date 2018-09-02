@@ -3,9 +3,9 @@
         <HeadBar title="实时监测" link="/monitor/main"></HeadBar>
         <DpTab :active="1"></DpTab>
         <div class="main-body">
-            <!--<div>-->
-                <!--天气-->
-            <!--</div>-->
+            <!--\天气-->
+             <Weather></Weather>
+            <!--天气\-->
             <div class="ss-tip">
                 <button type="button" class="btn">您有4个报警，请查看></button>
             </div>
@@ -159,10 +159,12 @@
     import Vue from 'vue'
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
+    import Weather from '../../components/Weather'
     Vue.use(Dialog);
     export default {
         name: 'Ssjc',
         components: {
+            Weather,
             [Tabbar.name]:Tabbar,
             [TabbarItem.name]:TabbarItem,
             [Icon.name]:Icon,
@@ -172,8 +174,13 @@
         data() {
             return {
                 active: 0,
-                show: false
+                show: false,
+                air: {},
+                weather: []
             }
+        },
+        mounted(){
+           // this.getLocationAndWeather();
         },
         methods: {
             changeWaring(num){

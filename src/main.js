@@ -4,8 +4,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 import 'lib-flexible'   //移动端布局框架
+import jsonp from 'jsonp';
 
-
+Vue.prototype.$jsonp= jsonp;
 Vue.config.productionTip = false;
 window.$store = store;
 // 路由变化更新tabNum
