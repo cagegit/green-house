@@ -64,5 +64,10 @@ export const modifyAddrAndTel = (token,userName,address,phone) =>{
 	}
 	return axios.get(url);
 } 
-
+/**
+ *  控制-控制列表
+ * */
+export const getControList = (token,pid) =>{
+	return axios.get(`/apps/controllersByParkGroupByType?token=`+encodeURIComponent(token) + "&pid=" + pid);
+} 
 

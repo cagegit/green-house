@@ -68,7 +68,7 @@
     import {Popup,Picker} from 'vant';
     import HeadBar from '../components/HeadBar'
     import FootBar from "../components/FootBar";
-    import { getLocates,getUtilities} from "@/service";
+    import { getLocates,getUtilities, getControList} from "@/service";
     export default  {
         name:'Control',
         components: {
@@ -163,17 +163,28 @@
                 }
             },
             yqConfirm(value) {
+                console.log("dddddddddddd:")
+                console.log(value)
+                console.log(this.yqList)
+                
                 this.yq = value;
                 this.yqShow = false;
                 this.yqList.forEach(val => {
                     if(val.name === this.yq) {
                         this.getDp(val.id);
+                        this.getControList(val.id);
                     }
                 });
             },
             async getDp(pid) {
                 const res = await getUtilities(pid,this.token);
                 this.daList = Object.assign([],res.data.results) || [];
+            },
+            getControList(pid){
+                getControList(this.token,pid).then(res=>{
+                    console.log("res:")
+                    console.log(res)
+                })
             }
         }
     }
