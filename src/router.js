@@ -80,7 +80,8 @@ export default new Router({
               {
                   path: 'fjs',// 风机组控制页
                   name: 'fjs',
-                  component: () => import('./views/monitor/Fjs.vue')
+                  component: () => import('./views/monitor/Fjs.vue'),
+                  props:true
               },
               {
                   path: 'fuxuan',// 重复选择页

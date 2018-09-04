@@ -10,7 +10,7 @@
                 <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <div class="control-panel">
-                <div class="flex-row">
+                <!-- <div class="flex-row">
                     <div class="sb-box" @click="toSbList(1)">
                         <img src="@/assets/img/fengj@2x.png"/>
                         <div class="sb-name">风机</div>
@@ -27,13 +27,13 @@
                         <img src="@/assets/img/guang@2x.png"/>
                         <div class="sb-name">灌溉1型</div>
                     </div>
-                </div>
+                </div> -->
                 <div class="flex-row">
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/guang@2x.png"/>
-                        <div class="sb-name">灌溉2型</div>
+                    <div class="sb-box" v-for="item in controlList" :key="item.info.id" @click="toSbList(item.items)">
+                        <img :src="getImg(item.info.value)"/>
+                        <div class="sb-name">{{item.info.name}}</div>
                     </div>
-                    <div class="sb-box" @click="toSbList(1)">
+                    <!-- <div class="sb-box" @click="toSbList(1)">
                         <img src="@/assets/img/jiawl@2x.png"/>
                         <div class="sb-name">加温炉</div>
                     </div>
@@ -45,13 +45,18 @@
                         <img src="@/assets/img/ship@2x.png"/>
                         <div class="sb-name">视频</div>
                     </div>
+                    <div class="sb-box" @click="toSbList(1)">
+                        <img src="@/assets/img/ship@2x.png"/>
+                        <div class="sb-name">视频</div>
+                    </div>
+ -->
                 </div>
-                <div class="flex-row">
+               <!--  <div class="flex-row">
                     <div class="sb-box" @click="toSbList(1)">
                         <img src="@/assets/img/co2@2x.png"/>
                         <div class="sb-name">CO2发生器</div>
                     </div>
-                </div>
+                </div> -->
 
             </div>
             <van-popup v-model="dqShow" position="bottom">
@@ -88,7 +93,17 @@
                 daList: [],
                 token: this.$store.state.token,
                 dqShow: false,
-                yqShow: false
+                yqShow: false,
+                img_1: require("@/assets/img/fengj@2x.png"),
+                img_2: require("@/assets/img/zidc@2x.png"),
+                img_3: require("@/assets/img/juanlj@2x.png"),
+                img_4: require("@/assets/img/guang@2x.png"),
+                img_5: require("@/assets/img/jiawl@2x.png"),
+                img_6: require("@/assets/img/zheyz@2x.png"),
+                img_7: require("@/assets/img/ship@2x.png"),
+                img_8: require("@/assets/img/co2@2x.png"),
+                controlList:[]
+
             }
         },
         mounted() {
@@ -98,8 +113,8 @@
             this.locates(this.token);
         },
         methods: {
-            toSbList(num) {
-                this.$router.push('/monitor/fjs');
+            toSbList(list) {
+                this.$router.push({ name: 'fjs', params: { itemList: list }});
             },
             showDqPanel(){
                 if(this.areaNameList.length>0){
@@ -125,6 +140,7 @@
                                 this.yqNameList = this.yqList.map(v => v.name);
                                 this.yq = this.yqList[0].name;
                                 this.getDp(this.yqList[0].id);
+                                this.getControList(this.yqList[0].id);
                             }
                         }
                     }
@@ -181,11 +197,15 @@
                 this.daList = Object.assign([],res.data.results) || [];
             },
             getControList(pid){
-                getControList(this.token,pid).then(res=>{
-                    console.log("res:")
-                    console.log(res)
+                getControList(this.token,176).then(res=>{
+                    if(res.data.code==1){
+                        this.controlList = Object.assign([],res.data.results)
+                    }
                 })
-            }
+            },
+            getImg(num) {
+                return this['img_'+num];
+            },
         }
     }
 </script>
@@ -239,12 +259,13 @@
     .flex-row {
         display: flex;
         flex:1;
-        justify-content: space-between;
-        margin-bottom: 10px;
+        justify-content: flex-start;
+        flex-wrap:wrap;
     }
     .sb-box{
         text-align: center;
         padding: 5px;
+        margin:0 0.266667rem 10px;
         img{
             width: 50px;
             height: 50px;
