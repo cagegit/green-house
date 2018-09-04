@@ -72,6 +72,20 @@
         props: {
             itemList:Array
         },
+        mounted() {
+            try{
+                if(this.itemList){
+                    localStorage.controList = Object.assign([],this.itemList) 
+                }
+                else{
+                    if(localStorage.controList){
+                        this.itemList = Object.assign([],localStorage.controList)
+                    }
+                }
+            }catch(e){
+
+            }
+        },
         data(){
             return {
                 img_1: require("@/assets/img/fengj@2x.png"),
