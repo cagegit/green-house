@@ -2,7 +2,7 @@
     <div class="monitor">
         <HeadBar title="风机" link="/control"></HeadBar>
         <div class="main-body">
-            <div class="fj-cell" style="margin-top: 10px" v-for="item in itemList" :key="item.id">
+            <div class="fj-cell" style="margin-top: 10px" v-for="item in controList" :key="item.id">
                 <div class="sb-c-left">
                     <img :src="getImg(item.properties.type)">
                     <span>{{item.name}}</span>
@@ -73,13 +73,18 @@
             itemList:Array
         },
         mounted() {
+            this.controList = this.itemList
             try{
                 if(this.itemList){
-                    localStorage.controList = Object.assign([],this.itemList) 
+                    console.log("gg:")
+                    localStorage.setItem('controList',JSON.stringify(this.itemList));
+                    console.log(this.itemList)
                 }
                 else{
                     if(localStorage.controList){
-                        this.itemList = Object.assign([],localStorage.controList)
+                        this.controList = JSON.parse(localStorage.getItem("controList"))
+                        console.log("ss:")
+                        console.log(this.itemList)
                     }
                 }
             }catch(e){
@@ -88,6 +93,7 @@
         },
         data(){
             return {
+                controList:[],
                 img_1: require("@/assets/img/fengj@2x.png"),
                 img_2: require("@/assets/img/zidc@2x.png"),
                 img_3: require("@/assets/img/juanlj@2x.png"),
