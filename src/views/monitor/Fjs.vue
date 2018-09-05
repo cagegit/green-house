@@ -1,6 +1,6 @@
 <template>
     <div class="monitor">
-        <HeadBar title="风机" link="/control"></HeadBar>
+        <HeadBar :title="titName" link="/control"></HeadBar>
         <div class="main-body">
             <div class="fj-cell" style="margin-top: 10px" v-for="item in controList" :key="item.id">
                 <div class="sb-c-left">
@@ -18,47 +18,6 @@
                     <i class="van-icon van-icon-arrow"></i>
                 </div>
             </div>
-<!--             <div class="fj-cell">
-                <div class="sb-c-left">
-                    <img src="@/assets/img/fengj@2x.png">
-                    <span>风机设备1</span>
-                </div>
-                <div class="sb-c-right" @click="toSetPage(1)">
-                    <span>开启</span>
-                    <i class="van-icon van-icon-arrow"></i>
-                </div>
-            </div>
-            <div class="fj-cell">
-                <div class="sb-c-left">
-                    <img src="@/assets/img/fengj@2x.png">
-                    <span>风机设备2</span>
-                </div>
-                <div class="sb-c-right" @click="toSetPage(1)">
-                    <span>开启</span>
-                    <i class="van-icon van-icon-arrow"></i>
-                </div>
-            </div>
-            <div class="fj-cell">
-                <div class="sb-c-left">
-                    <img src="@/assets/img/fengj@2x.png">
-                    <span>风机设备3</span>
-                </div>
-                <div class="sb-c-right" @click="toSetPage(1)">
-                    <span>关闭</span>
-                    <i class="van-icon van-icon-arrow"></i>
-                </div>
-            </div>
-            <div class="fj-cell">
-                <div class="sb-c-left">
-                    <img src="@/assets/img/fengj@2x.png">
-                    <span>风机设备4</span>
-                </div>
-                <div class="sb-c-right" @click="toSetPage(1)">
-                    <span>关闭</span>
-                    <i class="van-icon van-icon-arrow"></i>
-                </div>
-            </div> -->
-
         </div>
     </div>
 </template>
@@ -70,21 +29,23 @@
             HeadBar
         },
         props: {
-            itemList:Array
+            itemList:Object
         },
         mounted() {
-            this.controList = this.itemList
+            console.log("ffffffffff:")
+            console.log(this.itemList)
+            
             try{
                 if(this.itemList){
                     console.log("gg:")
                     localStorage.setItem('controList',JSON.stringify(this.itemList));
-                    console.log(this.itemList)
+                    this.controList = this.itemList.items;
+                    this.titName = this.itemList.info.name;
                 }
                 else{
                     if(localStorage.controList){
-                        this.controList = JSON.parse(localStorage.getItem("controList"))
-                        console.log("ss:")
-                        console.log(this.itemList)
+                        this.controList = JSON.parse(localStorage.getItem("controList")).items;
+                        this.titName = JSON.parse(localStorage.getItem("controList")).info.name;
                     }
                 }
             }catch(e){
@@ -94,6 +55,7 @@
         data(){
             return {
                 controList:[],
+                titName:"",
                 img_1: require("@/assets/img/fengj@2x.png"),
                 img_2: require("@/assets/img/zidc@2x.png"),
                 img_3: require("@/assets/img/juanlj@2x.png"),

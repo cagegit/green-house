@@ -29,7 +29,7 @@
                     </div>
                 </div> -->
                 <div class="flex-row">
-                    <div class="sb-box" v-for="item in controlList" :key="item.info.id" @click="toSbList(item.items)">
+                    <div class="sb-box" v-for="item in controlList" :key="item.info.id" @click="toSbList(item)">
                         <img :src="getImg(item.info.value)"/>
                         <div class="sb-name">{{item.info.name}}</div>
                     </div>
