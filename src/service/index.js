@@ -70,4 +70,15 @@ export const modifyAddrAndTel = (token,userName,address,phone) =>{
 export const getControList = (token,pid) =>{
 	return axios.get(`/apps/controllersByParkGroupByType?token=`+encodeURIComponent(token) + "&pid=" + pid);
 } 
-
+/**
+ * 发现-列表页
+ * */
+export const getFindList = (token,currentPage,pageSize,type) =>{
+	return axios.get(`/apps/discoverInfo?pageindex=` + currentPage + `&pagesize=` + pageSize + `&type=` + type + `&token=`+encodeURIComponent(token));
+}
+/**
+ * 发现-tab个数
+ * */
+export const getFindTab = (token) =>{
+	return axios.get(`/apps/discoverModule?token=` + encodeURIComponent(token));
+}
