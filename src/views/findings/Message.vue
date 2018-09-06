@@ -24,7 +24,7 @@
 </template>
 <script>
     import { Tab, Tabs, List, Cell } from 'vant'
-    import {getFindList} from '../../service'
+    import {getFindList, getFindTab} from '../../service'
     export default {
         name: "Message",
         components: {
@@ -50,6 +50,7 @@
             }
         },
         mounted(){
+            // this.getTabList();
         },
         methods: {
             onLoad() {
@@ -78,7 +79,8 @@
                         }
                     }
                 })
-            }
+            },
+            
         }
     }
 </script>
