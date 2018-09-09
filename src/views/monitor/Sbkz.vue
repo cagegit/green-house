@@ -129,18 +129,20 @@
             HeadBar,
             DpTab
         },
-        mounted() {
+        created() {
             const {pid,token} = this.$store.state;
             if(!token) {
                 this.$router.replace('/login');
             }
+            this.name = this.name || '';
             this.getCtrls(pid,token);
         },
         methods: {
            toSetPage(pro) {
                this.$store.commit('setPropertys',Object.assign({},pro.properties));
                // this.$router.push('/monitor/fjsb');
-               this.$router.push({ name: 'fjsb', params: { name: pro.name }});
+               console.log('Sbkz:'+pro.name);
+               this.$router.push({ name: 'fjsb', params: { name: pro.name ,id: pro.id}});
            },
             getImg(num) {
                 return this['img_'+num];
@@ -197,7 +199,7 @@
             border: 0;
         }
         span {
-            font-size: 16px;
+            font-size: 14px;
             color: #202323;
             padding-left: 10px;
         }

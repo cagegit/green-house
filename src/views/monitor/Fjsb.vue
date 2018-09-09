@@ -14,14 +14,14 @@
             </div>
             <!--三路控制-->
             <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='3'">
-                <!--<div class="fj-flex">-->
-                    <!--<div class="sb-c-left">-->
-                        <!--<span>手动</span>-->
-                    <!--</div>-->
-                    <!--<div class="sb-c-right">-->
-                        <!--<van-switch v-model="handCheck" />-->
-                    <!--</div>-->
-                <!--</div>-->
+                <div class="fj-flex">
+                    <div class="sb-c-left">
+                        <span>手动</span>
+                    </div>
+                    <div class="sb-c-right">
+                        <van-switch v-model="handCheck" />
+                    </div>
+                </div>
                 <div class="fj-content">
                     <div class="fj-zx">
                         <div class="zx-item" @click="setZx(-1)">
@@ -41,14 +41,14 @@
             </div>
             <!--阶段控制-->
             <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='4'">
-                <!--<div class="fj-flex">-->
-                    <!--<div class="sb-c-left">-->
-                        <!--<span>手动</span>-->
-                    <!--</div>-->
-                    <!--<div class="sb-c-right">-->
-                        <!--<van-switch v-model="handCheck" />-->
-                    <!--</div>-->
-                <!--</div>-->
+                <div class="fj-flex">
+                    <div class="sb-c-left">
+                        <span>手动</span>
+                    </div>
+                    <div class="sb-c-right">
+                        <van-switch v-model="handCheck" />
+                    </div>
+                </div>
                 <div class="fj-content">
                     <div class="fj-slider">
                         <van-slider v-model="current" :step="25" bar-height="8px" />
@@ -77,8 +77,8 @@
                         <div class="sb-c-left">
                             <span>开启时间</span>
                         </div>
-                        <div class="sb-c-right">
-                            <input type="text" placeholder="请选择" readonly/>
+                        <div class="sb-c-right" @click="setStartTime()">
+                            <input type="text" placeholder="请选择" :value="stTime" readonly/>
                             <i class="van-icon van-icon-arrow"></i>
                         </div>
                     </div>
@@ -86,8 +86,8 @@
                         <div class="sb-c-left">
                             <span>关闭时间</span>
                         </div>
-                        <div class="sb-c-right">
-                            <input type="text" placeholder="请选择" readonly/>
+                        <div class="sb-c-right" @click="setEndTime()">
+                            <input type="text" placeholder="请选择" :value="enTime" readonly/>
                             <i class="van-icon van-icon-arrow"></i>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                             <span>重复</span>
                         </div>
                         <div class="sb-c-right" @click="chongFu()">
-                            <input type="text" placeholder="请选择" readonly/>
+                            <input type="text" class="cf-input" placeholder="请选择" :value="chongfu" readonly/>
                             <i class="van-icon van-icon-arrow"></i>
                         </div>
                     </div>
@@ -105,16 +105,43 @@
             </div>
 
         </div>
+        <van-actionsheet v-model="startTimePanel">
+            <van-datetime-picker
+                    v-model="stTime"
+                    type="time"
+                    :min-hour="stMinHour"
+                    :max-hour="stMaxHour"
+                    @confirm="startConfirm"
+                    @cancel="startCancel"
+            />
+        </van-actionsheet>
+        <van-actionsheet v-model="endTimePanel">
+            <van-datetime-picker
+                    v-model="enTime"
+                    type="time"
+                    :min-hour="enMinHour"
+                    :max-hour="enMaxHour"
+                    @confirm="endConfirm"
+                    @cancel="endCancel"
+            />
+        </van-actionsheet>
     </div>
 </template>
 <script>
-    import { Switch,Slider } from 'vant'
+    import { Switch,Slider,DatetimePicker,Actionsheet } from 'vant'
     import HeadBar from '../../components/HeadBar'
-    import {setController} from '../../service'
+    import {setController,getAutoTask,addAutoTask,modifyAutoTask} from '../../service'
     export default {
         name: 'Fjsb',
         props: {
-            name:String
+            name:{
+                type: String,
+                default: ''
+            },
+            id: {
+                type: Number,
+                default: 0
+            }
         },
         data() {
             return {
@@ -130,28 +157,56 @@
                     rightNormal: require('@/assets/img/right-normal@2x.png'),
                     rightPress: require('@/assets/img/right-press@2x.png'),
                 },
-                pro:{}
+                pro:{
+                    ctrl:'1'
+                },
+                startTimePanel: false,
+                endTimePanel: false,
+                currentDate: new Date(),
+                stMinHour: 0,
+                stMaxHour: 23,
+                stTime:'00:00',
+                enMinHour: 0,
+                enMaxHour: 23,
+                enTime:'14:00',
+                chongfu: '每天'
             }
         },
         components: {
             [Switch.name]:Switch,
             [Slider.name]:Slider,
+            [DatetimePicker.name]:DatetimePicker,
+            [Actionsheet.name]:Actionsheet,
             HeadBar
         },
         mounted() {
-            const {propertys,token} = this.$store.state;
-            if(!token) {
-                this.$router.replace('/login');
-            }
+            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth} = this.$store.state;
+            // console.log(propertys);
             if(!propertys) {
                 this.$router.replace('/monitor/sbkz');
+                return;
             }
-            console.log(propertys);
+            this.handCheck = controlHand;
+            this.autoCheck = controlAuto;
+            this.getAutoTasks();// 获取自动任务列表
+            if(this.autoCheck) {
+                 if(fxType===1) {
+                    let sk = '';
+                    const wk ={0:'周一',1:'周二',2:'周三',3:'周四',4:'周五',5:'周六',6:'周日'};
+                     sk = fxWeek.map(v => wk[v]).join(',');
+                     this.chongfu = '每周 '+sk;
+                 } else if(fxType===2) {
+                     this.chongfu = '每月 '+fxMonth.slice(0,5).join(',');
+                 } else {
+                     this.chongfu = '每天';
+                 }
+            }
+
             this.pro = propertys;
             if(this.pro) {
                 this.currentZx = this.pro.value || 0;
                 this.current = this.pro.value || 0;
-                this.handCheck = !!this.pro.value;
+                // this.handCheck = !!this.pro.value;
             }
         },
         methods: {
@@ -161,29 +216,120 @@
             setZx(num) {
                 this.currentZx = num;
                 this.pro.value = num;
-                // this.$store.commit('setPropertys',Object.assign({},this.pro));
-                // "{"gatewayId":"123456789","deviceId":"307","type":"2","ctrl":"2","Channel":"18"}"
                 this.setCtrl();
             },
             setCtrl() {
-                const {deviceId,Channel,value,gatewayId} = this.pro;
-                setController(deviceId,Channel,value,gatewayId)
+                setTimeout(() => {
+                    const {deviceId,Channel,value,gatewayId} = this.pro;
+                    setController(deviceId,Channel,value,gatewayId)
+                        .then(res => {
+                            console.log(res.data);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                },200)
+            },
+            setStartTime() {
+                this.startTimePanel = true;
+            },
+            setEndTime() {
+                this.endTimePanel = true;
+            },
+            startConfirm(currentVal) {
+                console.log(currentVal);
+                this.stTime = currentVal;
+                this.startTimePanel = false;
+            },
+            startCancel() {
+                this.startTimePanel = false;
+            },
+            endConfirm(currentVal) {
+                console.log(currentVal);
+                this.enTime = currentVal;
+                this.endTimePanel = false;
+            },
+            endCancel() {
+                this.endTimePanel = false;
+            },
+            getAutoTasks() {
+                // console.log(this.id);
+                const token = this.$store.state.token;
+                getAutoTask(this.id,token).then(res => {
+                   console.log(res);
+                }).catch(err => {
+                    console.log(err);
+                });
+            },
+            addAutoTask(content) {
+                const token = this.$store.state.token;
+                content && (content.controllerid= this.id);
+                addAutoTask(this.id,token,content)
                     .then(res => {
-                        console.log(res.data);
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
+                        console.log(res);
+                    }).catch(err => {
+                     console.log(err);
+                    });
+            },
+            editAutoTask(taskId,content) {
+                const token = this.$store.state.token;
+                modifyAutoTask(taskId,this.id,content,token)
+                    .then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                       console.log(err);
+                    });
+            },
+            saveAutoInfo() {
+                if(this.autoCheck) {
+                    const sk = {};
+                    const {fxType,fxWeek,fxMonth} = this.$store.state;
+                    const fx = {0:'day',1:'week',2:'month'};
+                    sk.looptype = fx[fxType];
+                    if(fxType===1) {
+                        sk.days = fxWeek;
+                    } else if(fxType === 2) {
+                        sk.days = fxMonth;
+                    } else {
+                        sk.days = [];
+                    }
+                    sk.tims = [];
+                    let fw = {
+                        starthour: "8",
+                        startminute: "30",
+                        endhour: "9",
+                        endminute: "30"
+                    };
+                    if(this.stTime) {
+                        let [a,b] = this.stTime.split(':');
+                        fw.starthour = a && a.replace(/^0/,'');
+                        fw.startminute = b && b.replace(/^0/,'');
+                    }
+                    if(this.enTime) {
+                        let [a,b] = this.enTime.split(':');
+                        fw.endhour = a && a.replace(/^0/,'');
+                        fw.endminute = b && b.replace(/^0/,'');
+                    }
+                    sk.tims.push(fw);
+                    console.log(sk);
+                    this.addAutoTask(sk);
+                }
             }
+        },
+        beforeRouteLeave (to, from , next) {
+            this.saveAutoInfo();
+            next();
         },
         watch: {
             'handCheck':function (isCheck) {
+                console.log('isCheck:'+isCheck);
+                this.$store.commit('setControlHand',isCheck);
                 this.pro.value = isCheck?1:0;
                 this.setCtrl();
-                this.autoCheck = !isCheck;
             },
             'autoCheck':function (isCheck) {
-                this.handCheck = !isCheck;
+                console.log(isCheck);
+                this.$store.commit('setControlAuto',isCheck);
             },
             'current': function (val) {
                 this.pro.value = val;
@@ -237,6 +383,9 @@
                 padding-right: 5px;
                 color:#B2B2B2;
             }
+        }
+        .cf-input {
+            width: 120px !important;
         }
         .fj-content{
             border-top: 1px solid #ddd;

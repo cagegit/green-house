@@ -11,7 +11,6 @@ export default new Router({
       },
       {
           path: '/login',
-          name: 'login',
           component:  () => import('./views/Login.vue'),
           children: [
               {
@@ -38,7 +37,6 @@ export default new Router({
       },
       {
           path: '/monitor',
-          name: 'monitor',
           component: Monitor,
           children: [
               {
@@ -113,7 +111,6 @@ export default new Router({
           component: () => import('./views/Control.vue')
       }, {
           path: '/findings',
-          name: 'findings',
           component: () => import('./views/Findings.vue'),
           children: [
               {
@@ -123,7 +120,7 @@ export default new Router({
               },
               {
                   path: 'message',// 消息页面
-                  name: 'message',
+                  name: 'msg',
                   component: () => import('./views/findings/Message.vue')
               },
               {
@@ -134,7 +131,6 @@ export default new Router({
           ]
       }, {
           path: '/about',
-          name: 'about',
           component: () => import('./views/About.vue'),
           children: [
               {
@@ -164,7 +160,6 @@ export default new Router({
           ]
       }, {
           path: '/warning',   //告警
-          name: 'warning',
           component: () => import('./views/Warning.vue'),
           children: [
             {

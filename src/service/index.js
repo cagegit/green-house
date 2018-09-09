@@ -82,3 +82,28 @@ export const getFindList = (token,currentPage,pageSize,type) =>{
 export const getFindTab = (token) =>{
 	return axios.get(`/apps/discoverModule?token=` + encodeURIComponent(token));
 }
+
+/**
+ * 修改单控制器
+ **/
+export const setControl = (gatewayId,value) => { // value 格式：100:17*1;传感器ID，通道号，期望值
+    return axios.get(`http://39.104.67.142:3030/gateway/tcpcmd?cmd=control_power&gatewayId=${gatewayId}&value=${value}`);
+};
+/**
+ * 获取自动任务列表
+ * */
+export const getAutoTask = (controllerId,token) => {
+    return axios.get(`/apps/gettask?controllerid=${controllerId}&token=${token}`);
+};
+/**
+ * 添加自动任务
+ * */
+export const  addAutoTask = (ctrlId,token,content) => {
+     return axios.post(`/apps/createtask`,{controllerid:ctrlId,content:content,token:token});
+};
+/**
+ * 修改自动任务
+ * */
+export const modifyAutoTask = (taskId,ctrlId,content,token) => {
+   return axios.post(`/apps/modifytask?`,{id:taskId,controllerid:ctrlId,content:content,token:token});
+};
