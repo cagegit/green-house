@@ -82,3 +82,9 @@ export const getFindList = (token,currentPage,pageSize,type) =>{
 export const getFindTab = (token) =>{
 	return axios.get(`/apps/discoverModule?token=` + encodeURIComponent(token));
 }
+/**
+ * 告警this.$router.
+ **/
+export const getWaringList = (userId, status, pageNum) =>{
+	return axios.get(`http://giot.kjxt.tech:3030/stat/warningByUser?uid=` + userId + `&page=` + pageNum + `&status=` + status);
+}

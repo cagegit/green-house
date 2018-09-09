@@ -5,7 +5,7 @@
             <div class="warn-top">
                 <div class="detail-item flex">
                     <div class="warn-type">告警类型</div>
-                    <div class="warn-value">湿度告警</div>
+                    <div class="warn-value">{{detailCard.name}}告警</div>
                 </div>
                 <div class="detail-item flex">
                     <div class="warn-type">当前值</div>
@@ -13,25 +13,25 @@
                 </div>
                 <div class="detail-item flex">
                     <div class="warn-type">正常值</div>
-                    <div class="warn-value">50%~70%</div>
+                    <div class="warn-value">{{detailCard.low}}%~{{detailCard.high}}%</div>
                 </div>
                 <div class="detail-item flex">
                     <div class="warn-type">告警级别</div>
-                    <div class="warn-value">2级   风机已开启</div>
+                    <div class="warn-value">{{detailCard.level}}级   风机已开启</div>
                 </div>
                 <div class="detail-item flex">
                     <div class="warn-type">告警时间</div>
-                    <div class="warn-value">今天 5:04</div>
+                    <div class="warn-value">{{detailWarn.peng.ctime}}</div>
                 </div>
             </div>
-            <div class="warn-bottom">
+            <!-- <div class="warn-bottom">
                 <div class="detail-item flex">
                     <div class="warn-type">告警位置</div>
                 </div>
                 <div class="detail-item flex">
                     <div class="warn-value">房山区农委—园区1—一号西红柿大棚</div>
                 </div>
-            </div>
+            </div> -->
             
         </div>
     </div>
@@ -45,10 +45,19 @@
         },
         data() {
             return {
-              
+              detailCard:{}
             }
         },
+        props: {
+            detailWarn:Object
+        },
+        mounted(){
+            this.detailCard = Object.assign({},JSON.parse(JSON.stringify(this.detailWarn)));
+            console.log("dddddddddddddd:")
+            console.log(this.detailWarn.peng.ctime)
+        },
         methods:{
+            
         }
     }
 </script>

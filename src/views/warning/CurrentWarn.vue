@@ -7,83 +7,83 @@
         @click="switchBtn"
         >历史警告</div>
     </div>
-    <div class="warn-list">
-        <div class="warn-item" v-for="item in warnList" :key="item.id" @click="toDetail">
+    <van-list
+        v-model="loading"
+        :finished="finished"
+        @load="onLoad" 
+        class="warn-list">
+
+        <van-cell class="warn-item" v-for="(item,index) in warnList" :key="index" @click="toDetail(item)">
             <div class="flex item-top">
-                <div class="house-name">{{item.houseName}}</div>   
-                <div class="warn-time"><span>{{item.date}}  </span><span> {{item.time}}</span></div>
+                <div class="house-name">{{item.peng.name}}</div>   
+                <div class="warn-time"><span>{{item.peng.ctime}} </span></div>
             </div>
             <div class="item-bottom flex">
-                <span>{{item.type}}：</span>
-                <span class="warn-rank">4级告警</span>
-                <span>{{item.addr}}</span>      
+                <span>{{item.name}}：</span>
+                <span class="warn-rank">{{item.level}}级告警</span>
+                <!-- <span>{{item.addr}}</span>       -->
             </div>      
-        </div>
-    </div>
+        </van-cell>
+
+    </van-list>
     <FootBar :active="3"></FootBar>
     </div>
     
 </template>
 <script>
     import FootBar from '@/components/FootBar'
+    import { Cell, List } from 'vant'
+    import { getWaringList } from '@/service'
     export default {
         name: "currentWarn",
          components: {
+            [List.name]: List,
+            [Cell.name]: Cell,
             FootBar
         },
         data() {
             return {
-                warnList:[{
-                    id:1,
-                    houseName:"一号西红柿大棚",
-                    date:"7月12",
-                    time:"12:25",
-                    type:"湿度传感器",
-                    rank:"4级告警",
-                    addr:"房山区农委--园区1"
-                },{
-                    id:2,
-                    houseName:"二号西红柿大棚",
-                    date:"7月12",
-                    time:"12:25",
-                    type:"湿度传感器",
-                    rank:"4级告警",
-                    addr:"房山区农委--园区1"
-                },{
-                    id:3,
-                    houseName:"三号西红柿大棚",
-                    date:"7月12",
-                    time:"12:25",
-                    type:"湿度传感器",
-                    rank:"4级告警",
-                    addr:"房山区农委--园区1"
-                },{
-                    id:4,
-                    houseName:"四号西红柿大棚",
-                    date:"7月12",
-                    time:"12:25",
-                    type:"湿度传感器",
-                    rank:"4级告警",
-                    addr:"房山区农委--园区1"
-                },{
-                    id:5,
-                    houseName:"五号西红柿大棚",
-                    date:"7月12",
-                    time:"12:25",
-                    type:"湿度传感器",
-                    rank:"4级告警",
-                    addr:"房山区农委--园区1"
-                }
-                ]
+                loading: false,
+                finished: false,
+                currentPage: 0,
+                warnList:[],
+                currentPage:0
             }
              
         },
+        mounted(){
+            // this.getWaringListFn(this.$store.state.user.id,1,0);
+        },
         methods:{
-            toDetail(){
-                this.$router.push("/warning/warningDetail");
+            toDetail(item){
+                this.$router.push({name:'warningDetail',params:{detailWarn:item}});
             },
             switchBtn(){
                 this.$router.push("/warning/historywarn");
+            },
+            onLoad() {
+                getWaringList(this.$store.state.user.id,1,this.currentPage).then(res =>{
+                    if (res.data.results) {
+                        this.currentPage += 1;
+                        this.loading = false;
+                        if (res.data.results.length == 0) {
+                            this.finished = true
+                        } else {
+                            this.warnList = Object.assign([], this.warnList, res.data.results)
+                            for (var i = 0; i < this.warnList.length; i++) {
+                                var date = new Date(this.warnList[i].peng.ctime);
+                                var year = date.getFullYear();
+                                var month = date.getMonth() + 1;
+                                var today = date.getDate();
+                                var hour = date.getHours();
+                                var minutes = date.getMinutes();
+                                var seconds = date.getSeconds();
+                                var formatTime = year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds
+                                this.warnList[i].peng.ctime = formatTime;
+                            }
+                        }
+                    }
+                })
             }
         }
     }
@@ -131,6 +131,7 @@
         border-radius: 0.266667rem;
         height:2.586667rem;
         margin-bottom:0.4rem;
+        padding:0;
     }
     .item-top{
         padding:0 0.4rem;
