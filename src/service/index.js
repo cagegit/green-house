@@ -107,3 +107,19 @@ export const  addAutoTask = (ctrlId,token,content) => {
 export const modifyAutoTask = (taskId,ctrlId,content,token) => {
    return axios.post(`/apps/modifytask?`,{id:taskId,controllerid:ctrlId,content:content,token:token});
 };
+/**
+ * 获取告警统计
+ * */
+export const getWarings = (type,corpId,status,from,to) => {
+    return axios.get(`http://39.104.67.142:3030/stat/warningStat?type=${type}&corp_id=${corpId}&status=${status}&from=${from}&to=${to}`);
+};
+/**
+ * 修改大棚信息
+ * */
+export const editDaPeng = (dpId,name,foodtype,w,h,len,address) => {
+    w = w || 0;
+    h = h || 0;
+    len = len || 0;
+    return axios.get(`/apps/modifygreenhouse?id=${dpId}&name=${name}&foodtype=${foodtype}&width=${w}&height=${h}&length=${len}&address=${address}`);
+    // return axios.post(`/apps/modifygreenhouse`,{id:dpId,name:name,foodtype:foodtype,width:w,height:h,length:len,address:address});
+};

@@ -72,7 +72,7 @@
             [Popup.name]:Popup,
             [Picker.name]:Picker
         },
-        mounted() {
+        created() {
             if(JSON.stringify(this.$store.state.user)!=='{}') {
                 this.user = Object.assign({},this.$store.state.user);
             }
@@ -167,9 +167,9 @@
             },
             async getDp(pid) {
                 const res = await getUtilities(pid,this.token);
-                console.log('da:');
-                console.log('pid:'+pid);
-                console.log(res.data);
+                // console.log('da:');
+                // console.log('pid:'+pid);
+                // console.log(res.data);
                 this.daList = Object.assign([],res.data.results) || [];
             }
         }

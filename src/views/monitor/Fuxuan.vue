@@ -78,11 +78,11 @@
             for(let i =1;i<=num;i++) {
                 this.months.push({value:i,check:false});
             }
-            console.log('current date:'+num);
+            // console.log('current date:'+num);
             const {fxType,fxWeek,fxMonth} = this.$store.state;
             this.week = fxType;
-            console.log(fxWeek);
-            console.log(fxMonth);
+            // console.log(fxWeek);
+            // console.log(fxMonth);
             if(this.week===1) {
                 this.weeks.forEach(v => {
                     if(fxWeek && fxWeek.indexOf(v.value)>=0) {

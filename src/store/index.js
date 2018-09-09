@@ -15,7 +15,8 @@ const state = {
     sbInfo: {
         name: '一号西红柿大棚',
         type: '非转基因西红柿',
-        size: '200*800'
+        size: '200*3*1000',
+        area: '北京市北京市海淀区'
     },
     user: {},
     aboutMes:{}
