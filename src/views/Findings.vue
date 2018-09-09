@@ -20,7 +20,7 @@
         >
 
             <van-cell class="card-list" v-for="(item,index) in cardList" :key="index">
-                <a :href="item.url">
+                <a :href="'https://'+item.url" target="_blank">
                     <div class="card-img">
                         <img :src="item.imgUrl" alt=""/>
                         <div class="card-date flex">

@@ -54,7 +54,7 @@ export default {
                         message: '登录成功',
                         duration: 500
                     });
-                    this.$store.commit('setToken',res.data.token);
+                    this.$store.commit('setToken', res.data.token);
                     if(res.data.user && res.data.user.length>0) {
                         this.$store.commit('setUser',res.data.user[0]);
                     }

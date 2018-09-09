@@ -6,8 +6,8 @@
             <!--\天气-->
              <Weather></Weather>
             <!--天气\-->
-            <div class="ss-tip">
-                <button type="button" class="btn">您有4个报警，请查看></button>
+            <div class="ss-tip" v-if="warings>0">
+                <button type="button" class="btn" @click="toWarPage()">您有{{warings}}个报警，请查看></button>
             </div>
 
             <div class="ss-card">
@@ -160,6 +160,24 @@
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
     import Weather from '../../components/Weather'
+    import {getWarings} from '../../service'
+    Date.prototype.dateFormat = function(fmt) { //author: meizz
+        let o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt))
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        for(let k in o)
+            if(new RegExp("("+ k +")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length===1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        return fmt;
+    };
     Vue.use(Dialog);
     export default {
         name: 'Ssjc',
@@ -176,16 +194,36 @@
                 active: 0,
                 show: false,
                 air: {},
-                weather: []
+                weather: [],
+                warings: 0
             }
         },
-        mounted(){
+        created(){
            // this.getLocationAndWeather();
+            this.countWarings();
         },
         methods: {
             changeWaring(num){
                 console.log(num);
                 this.show = true;
+            },
+            countWarings() {
+                // type=3 //1：按级别 2：按日期 3：按大棚 &corp_id=1// 客户id&status=1 // 1:报警中 0：历史报警
+                const fromTime = "2018-09-01";
+                const toTime = new Date().dateFormat("yyyy-MM-dd");
+                getWarings(3,1,1,fromTime,toTime).then(res => {
+                    // console.log(res);
+                    if(res && res.data && res.data.status ===1) {
+                        if(res.data.results && res.data.results.length>0) {
+                            this.warings = res.data.results[0].count;
+                        }
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
+            },
+            toWarPage(){
+                this.$router.push('/warning');
             }
         }
     }

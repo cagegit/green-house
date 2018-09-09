@@ -43,27 +43,39 @@
                 <div class="sb-c-left">
                     <span>所在地</span>
                 </div>
-                <div class="sb-c-right">
-                    <span>北京市海淀区</span>
+                <div class="sb-c-right" @click="showTimePanel=true">
+                    <span>{{sbInfo.area}}</span>
                     <i class="van-icon van-icon-arrow"></i>
                 </div>
             </div>
-
+            <div class="sb-button">
+                <button type="button" @click="modifyDpInfo()">保存</button>
+            </div>
+            <van-actionsheet v-model="showTimePanel">
+                <van-area :area-list="addressList" @confirm="getArea" @cancel="showTimePanel=false;" />
+            </van-actionsheet>
         </div>
     </div>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
+    import AreaList from 'vant/packages/area/demo/area';
+    import {Actionsheet,Area } from 'vant';
+    import {editDaPeng} from '../../service'
     export default {
         name: 'Ssxx',
         components: {
             HeadBar,
-            DpTab
+            DpTab,
+            [Actionsheet.name]:Actionsheet,
+            [Area.name]:Area
         },
         data() {
            return {
-               sbInfo: this.$store.state.sbInfo
+               sbInfo: this.$store.state.sbInfo,
+               showTimePanel:false,
+               addressList:AreaList
            }
         },
         methods: {
@@ -75,6 +87,28 @@
                 } else {
                     this.$router.push({name:'dp-size'});
                 }
+            },
+            getArea(data) {
+                this.showTimePanel = false;
+                console.log(data);
+                if(data.length>=3) {
+                    this.sbInfo.area = data[0].name +data[1].name + data[2].name;
+                    this.$store.commit('sbinfo',this.sbInfo);
+                }
+            },
+            modifyDpInfo() {
+                // dpId,name,foodtype,w,h,len,address
+                const {pid,sbInfo} = this.$store.state;
+                if(!pid) {
+                    return;
+                }
+                const [w,h,l] = sbInfo.size.split('*');
+                editDaPeng(pid,sbInfo.name,sbInfo.type,w,h,l,sbInfo.area)
+                    .then(res => {
+                        console.log(res);
+                    }).catch(err => {
+                        console.log(err);
+                    });
             }
         }
     }

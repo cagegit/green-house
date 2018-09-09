@@ -3,10 +3,11 @@
         <HeadBar title="重复选择" link="/monitor/fjsb"></HeadBar>
         <div class="main-body">
             <div class="dp-tab2">
-                <button type="button" :class="{'active':week===0}" @click="changeFxType(0)">按周</button>
-                <button type="button" :class="{'active':week===1}" @click="changeFxType(1)">按月</button>
+                <button type="button" :class="{'active':week===0}" @click="changeFxType(0)">按天</button>
+                <button type="button" :class="{'active':week===1}" @click="changeFxType(1)">按周</button>
+                <button type="button" :class="{'active':week===2}" @click="changeFxType(2)">按月</button>
             </div>
-            <div v-if="week===0">
+            <div v-if="week===1">
                 <div class="fu-box">
                     <div class="fu-flex" v-for="item in weeks" :key="item.value">
                         <div class="sb-c-left">
@@ -19,7 +20,7 @@
 
                 </div>
             </div>
-            <div v-else>
+            <div v-else-if="week===2">
                <div class="fu-box">
                    <div class="fu-month">
                        <div v-for="item in months" :key="item.value" class="month" :class="{'active':item.check}"
@@ -27,63 +28,20 @@
                    </div>
                </div>
             </div>
+            <div v-else>
+                <div class="fu-box">
+                    <div class="fu-day">
+                        每天重复
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar';
     import { mapActions} from 'vuex';
-    export default {
-        name: 'Fuxuan',
-        data() {
-            return {
-                 weeks: [
-                     {name:'周一',value:1,check:true},
-                     {name:'周二',value:2,check:false},
-                     {name:'周三',value:3,check:false},
-                     {name:'周四',value:4,check:false},
-                     {name:'周五',value:5,check:false},
-                     {name:'周六',value:6,check:false},
-                     {name:'周日',value:7,check:false}
-                 ],
-                 months: []
-            }
-        },
-        computed: {
-          week: {
-              get(){
-                  return this.$store.state.fxType;
-              },
-              set() {}
-          }
-        },
-        components: {
-            HeadBar
-        },
-        beforeMount(){
-            // 获取当月时长
-            const num = getCountDays();
-            console.log('current date:'+num);
-            for(let i =1;i<=num;i++) {
-                this.months.push({value:i,check:false});
-            }
-        },
-        methods: {
-            ...mapActions([
-                'fxAction'
-            ]),
-            changeFxType(num) {
-                let list = [];
-                if(num===0) {
-                    list = this.weeks.filter(item => item.check);
-                } else {
-                    list = this.months.filter(item => item.check);
-                }
-                this.fxAction({type:num,value:list});
-            }
-        }
-    }
-    function getCountDays() {
+    const getCountDays = function() {
         const curDate = new Date();
         /* 获取当前月份 */
         const curMonth = curDate.getMonth();
@@ -93,7 +51,78 @@
         curDate.setDate(0);
         /* 返回当月的天数 */
         return curDate.getDate();
+    };
+    export default {
+        name: 'Fuxuan',
+        data() {
+            return {
+                 weeks: [
+                     {name:'周一',value:0,check:false},
+                     {name:'周二',value:1,check:false},
+                     {name:'周三',value:2,check:false},
+                     {name:'周四',value:3,check:false},
+                     {name:'周五',value:4,check:false},
+                     {name:'周六',value:5,check:false},
+                     {name:'周日',value:6,check:false}
+                 ],
+                 months: [],
+                week: 0
+            }
+        },
+        components: {
+            HeadBar
+        },
+        created(){
+            // 获取当月时长
+            const num = getCountDays();
+            for(let i =1;i<=num;i++) {
+                this.months.push({value:i,check:false});
+            }
+            // console.log('current date:'+num);
+            const {fxType,fxWeek,fxMonth} = this.$store.state;
+            this.week = fxType;
+            // console.log(fxWeek);
+            // console.log(fxMonth);
+            if(this.week===1) {
+                this.weeks.forEach(v => {
+                    if(fxWeek && fxWeek.indexOf(v.value)>=0) {
+                        v.check = true;
+                    }
+                });
+            } else if(this.week===2) {
+                this.months.forEach(v => {
+                    if(fxMonth && fxMonth.indexOf(v.value)>=0) {
+                        v.check = true;
+                    }
+                });
+            } else {
+
+            }
+        },
+        beforeRouteLeave (to, from , next) {
+            console.log('leave fuxuan router');
+            this.changeFxType(this.week);
+            next();
+        },
+        methods: {
+            ...mapActions([
+                'fxAction'
+            ]),
+            changeFxType(num) {
+                let list = [];
+                if(num===1) {
+                    list = this.weeks.filter(item => item.check).map(v => v.value);
+                } else if(num ===2) {
+                    list = this.months.filter(item => item.check).map(v => v.value);
+                } else {
+                    list = [];
+                }
+                this.week = num;
+                this.fxAction({type:num,value:list});
+            }
+        }
     }
+
 </script>
 <style lang="scss" scoped>
     .fu-box{
@@ -154,6 +183,10 @@
                 }
             }
 
+        }
+        .fu-day {
+            padding: 5px 10px;
+            font-size: 14px;
         }
     }
     .kong {
