@@ -127,5 +127,5 @@ export const editDaPeng = (dpId,name,foodtype,w,h,len,address) => {
  * 告警this.$router.
  **/
 export const getWaringList = (userId, status, pageNum) =>{
-	return axios.get(`http://giot.kjxt.tech:3030/stat/warningByUser?uid=` + userId + `&page=` + pageNum + `&status=` + status);
+	return axios.get(`http://giot.kjxt.tech:3030/stat/warningByUser?uid=${userId}&page=${pageNum}&status=${status}`);
 }
