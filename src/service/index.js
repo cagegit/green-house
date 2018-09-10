@@ -123,3 +123,9 @@ export const editDaPeng = (dpId,name,foodtype,w,h,len,address) => {
     return axios.get(`/apps/modifygreenhouse?id=${dpId}&name=${name}&foodtype=${foodtype}&width=${w}&height=${h}&length=${len}&address=${address}`);
     // return axios.post(`/apps/modifygreenhouse`,{id:dpId,name:name,foodtype:foodtype,width:w,height:h,length:len,address:address});
 };
+/**
+ * 告警this.$router.
+ **/
+export const getWaringList = (userId, status, pageNum) =>{
+	return axios.get(`http://giot.kjxt.tech:3030/stat/warningByUser?uid=${userId}&page=${pageNum}&status=${status}`);
+}
