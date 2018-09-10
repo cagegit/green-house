@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Monitor from './views/Monitor.vue'
+import Err404 from './views/error/404.vue'
+import Err500 from './views/error/500.vue'
 Vue.use(Router);
+
 
 export default new Router({
   routes: [
@@ -183,6 +186,20 @@ export default new Router({
                 component: () => import('./views/warning/WarningDetail.vue')
             }
         ]
+      },
+      {
+          path:'/404',
+          name:'404',
+          component: Err404
+      },
+      {
+          path:'/500',
+          name:'500',
+          component: Err500
+      },
+      {
+          path: '/*',
+          redirect: '/monitor/main'
       }
   ]
 })

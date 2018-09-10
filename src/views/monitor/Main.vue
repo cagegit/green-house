@@ -82,12 +82,12 @@
             toNextPage(pid) {
                 console.log('pid:'+pid);
                 pid = 176;
-                getSensors(176,this.token).then(res => {
+                getSensors(pid,this.token).then(res => {
                     console.log(res.data);
                 }).catch(err => {
                     console.log(err);
                 });
-                this.$store.commit('setPid',176);
+                this.$store.commit('setPid',pid);
                 this.$router.push("/monitor/ssjc");
             },
             showDqPanel(){
