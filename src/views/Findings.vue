@@ -70,23 +70,23 @@
         methods: {
             switchBtn(tab) {
                 this.currentTab = tab.id;
-                this.cardList=[]
-                this.type = tab.value
+                this.cardList=[];
+                this.type = tab.value;
                 this.currentPage = 0;
                 this.finished = false;
-                this.onLoad()
-                console.log("switchBtn:")
+                this.onLoad();
+                console.log("switchBtn:");
                 console.log(this.type)
                
             },
             getTabList() {
                 getFindTab(this.$store.state.token).then(res => {
                     if(res.data.results.length>0){
-                        console.log("getFindTab:")
-                        console.log(this.type)
-                        this.type = res.data.results[0].value
-                        this.tabs = Object.assign([], res.data.results)
-                        this.currentTab = res.data.results[0].id
+                        // console.log("getFindTab:")
+                        // console.log(this.type)
+                        this.type = res.data.results[0].value;
+                        this.tabs = Object.assign([], res.data.results);
+                        this.currentTab = res.data.results[0].id;
                         this.onLoad()
                     }
                     
@@ -94,16 +94,16 @@
             },
             onLoad() {
                 getFindList(this.$store.state.token, this.currentPage, 10, this.type).then(res => {
-                    console.log("onload:")
-                    console.log(this.type)
-                    if (res.data.code == 1) {
+                    // console.log("onload:")
+                    // console.log(this.type)
+                    if (res.data.code === 1) {
                         this.currentPage += 1;
                         this.loading = false;
-                        if (res.data.results.length == 0) {
+                        if (res.data.results.length === 0) {
                             this.finished = true
                             
                         } else {
-                            this.cardList = Object.assign([], this.cardList, res.data.results)
+                            this.cardList = Object.assign([], this.cardList, res.data.results);
                             for (var i = 0; i < this.cardList.length; i++) {
                                 var date = new Date(this.cardList[i].ctime);
                                 var year = date.getFullYear();
@@ -112,12 +112,12 @@
                                 var hour = date.getHours();
                                 var minutes = date.getMinutes();
                                 var seconds = date.getSeconds();
-                                var formatTime = year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds
+                                var formatTime = year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds;
                                 this.cardList[i].ctime = formatTime;
                             }
-                            console.log("dddddddddddd:")
-                            console.log(res.data.results)
-                            console.log(this.cardList)
+                            // console.log("dddddddddddd:")
+                            // console.log(res.data.results)
+                            // console.log(this.cardList)
                         }
                     }
                 })

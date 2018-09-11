@@ -131,9 +131,6 @@
         },
         created() {
             const {pid,token} = this.$store.state;
-            if(!token) {
-                this.$router.replace('/login');
-            }
             this.name = this.name || '';
             this.getCtrls(pid,token);
         },
@@ -141,16 +138,17 @@
            toSetPage(pro) {
                this.$store.commit('setPropertys',Object.assign({},pro.properties));
                // this.$router.push('/monitor/fjsb');
-               console.log('Sbkz:'+pro.name);
+               // console.log('Sbkz:'+pro.name);
                this.$router.push({ name: 'fjsb', params: { name: pro.name ,id: pro.id}});
            },
             getImg(num) {
+               num = +num> 8 ? 1: +num;
                 return this['img_'+num];
             },
             async getCtrls(pid,token) {
                  try {
                     const res = await getControllers(pid,token);
-                    console.log(res.data);
+                    // console.log(res.data);
                     if(res.data && res.data.results) {
                         res.data.results.forEach(val => {
                             if(val.properties) {

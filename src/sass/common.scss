@@ -235,3 +235,7 @@ html, body {
      padding: 5px 10px;
    }
 }
+button[disabled]{
+  color: #999;
+  background-color: #e8e8e8;
+}

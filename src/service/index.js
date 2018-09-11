@@ -116,12 +116,12 @@ export const getWarings = (type,corpId,status,from,to) => {
 /**
  * 修改大棚信息
  * */
-export const editDaPeng = (dpId,name,foodtype,w,h,len,address) => {
+export const editDaPeng = (dpId,token,name,foodtype,w,h,len,address) => {
     w = w || 0;
     h = h || 0;
     len = len || 0;
-    return axios.get(`/apps/modifygreenhouse?id=${dpId}&name=${name}&foodtype=${foodtype}&width=${w}&height=${h}&length=${len}&address=${address}`);
-    // return axios.post(`/apps/modifygreenhouse`,{id:dpId,name:name,foodtype:foodtype,width:w,height:h,length:len,address:address});
+    // return axios.get(`/apps/modifygreenhouse?id=${dpId}&name=${name}&foodtype=${foodtype}&width=${w}&height=${h}&length=${len}&address=${address}`);
+    return axios.post(`/apps/modifygreenhouse`,{id:dpId,token:token,name:name,foodtype:foodtype,width:w,height:h,length:len,address:address});
 };
 /**
  * 告警this.$router.

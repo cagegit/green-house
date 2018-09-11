@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="sb-button">
-                <button type="button" @click="modifyDpInfo()">保存</button>
+                <button type="button" :disabled="isSaving" @click="modifyDpInfo()">保存</button>
             </div>
             <van-actionsheet v-model="showTimePanel">
                 <van-area :area-list="addressList" @confirm="getArea" @cancel="showTimePanel=false;" />
@@ -61,7 +61,7 @@
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
     import AreaList from 'vant/packages/area/demo/area';
-    import {Actionsheet,Area } from 'vant';
+    import {Actionsheet,Area,Toast } from 'vant';
     import {editDaPeng} from '../../service'
     export default {
         name: 'Ssxx',
@@ -69,13 +69,15 @@
             HeadBar,
             DpTab,
             [Actionsheet.name]:Actionsheet,
-            [Area.name]:Area
+            [Area.name]:Area,
+            [Toast.name]:Toast
         },
         data() {
            return {
                sbInfo: this.$store.state.sbInfo,
                showTimePanel:false,
-               addressList:AreaList
+               addressList:AreaList,
+               isSaving: false
            }
         },
         methods: {
@@ -90,7 +92,7 @@
             },
             getArea(data) {
                 this.showTimePanel = false;
-                console.log(data);
+                // console.log(data);
                 if(data.length>=3) {
                     this.sbInfo.area = data[0].name +data[1].name + data[2].name;
                     this.$store.commit('sbinfo',this.sbInfo);
@@ -98,16 +100,25 @@
             },
             modifyDpInfo() {
                 // dpId,name,foodtype,w,h,len,address
-                const {pid,sbInfo} = this.$store.state;
+                const {pid,token,sbInfo} = this.$store.state;
                 if(!pid) {
                     return;
                 }
                 const [w,h,l] = sbInfo.size.split('*');
-                editDaPeng(pid,sbInfo.name,sbInfo.type,w,h,l,sbInfo.area)
+                this.isSaving = true;
+                editDaPeng(pid,token,sbInfo.name,sbInfo.type,w,h,l,sbInfo.area)
                     .then(res => {
-                        console.log(res);
+                        // console.log(res);
+                        if(res && res.data && res.data.code ===1) {
+                            Toast('保存成功！');
+                        } else {
+                            Toast('保存失败！');
+                        }
+                        this.isSaving = false;
                     }).catch(err => {
                         console.log(err);
+                        this.isSaving = false;
+                        Toast('保存失败！');
                     });
             }
         }
