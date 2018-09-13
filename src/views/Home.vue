@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <div class="start-box">
-      <router-view></router-view>
+      <transition  mode="out-in" >
+        <router-view></router-view>
+      </transition>
     </div>
   </div>
 </template>

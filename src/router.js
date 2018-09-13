@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Monitor from './views/Monitor.vue'
+import Main from './views/monitor/Main.vue'
 import Err404 from './views/error/404.vue'
 import Err500 from './views/error/500.vue'
 Vue.use(Router);
@@ -50,7 +51,7 @@ export default new Router({
               {
                   path: 'main',// 监测主页面
                   name: 'main',
-                  component: () => import('./views/monitor/Main.vue')
+                  component: Main
               },
               {
                   path: 'ssjc',// 实时监测页面
@@ -200,7 +201,7 @@ export default new Router({
       },
       {
           path: '/*',
-          redirect: '/monitor/main'
+          redirect: '/login'
       }
   ]
 })

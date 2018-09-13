@@ -43,7 +43,7 @@
                 <div class="sb-c-left">
                     <span>所在地</span>
                 </div>
-                <div class="sb-c-right" @click="showTimePanel=true">
+                <div class="sb-c-right">
                     <span>{{sbInfo.area}}</span>
                     <i class="van-icon van-icon-arrow"></i>
                 </div>
@@ -51,25 +51,22 @@
             <div class="sb-button">
                 <button type="button" :disabled="isSaving" @click="modifyDpInfo()">保存</button>
             </div>
-            <van-actionsheet v-model="showTimePanel">
-                <van-area :area-list="addressList" @confirm="getArea" @cancel="showTimePanel=false;" />
-            </van-actionsheet>
+            <!--<van-actionsheet v-model="showTimePanel">-->
+                <!--<van-area :area-list="addressList" @confirm="getArea" @cancel="showTimePanel=false;" />-->
+            <!--</van-actionsheet>-->
         </div>
     </div>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
-    import AreaList from 'vant/packages/area/demo/area';
-    import {Actionsheet,Area,Toast } from 'vant';
+    import { Toast } from 'vant';
     import {editDaPeng} from '../../service'
     export default {
         name: 'Ssxx',
         components: {
             HeadBar,
             DpTab,
-            [Actionsheet.name]:Actionsheet,
-            [Area.name]:Area,
             [Toast.name]:Toast
         },
         data() {
@@ -88,14 +85,6 @@
                     this.$router.push({name:'dp-type'});
                 } else {
                     this.$router.push({name:'dp-size'});
-                }
-            },
-            getArea(data) {
-                this.showTimePanel = false;
-                // console.log(data);
-                if(data.length>=3) {
-                    this.sbInfo.area = data[0].name +data[1].name + data[2].name;
-                    this.$store.commit('sbinfo',this.sbInfo);
                 }
             },
             modifyDpInfo() {

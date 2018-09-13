@@ -1,9 +1,9 @@
 <template>
     <div class="monitor">
-        <HeadBar title="修改作物种类" link="/monitor/ssxx"></HeadBar>
+        <HeadBar title="修改地址详情" link="/monitor/ssxx"></HeadBar>
         <div class="main-body">
             <div class="com-cell">
-                <van-field v-model="value" clearable placeholder="作物种类" />
+                <van-field v-model="value" clearable placeholder="详细地址" />
             </div>
             <div class="sb-button">
                 <button type="button" @click="setNewValue()">确定</button>
@@ -13,10 +13,10 @@
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
-    import { Field,Toast} from 'vant';
+    import { Field, Toast} from 'vant';
     import { mapActions} from 'vuex';
     export default {
-        name: 'DpType',
+        name: 'DpAddress',
         components: {
             [Field.name]:Field,
             [Toast.name]:Toast,
@@ -24,7 +24,7 @@
         },
         data() {
             return {
-                value: this.$store.state.sbInfo.type
+                value: this.$store.state.sbInfo.area
             }
         },
         methods: {
@@ -34,11 +34,9 @@
             setNewValue() {
                 // console.log(this.value);
                 Toast('更新成功！');
-                this.sbInfoAction({type:this.value});
+                this.sbInfoAction({area:this.value});
             }
         }
     }
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

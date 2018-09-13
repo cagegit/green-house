@@ -9,22 +9,7 @@
                 <button @click="showDqPanel"><div class="in-box"><span>{{area}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
                 <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
-            <!--<div class="dp-box">-->
-                <!--<img src="@/assets/img/dp@2x.png">-->
-                <!--<span>1号西红柿大棚</span>-->
-                <!--<div class="mark">-->
-                    <!--<i class="mark-con"></i>-->
-                    <!--<span>告警</span>-->
-                <!--</div>-->
-            <!--</div>-->
             <DapCell v-for="item in daList" :key="item.id" :title="item.name" :src="src" :isMark="true" @click.native="toNextPage(item.pid)"></DapCell>
-            <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>-->
-            <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>-->
-            <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="true" @click.native="toNextPage()"></DapCell>-->
-            <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>-->
-            <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>-->
-            <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>-->
-            <!--<DapCell :title="'1号西红柿大棚'" :src="src" :isMark="false" @click.native="toNextPage()"></DapCell>-->
             <div style="margin-bottom: 60px;"></div>
             <van-popup v-model="dqShow" position="bottom">
                 <van-picker show-toolbar :columns="areaNameList" @cancel="dqShow=false" @confirm="dpConfirm"/>
@@ -175,13 +160,10 @@
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     @import "../../sass/variable";
     .monitor-main {
-       .body{
-           padding-left: $page-padding;
-           padding-right: $page-padding;
-       }
+
         .banner {
             margin: 10px auto;
             img {

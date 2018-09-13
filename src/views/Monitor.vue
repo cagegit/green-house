@@ -1,6 +1,8 @@
 <template>
   <div class="monitor">
-      <router-view></router-view>
+      <transition name="fade" mode="out-in">
+         <router-view></router-view>
+      </transition>
   </div>
 </template>
 <script>
@@ -11,7 +13,7 @@
 <style lang="scss">
     .monitor{
         width: 100%;
-        height: 100%;
+        height: 100vh;
         text-align: left;
     }
 </style>

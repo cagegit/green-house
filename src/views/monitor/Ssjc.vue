@@ -13,53 +13,44 @@
             <div class="ss-card">
                 <div class="ss-line">
                     <div class="ss-title">
-                        <img src="@/assets/img/wd@2x.png"/>
-                        <span>温度情况</span>
+                        <span>温度</span>
                     </div>
                     <div @click="changeWaring(1)">
                         <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
                     </div>
                 </div>
                 <div class="ss-line-no-icon">
-                    <span>温度</span>
-                    <span class="sb-pink">40°C</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>获取时间</span>
-                    <span>7-24 08:45:44</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>告警级别</span>
-                    <span class="sb-pink">5级,风机已开启</span>
+                    <div class="sb-pre">
+                        <img src="@/assets/img/wd@2x.png"/> <span>40℃</span>
+                    </div>
+                    <div class="sb-next">
+                        <p>更新时间：2018-7-24 8:24::20</p>
+                        <p><span class="sb-pink">5级</span>风机已开启</p>
+                    </div>
                 </div>
             </div>
             <div class="ss-card">
                 <div class="ss-line">
                     <div class="ss-title">
-                        <img src="@/assets/img/tr@2x.png"/>
-                        <span>土壤情况</span>
+                        <span>土壤水分</span>
                     </div>
                     <div @click="changeWaring(1)">
                         <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
                     </div>
                 </div>
                 <div class="ss-line-no-icon">
-                    <span>温度</span>
-                    <span class="sb-orange">40°C</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>获取时间</span>
-                    <span>7-24 08:45:44</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>告警级别</span>
-                    <span class="sb-orange">4级,风机已开启</span>
+                    <div class="sb-pre">
+                        <img src="@/assets/img/tr@2x.png"/><span>8.8%</span>
+                    </div>
+                    <div class="sb-next">
+                        <p>更新时间：2018-7-24 8:24::20</p>
+                        <p><span class="sb-orange">4级</span>风机已开启</p>
+                    </div>
                 </div>
             </div>
             <div class="ss-card">
                 <div class="ss-line">
                     <div class="ss-title">
-                        <img src="@/assets/img/PH@2x.png"/>
                         <span>PH值情况</span>
                     </div>
                     <div @click="changeWaring(1)">
@@ -67,22 +58,18 @@
                     </div>
                 </div>
                 <div class="ss-line-no-icon">
-                    <span>温度</span>
-                    <span class="sb-yellow">40°C</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>获取时间</span>
-                    <span>7-24 08:45:44</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>告警级别</span>
-                    <span class="sb-yellow">3级,风机已开启</span>
+                    <div class="sb-pre">
+                        <img src="@/assets/img/PH@2x.png"/><span>4.54</span>
+                    </div>
+                    <div class="sb-next">
+                        <p>更新时间：2018-7-24 8:24::20</p>
+                        <p><span class="sb-orange">2级</span>风机已开启</p>
+                    </div>
                 </div>
             </div>
             <div class="ss-card">
                 <div class="ss-line">
                     <div class="ss-title">
-                        <img src="@/assets/img/PH@2x.png"/>
                         <span>PH值情况</span>
                     </div>
                     <div @click="changeWaring(1)">
@@ -90,22 +77,18 @@
                     </div>
                 </div>
                 <div class="ss-line-no-icon">
-                    <span>温度</span>
-                    <span class="sb-blue">40°C</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>获取时间</span>
-                    <span>7-24 08:45:44</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>告警级别</span>
-                    <span class="sb-blue">2级,风机已开启</span>
+                    <div class="sb-pre">
+                        <img src="@/assets/img/PH@2x.png"/><span>4.54</span>
+                    </div>
+                    <div class="sb-next">
+                        <p>更新时间：2018-7-24 8:24::20</p>
+                        <p><span class="sb-yellow">2级</span>风机已开启</p>
+                    </div>
                 </div>
             </div>
             <div class="ss-card">
                 <div class="ss-line">
                     <div class="ss-title">
-                        <img src="@/assets/img/tr@2x.png"/>
                         <span>土壤情况</span>
                     </div>
                     <div @click="changeWaring(1)">
@@ -113,19 +96,15 @@
                     </div>
                 </div>
                 <div class="ss-line-no-icon">
-                    <span>温度</span>
-                    <span class="sb-green">40°C</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>获取时间</span>
-                    <span>7-24 08:45:44</span>
-                </div>
-                <div class="ss-line-no-icon">
-                    <span>告警级别</span>
-                    <span class="sb-green">1级,风机已开启</span>
+                    <div class="sb-pre">
+                        <img src="@/assets/img/tr@2x.png"/><span>35℃</span>
+                    </div>
+                    <div class="sb-next">
+                        <p>更新时间：2018-7-24 8:24::20</p>
+                        <p><span class="sb-green">3级</span>风机已开启</p>
+                    </div>
                 </div>
             </div>
-
 
 
         </div>
@@ -272,23 +251,52 @@
             color: #777777 !important;
             span:first-child {
                 padding-left: 24px;
+                margin-right: 5px;
             }
+        }
+    }
+    .sb-pre{
+        img {
+            padding: 10px 5px;
+            vertical-align: bottom;
+            width: 30px;
+            height: 30px;
+        }
+        span {
+            font-size: 24px;
+            line-height: 2.1;
+        }
+    }
+    .sb-next{
+        &>p {
+            text-align: right;
+            color: #777777
         }
     }
     .sb-pink{
         color: $sbjc-pink;
+        border: 1px solid $sbjc-pink;
+        padding: 0 3px !important;
     }
     .sb-orange{
         color: $sbjc-orange;
+        border: 1px solid $sbjc-orange;
+        padding: 0 3px !important;
     }
     .sb-yellow{
         color: $sbjc-yellow;
+        border: 1px solid $sbjc-yellow;
+        padding: 0 3px !important;
     }
     .sb-blue{
         color: $sbjc-blue;
+        border: 1px solid $sbjc-blue;
+        padding: 0 3px !important;
     }
     .sb-green{
         color: $sbjc-green;
+        border: 1px solid $sbjc-green;
+        padding: 0 3px !important;
     }
     .dia-content {
         padding: 20px;

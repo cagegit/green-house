@@ -13,12 +13,13 @@
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
-    import { Field} from 'vant';
+    import { Field, Toast} from 'vant';
     import { mapActions} from 'vuex';
     export default {
         name: 'DpSize',
         components: {
             [Field.name]:Field,
+            [Toast.name]:Toast,
             HeadBar
         },
         data() {
@@ -31,7 +32,8 @@
                 'sbInfoAction'
             ]),
             setNewValue() {
-                console.log(this.value);
+                // console.log(this.value);
+                Toast('更新成功！');
                 this.sbInfoAction({size:this.value});
             }
         }

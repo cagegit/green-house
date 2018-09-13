@@ -10,54 +10,12 @@
                 <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <div class="control-panel">
-                <!-- <div class="flex-row">
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/fengj@2x.png"/>
-                        <div class="sb-name">风机</div>
-                    </div>
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/zidc@2x.png"/>
-                        <div class="sb-name">自动窗</div>
-                    </div>
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/juanlj@2x.png"/>
-                        <div class="sb-name">卷帘机</div>
-                    </div>
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/guang@2x.png"/>
-                        <div class="sb-name">灌溉1型</div>
-                    </div>
-                </div> -->
                 <div class="flex-row">
                     <div class="sb-box" v-for="item in controlList" :key="item.info.id" @click="toSbList(item)">
                         <img :src="getImg(item.info.value)"/>
                         <div class="sb-name">{{item.info.name}}</div>
                     </div>
-                    <!-- <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/jiawl@2x.png"/>
-                        <div class="sb-name">加温炉</div>
-                    </div>
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/zheyz@2x.png"/>
-                        <div class="sb-name">遮阳罩</div>
-                    </div>
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/ship@2x.png"/>
-                        <div class="sb-name">视频</div>
-                    </div>
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/ship@2x.png"/>
-                        <div class="sb-name">视频</div>
-                    </div>
- -->
                 </div>
-               <!--  <div class="flex-row">
-                    <div class="sb-box" @click="toSbList(1)">
-                        <img src="@/assets/img/co2@2x.png"/>
-                        <div class="sb-name">CO2发生器</div>
-                    </div>
-                </div> -->
-
             </div>
             <van-popup v-model="dqShow" position="bottom">
                 <van-picker show-toolbar :columns="areaNameList" @cancel="dqShow=false" @confirm="dpConfirm"/>
