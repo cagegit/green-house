@@ -107,6 +107,12 @@ export default new Router({
                   name: 'dp-size',
                   component: () => import('./views/monitor/DpSize.vue'),
                   props: true
+              },
+              {
+                  path: 'dp-area',// 修改大棚地址
+                  name: 'dp-area',
+                  component: () => import('./views/monitor/DpAddress.vue'),
+                  props: true
               }
           ]
       }, {

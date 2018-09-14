@@ -201,7 +201,7 @@ html, body {
       color: #fff;
     }
   }
-  & > button:last-child {
+  & > button:not(:first-of-type) {
     margin-left: 10px;
   }
 }

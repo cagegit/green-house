@@ -1,7 +1,7 @@
 <template>
     <div class="err-page" @click="toMain()">
         <img src="@/assets/img/404.png"/>
-        <span>暂无数据</span>
+        <span>暂无数据</span><a href="javascript:void(0);" @click="refresh">刷新试试</a>
     </div>
 </template>
 <script>
@@ -9,7 +9,10 @@
          name:'Err404',
          methods: {
              toMain() {
-                 this.$router.replace('/monitor/main')
+                 this.$router.replace('/monitor/main');
+             },
+             refresh() {
+                 this.$router.replace('/monitor/main');
              }
          }
     }

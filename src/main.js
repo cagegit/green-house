@@ -45,3 +45,16 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app');
+// 网络断开检测
+const offlineCallback = function() {
+    console.log('off line!');
+    Vue.$router.replace('/404');
+};
+const onLine = function() {
+    // Handle the online event
+    console.log('on line');
+    Vue.$router.replace('/monitor/main');
+};
+document.addEventListener("offline", offlineCallback, false);
+document.addEventListener("online", onLine, false);
+

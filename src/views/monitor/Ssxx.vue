@@ -43,7 +43,7 @@
                 <div class="sb-c-left">
                     <span>所在地</span>
                 </div>
-                <div class="sb-c-right">
+                <div class="sb-c-right" @click="editSbxx(4)">
                     <span>{{sbInfo.area}}</span>
                     <i class="van-icon van-icon-arrow"></i>
                 </div>
@@ -73,7 +73,7 @@
            return {
                sbInfo: this.$store.state.sbInfo,
                showTimePanel:false,
-               addressList:AreaList,
+               addressList:[],
                isSaving: false
            }
         },
@@ -83,8 +83,10 @@
                     this.$router.push({name:'dp-name'});
                 } else if(num===2) {
                     this.$router.push({name:'dp-type'});
-                } else {
+                } else if(num===3) {
                     this.$router.push({name:'dp-size'});
+                } else {
+                    this.$router.push({name:'dp-area'});
                 }
             },
             modifyDpInfo() {
