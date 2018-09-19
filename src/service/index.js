@@ -1,4 +1,6 @@
-
+import { Observable,from,pipe,interval } from 'rxjs';
+import { switchMap,map } from 'rxjs/operators';
+let warObservable;
 /**
  * 登录
  * */
@@ -55,15 +57,15 @@ export const getAbout = (token) => axios.get(`/apps/about?token=`+encodeURICompo
  *  修改地址电话
  * */
 export const modifyAddrAndTel = (token,userName,address,phone) =>{
-	var url = "/apps/updateEmployee?token=" + encodeURIComponent(token) + "&loginname=" + userName;
-	if(address!=false){
+	let url = "/apps/updateEmployee?token=" + encodeURIComponent(token) + "&loginname=" + userName;
+	if(address!==false){
 		url = url + "&address=" + address;
 	}
-	if(phone!=false){
+	if(phone!==false){
 		url = url + "&phone=" + phone;
 	}
 	return axios.get(url);
-} 
+};
 /**
  *  控制-控制列表
  * */
@@ -75,13 +77,13 @@ export const getControList = (token,pid) =>{
  * */
 export const getFindList = (token,currentPage,pageSize,type) =>{
 	return axios.get(`/apps/discoverInfo?pageindex=` + currentPage + `&pagesize=` + pageSize + `&type=` + type + `&token=`+encodeURIComponent(token));
-}
+};
 /**
  * 发现-tab个数
  * */
 export const getFindTab = (token) =>{
 	return axios.get(`/apps/discoverModule?token=` + encodeURIComponent(token));
-}
+};
 
 /**
  * 修改单控制器
@@ -128,4 +130,21 @@ export const editDaPeng = (dpId,token,name,foodtype,w,h,len,address) => {
  **/
 export const getWaringList = (userId, status, pageNum) =>{
 	return axios.get(`http://giot.kjxt.tech:3030/stat/warningByUser?uid=${userId}&page=${pageNum}&status=${status}`);
-}
+};
+
+
+/**
+ * 轮询接口
+ */
+export  const  getRepeateWaringList = (id) => {
+    if(warObservable){
+        warObservable.unsubscribe();
+    }
+    warObservable = interval(1000*5).pipe(
+        switchMap(val =>  from(getWarings('1',id,'1','2018-09-01',''))),
+        map(res => {
+            return res.data;
+        })
+    );
+    return warObservable;
+};

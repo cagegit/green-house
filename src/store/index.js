@@ -19,7 +19,8 @@ const state = {
         area: '北京市北京市海淀区'
     },
     user: {},
-    aboutMes:{}
+    aboutMes:{},
+    warnings: 0
 };
 
 export default new Vuex.Store({
@@ -63,6 +64,9 @@ export default new Vuex.Store({
         },
         setControlAuto(state, check) {
             state.controlAuto = check;
+        },
+        setWarning(state, num) {
+           state.warnings += num;
         }
     },
     actions: {

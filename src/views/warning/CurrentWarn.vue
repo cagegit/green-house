@@ -1,12 +1,13 @@
 <template>
+    <!--<div>-->
+        <!--<div class="switch-tab flex">-->
+        <!--<div class="mess active-tab"-->
+        <!--&gt;当前警告</div>-->
+        <!--<div class="mess"-->
+        <!--@click="switchBtn"-->
+        <!--&gt;历史警告</div>-->
+    <!--</div>-->
     <div>
-        <div class="switch-tab flex">
-        <div class="mess active-tab"
-        >当前警告</div>
-        <div class="mess"
-        @click="switchBtn"
-        >历史警告</div>
-    </div>
     <van-list
         v-model="loading"
         :finished="finished"
@@ -26,9 +27,7 @@
         </van-cell>
 
     </van-list>
-    <FootBar :active="3"></FootBar>
     </div>
-    
 </template>
 <script>
     import FootBar from '@/components/FootBar'
@@ -46,8 +45,7 @@
                 loading: false,
                 finished: false,
                 currentPage: 0,
-                warnList:[],
-                currentPage:0
+                warnList:[]
             }
              
         },
@@ -58,32 +56,32 @@
             toDetail(item){
                 this.$router.push({name:'warningDetail',params:{detailWarn:item}});
             },
-            switchBtn(){
-                this.$router.push("/warning/historywarn");
-            },
             onLoad() {
+                this.loading = true;
                 getWaringList(this.$store.state.user.id,1,this.currentPage).then(res =>{
                     if (res.data.results) {
                         this.currentPage += 1;
                         this.loading = false;
-                        if (res.data.results.length == 0) {
-                            this.finished = true
-                        } else {
-                            this.warnList = Object.assign([], this.warnList, res.data.results)
-                            for (var i = 0; i < this.warnList.length; i++) {
-                                var date = new Date(this.warnList[i].peng.ctime);
-                                var year = date.getFullYear();
-                                var month = date.getMonth() + 1;
-                                var today = date.getDate();
-                                var hour = date.getHours();
-                                var minutes = date.getMinutes();
-                                var seconds = date.getSeconds();
-                                var formatTime = year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds
+                        this.finished = true;
+                        if (res.data.results.length > 0) {
+                            this.warnList = Object.assign([], this.warnList, res.data.results);
+                            for (let i = 0; i < this.warnList.length; i++) {
+                                let date = new Date(this.warnList[i].peng.ctime);
+                                let year = date.getFullYear();
+                                let month = date.getMonth() + 1;
+                                let today = date.getDate();
+                                let hour = date.getHours();
+                                let minutes = date.getMinutes();
+                                let seconds = date.getSeconds();
+                                let formatTime = year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds;
                                 this.warnList[i].peng.ctime = formatTime;
                             }
                         }
                     }
-                })
+                }).catch(err => {
+                    console.log(err);
+                    this.loading = false;
+                });
             }
         }
     }

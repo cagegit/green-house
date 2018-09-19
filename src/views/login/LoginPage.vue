@@ -27,8 +27,9 @@
 </template>
 <script>
 import { Field, CellGroup,Button,Toast } from 'vant';
-import {loginIn} from '@/service';
+import {loginIn,getWarings,getRepeateWaringList} from '@/service';
 import MD5 from 'js-md5';
+
 export default {
     name: "LoginPage",
     data() {
@@ -47,7 +48,6 @@ export default {
     methods: {
         async login() {
             try {
-                
                 const res = await loginIn(this.username, this.toMd5(this.password));
                 if(res.data.code===1) {
                     Toast.success({
@@ -58,7 +58,8 @@ export default {
                     if(res.data.user && res.data.user.length>0) {
                         this.$store.commit('setUser',res.data.user[0]);
                     }
-                    localStorage.setItem('token',res.data.token);
+                    // localStorage.setItem('token',res.data.token);
+                    this.getWaringCount();
                     this.$router.push('/monitor/main');
                 } else {
                     Toast.success('登录失败');
@@ -70,6 +71,45 @@ export default {
         },
         toMd5(str) {
             return MD5(str);
+        },
+        getWaringCount() {
+            const {user} = this.$store.state;
+            if(user.corp_id === undefined) {
+               return;
+            }
+            getWarings('1',user.corp_id,'1','2018-09-01','').then(({data}) => {
+                // console.log(data);
+                if(data && data.status ===1) {
+                    if(data.results && data.results.length>0) {
+                        let warnings = 0;
+                        data.results.forEach(val => {
+                            if(val && val.count) {
+                                warnings = warnings+ val.count;
+                            }
+                        });
+                        this.$store.commit('setWarning',warnings);
+                    }
+                }
+            }).catch(err => {
+                console.log(err);
+            });
+            getRepeateWaringList(user.corp_id).subscribe(res => {
+                // console.log(res);
+                if(res && res.status ===1) {
+                    if(res.results && res.results.length>0) {
+                        let warnings = 0;
+                        res.results.forEach(val => {
+                            if(val && val.count) {
+                                warnings = warnings+ val.count;
+                            }
+                        });
+                        this.$store.commit('setWarning',warnings);
+                    }
+                }
+            },err => {
+                console.log(err);
+            });
+
         }
     }
 }

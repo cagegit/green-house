@@ -8,7 +8,7 @@
             <span>控制</span>
             <img slot="icon" slot-scope="props" :src="props.active ? tab.kz_0 : tab.kz_1"/>
         </van-tabbar-item>
-        <van-tabbar-item icon="chat" dot @click.native="moveTo(2)">
+        <van-tabbar-item icon="chat" :dot="isDot" @click.native="moveTo(2)">
             <span>告警</span>
             <img slot="icon" slot-scope="props" :src="props.active ? tab.gj_0 : tab.gj_1"/>
         </van-tabbar-item>
@@ -55,6 +55,12 @@
                 },
                 set: function () {
                 }
+            },
+            isDot: {
+                get: function () {
+                    return this.$store.state.warnings>0;
+                },
+                set: function () {}
             }
         },
         methods: {
@@ -90,12 +96,6 @@
                        this.$router.push('/monitor/main');
                    }
                }
-            }
-        },watch: {
-            active(val) {
-                console.log('Foot bar:'+val);
-                // return this.$store.state.activeTab;
-
             }
         }
     };

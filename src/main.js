@@ -5,10 +5,11 @@ import router from './router'
 import store from './store/index'
 import 'lib-flexible'   //移动端布局框架
 import jsonp from 'jsonp';
+import VueRx from 'vue-rx';
 
 Vue.prototype.$jsonp= jsonp;
 Vue.config.productionTip = false;
-window.$store = store;
+Vue.use(VueRx);
 // 路由变化更新tabNum
 router.beforeEach((to, from,next) => {
     // console.log('router change from:'+from.path +', to:'+to.path);
@@ -40,20 +41,38 @@ router.beforeEach((to, from,next) => {
     }
 });
 Vue.prototype.$eventHub = new Vue();// 设置全局$emit $on
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app');
+
+let vueIns = null;
+if(process.env.NODE_ENV === 'production') {
+    const deviceReady = function() {
+        vueIns = new Vue({
+            router,
+            store,
+            render: h => h(App)
+        }).$mount('#app');
+        window.open = cordova.InAppBrowser.open; // 替换 window.open方法
+    };
+    document.addEventListener("deviceready", deviceReady, false);
+} else {
+    vueIns = new Vue({
+        router,
+        store,
+        render: h => h(App)
+    }).$mount('#app');
+}
 // 网络断开检测
 const offlineCallback = function() {
     console.log('off line!');
-    Vue.$router.replace('/404');
+    if(store.state.token) {
+        vueIns && vueIns.$router.replace('/404');
+    }
 };
 const onLine = function() {
     // Handle the online event
     console.log('on line');
-    Vue.$router.replace('/monitor/main');
+    if(store.state.token) {
+        vueIns &&  vueIns.$router.replace('/monitor/main');
+    }
 };
 document.addEventListener("offline", offlineCallback, false);
 document.addEventListener("online", onLine, false);

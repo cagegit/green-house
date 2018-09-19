@@ -1,38 +1,40 @@
 <template>
     <div>
-        <HeadBar title="告警详情" link="" class="top-nav-bar"></HeadBar>  
-        <div class="war-detail">
-            <div class="warn-top">
-                <div class="detail-item flex">
-                    <div class="warn-type">告警类型</div>
-                    <div class="warn-value">{{detailCard.name}}告警</div>
+        <HeadBar title="告警详情" link="" class="top-nav-bar"></HeadBar>
+        <div class="main-body">
+            <div class="war-detail">
+                <div class="warn-top">
+                    <div class="detail-item flex">
+                        <div class="warn-type">告警类型</div>
+                        <div class="warn-value">{{detailCard.name}}告警</div>
+                    </div>
+                    <div class="detail-item flex">
+                        <div class="warn-type">当前值</div>
+                        <div class="warn-value">80%</div>
+                    </div>
+                    <div class="detail-item flex">
+                        <div class="warn-type">正常值</div>
+                        <div class="warn-value">{{detailCard.low}}%~{{detailCard.high}}%</div>
+                    </div>
+                    <div class="detail-item flex">
+                        <div class="warn-type">告警级别</div>
+                        <div class="warn-value">{{detailCard.level}}级   风机已开启</div>
+                    </div>
+                    <div class="detail-item flex">
+                        <div class="warn-type">告警时间</div>
+                        <div class="warn-value">{{detailWarn.peng.ctime}}</div>
+                    </div>
                 </div>
-                <div class="detail-item flex">
-                    <div class="warn-type">当前值</div>
-                    <div class="warn-value">80%</div>
-                </div>
-                <div class="detail-item flex">
-                    <div class="warn-type">正常值</div>
-                    <div class="warn-value">{{detailCard.low}}%~{{detailCard.high}}%</div>
-                </div>
-                <div class="detail-item flex">
-                    <div class="warn-type">告警级别</div>
-                    <div class="warn-value">{{detailCard.level}}级   风机已开启</div>
-                </div>
-                <div class="detail-item flex">
-                    <div class="warn-type">告警时间</div>
-                    <div class="warn-value">{{detailWarn.peng.ctime}}</div>
-                </div>
+                <!-- <div class="warn-bottom">
+                    <div class="detail-item flex">
+                        <div class="warn-type">告警位置</div>
+                    </div>
+                    <div class="detail-item flex">
+                        <div class="warn-value">房山区农委—园区1—一号西红柿大棚</div>
+                    </div>
+                </div> -->
+
             </div>
-            <!-- <div class="warn-bottom">
-                <div class="detail-item flex">
-                    <div class="warn-type">告警位置</div>
-                </div>
-                <div class="detail-item flex">
-                    <div class="warn-value">房山区农委—园区1—一号西红柿大棚</div>
-                </div>
-            </div> -->
-            
         </div>
     </div>
 </template>
@@ -68,7 +70,7 @@
         align-items:center;
     }
     .content-warp {
-        padding: 0 0.533333rem;
+        padding: 0 10px;
         margin-bottom:1.733333rem;
     }
     .top-nav-bar{
@@ -90,7 +92,6 @@
         background: #FFFFFF;
         box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
         border-radius: 20px;
-        margin-top:0.24rem;
     }
     .warn-top{
         padding:0.24rem 0.533333rem 0;
