@@ -26,7 +26,7 @@
     import HeadBar from '../../components/HeadBar'
     import FootBar from "../../components/FootBar";
     import DapCell from "../../components/DpCell";
-    import { getLocates, loginIn,getUtilities,getSensors} from "@/service";
+    import { getLocates, loginIn,getUtilities} from "@/service";
 
     export default {
         name: 'MonitorMain',
@@ -67,11 +67,6 @@
             toNextPage(pid) {
                 //console.log('pid:'+pid);
                 pid = 176;
-                getSensors(pid,this.token).then(res => {
-                    console.log(res.data);
-                }).catch(err => {
-                    console.log(err);
-                });
                 this.$store.commit('setPid',pid);
                 this.$router.push("/monitor/ssjc");
             },

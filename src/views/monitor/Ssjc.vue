@@ -10,102 +10,25 @@
                 <button type="button" class="btn" @click="toWarPage()">您有{{warings}}个报警，请查看></button>
             </div>
 
-            <div class="ss-card">
+            <div class="ss-card" v-for="item in devices" :key="item.id">
                 <div class="ss-line">
                     <div class="ss-title">
-                        <span>温度</span>
+                        <span>{{item.name}}</span>
                     </div>
-                    <div @click="changeWaring(1)">
+                    <div @click="changeWaring(item.properties)">
                         <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
                     </div>
                 </div>
                 <div class="ss-line-no-icon">
                     <div class="sb-pre">
-                        <img src="@/assets/img/wd@2x.png"/> <span>40℃</span>
+                        <img :src="toImg(item.name)"/> <span>{{toLiang(item)}}</span>
                     </div>
                     <div class="sb-next">
-                        <p>更新时间：2018-7-24 8:24::20</p>
-                        <p><span class="sb-pink">5级</span>风机已开启</p>
+                        <p>更新时间：{{item.time}}</p>
+                        <p><span class="sb-pink">{{item.properties.sensorType}}级</span>风机已开启</p>
                     </div>
                 </div>
             </div>
-            <div class="ss-card">
-                <div class="ss-line">
-                    <div class="ss-title">
-                        <span>土壤水分</span>
-                    </div>
-                    <div @click="changeWaring(1)">
-                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
-                    </div>
-                </div>
-                <div class="ss-line-no-icon">
-                    <div class="sb-pre">
-                        <img src="@/assets/img/tr@2x.png"/><span>8.8%</span>
-                    </div>
-                    <div class="sb-next">
-                        <p>更新时间：2018-7-24 8:24::20</p>
-                        <p><span class="sb-orange">4级</span>风机已开启</p>
-                    </div>
-                </div>
-            </div>
-            <div class="ss-card">
-                <div class="ss-line">
-                    <div class="ss-title">
-                        <span>PH值情况</span>
-                    </div>
-                    <div @click="changeWaring(1)">
-                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
-                    </div>
-                </div>
-                <div class="ss-line-no-icon">
-                    <div class="sb-pre">
-                        <img src="@/assets/img/PH@2x.png"/><span>4.54</span>
-                    </div>
-                    <div class="sb-next">
-                        <p>更新时间：2018-7-24 8:24::20</p>
-                        <p><span class="sb-orange">2级</span>风机已开启</p>
-                    </div>
-                </div>
-            </div>
-            <div class="ss-card">
-                <div class="ss-line">
-                    <div class="ss-title">
-                        <span>PH值情况</span>
-                    </div>
-                    <div @click="changeWaring(1)">
-                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
-                    </div>
-                </div>
-                <div class="ss-line-no-icon">
-                    <div class="sb-pre">
-                        <img src="@/assets/img/PH@2x.png"/><span>4.54</span>
-                    </div>
-                    <div class="sb-next">
-                        <p>更新时间：2018-7-24 8:24::20</p>
-                        <p><span class="sb-yellow">2级</span>风机已开启</p>
-                    </div>
-                </div>
-            </div>
-            <div class="ss-card">
-                <div class="ss-line">
-                    <div class="ss-title">
-                        <span>土壤情况</span>
-                    </div>
-                    <div @click="changeWaring(1)">
-                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
-                    </div>
-                </div>
-                <div class="ss-line-no-icon">
-                    <div class="sb-pre">
-                        <img src="@/assets/img/tr@2x.png"/><span>35℃</span>
-                    </div>
-                    <div class="sb-next">
-                        <p>更新时间：2018-7-24 8:24::20</p>
-                        <p><span class="sb-green">3级</span>风机已开启</p>
-                    </div>
-                </div>
-            </div>
-
 
         </div>
         <van-dialog v-model="show" :show-cancel-button="true">
@@ -116,7 +39,7 @@
                         <div class="st-left">上限</div>
                         <div class="gj-set">
                             <button type="button">-</button>
-                            <div class="sb"><input type="text" value="26℃"/></div>
+                            <div class="sb"><input type="text" :value="limit_high"/></div>
                             <button type="button">+</button>
                         </div>
                     </div>
@@ -124,7 +47,7 @@
                         <div class="st-left">下限</div>
                         <div class="gj-set">
                             <button type="button">-</button>
-                            <div class="sb"><input type="text" value="26℃"/></div>
+                            <div class="sb"><input type="text" :value="limit_low"/></div>
                             <button type="button">+</button>
                         </div>
                     </div>
@@ -139,7 +62,7 @@
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
     import Weather from '../../components/Weather'
-    import {getWarings} from '../../service'
+    import {getWarings,getSensors,getLatestSensorData} from '../../service'
     Date.prototype.dateFormat = function(fmt) { //author: meizz
         let o = {
             "M+" : this.getMonth()+1,                 //月份
@@ -174,16 +97,30 @@
                 show: false,
                 air: {},
                 weather: [],
-                warings: 0
+                warings: 0,
+                devices: [],
+                sfImg: require("@/assets/img/tr@2x.png"),
+                phImg: require("@/assets/img/PH@2x.png"),
+                wdImg: require("@/assets/img/wd@2x.png"),
+                limit_low:0,
+                limit_high:0
             }
         },
         created(){
            // this.getLocationAndWeather();
+            const {pid,token} = this.$store.state;
+            if(!pid) {
+                this.$router.back();
+                return;
+            }
+            this.getConcatData(pid,token);
             this.countWarings();
         },
         methods: {
-            changeWaring(num){
-                console.log(num);
+            changeWaring({limit_low,limit_high,readout_unit}){
+                readout_unit = readout_unit.replace(/RH/g,'');
+                this.limit_low = limit_low+readout_unit;
+                this.limit_high = limit_high+readout_unit;
                 this.show = true;
             },
             countWarings() {
@@ -191,7 +128,6 @@
                 const fromTime = "2018-09-01";
                 const toTime = new Date().dateFormat("yyyy-MM-dd");
                 getWarings(3,1,1,fromTime,toTime).then(res => {
-                    // console.log(res);
                     if(res && res.data && res.data.status ===1) {
                         if(res.data.results && res.data.results.length>0) {
                             this.warings = res.data.results[0].count;
@@ -201,8 +137,41 @@
                     console.log(err);
                 })
             },
+            getConcatData(pid,token) {
+                const quest1 = getSensors(pid,token);
+                const quest2 = getLatestSensorData(pid);
+                Promise.all([quest1,quest2]).then(res => {
+                    const results = res.map(item => (item.data && item.data.results) || [] );
+                    // console.log(results);
+                    results[0].forEach(val => {
+                        results[1].forEach(v => {
+                            if(val.id === v._id) {
+                                val['data'] =v.data;
+                                val['time'] =new Date(v.utime).dateFormat("yyyy-MM-dd hh:mm:ss");
+                                val['properties'] = (val.properties && JSON.parse(val.properties)) || {};
+                            }
+                        });
+                    });
+                    // console.log(results[0]);
+                    this.devices = results[0];
+                }).catch(err => {
+                    console.log(err);
+                })
+            },
             toWarPage(){
                 this.$router.push('/warning');
+            },
+            toImg(txt) {
+                if(/温度|光照/g.test(txt)) {
+                    return this.wdImg;
+                } else if(/湿度/g.test(txt)) {
+                    return this.sfImg;
+                } else {
+                    return this.phImg;
+                }
+            },
+            toLiang(item) {
+                return item.data + item.properties.readout_unit.replace(/RH/g,'');
             }
         }
     }
