@@ -65,7 +65,7 @@ export default {
                     Toast.success('登录失败');
                 }
             }catch (err) {
-                console.log(err);
+                //console.log(err);
                 Toast.success('网络错误');
             }
         },

@@ -223,7 +223,7 @@
                     const {deviceId,Channel,value,gatewayId} = this.pro;
                     setController(deviceId,Channel,value,gatewayId)
                         .then(res => {
-                            console.log(res.data);
+                            //console.log(res.data);
                         })
                         .catch(err => {
                             console.log(err);
@@ -237,7 +237,7 @@
                 this.endTimePanel = true;
             },
             startConfirm(currentVal) {
-                console.log(currentVal);
+                //console.log(currentVal);
                 this.stTime = currentVal;
                 this.startTimePanel = false;
             },
@@ -245,7 +245,7 @@
                 this.startTimePanel = false;
             },
             endConfirm(currentVal) {
-                console.log(currentVal);
+                //console.log(currentVal);
                 this.enTime = currentVal;
                 this.endTimePanel = false;
             },
@@ -256,7 +256,7 @@
                 // console.log(this.id);
                 const token = this.$store.state.token;
                 getAutoTask(this.id,token).then(res => {
-                   console.log(res);
+                   //console.log(res);
                 }).catch(err => {
                     console.log(err);
                 });
@@ -266,7 +266,7 @@
                 content && (content.controllerid= this.id);
                 addAutoTask(this.id,token,content)
                     .then(res => {
-                        console.log(res);
+                        //console.log(res);
                     }).catch(err => {
                      console.log(err);
                     });
@@ -275,7 +275,7 @@
                 const token = this.$store.state.token;
                 modifyAutoTask(taskId,this.id,content,token)
                     .then(res => {
-                        console.log(res);
+                        //console.log(res);
                     }).catch(err => {
                        console.log(err);
                     });
@@ -311,7 +311,7 @@
                         fw.endminute = b && b.replace(/^0/,'');
                     }
                     sk.tims.push(fw);
-                    console.log(sk);
+                    //console.log(sk);
                     this.addAutoTask(sk);
                 }
             }
@@ -328,7 +328,7 @@
                 this.setCtrl();
             },
             'autoCheck':function (isCheck) {
-                console.log(isCheck);
+                //console.log(isCheck);
                 this.$store.commit('setControlAuto',isCheck);
             },
             'current': function (val) {

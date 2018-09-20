@@ -8,7 +8,11 @@
                         @click="switchBtn(tab.id)"
                         :class="{'active':currentTab===tab.id}">{{ tab.name }}</button>
             </div>
-            <router-view></router-view>
+            <div style="position: relative;">
+                <transition name="slide-left">
+                    <router-view class="child-view"></router-view>
+                </transition>
+            </div>
         </div>
         <FootBar :active="3"></FootBar>
     </div>

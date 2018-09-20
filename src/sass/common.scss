@@ -239,3 +239,26 @@ button[disabled]{
   color: #999;
   background-color: #e8e8e8;
 }
+// 动画过度效果
+$animate-time:.3s;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity $animate-time ease;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0;
+}
+.child-view {
+  position: absolute;
+  transition: all $animate-time cubic-bezier(.55,0,.1,1);
+  width: 100%;
+}
+.slide-left-enter, .slide-right-leave-active {
+  opacity: 0;
+  -webkit-transform: translate(30px, 0);
+  transform: translate(30px, 0);
+}
+.slide-left-leave-active, .slide-right-enter {
+  opacity: 0;
+  -webkit-transform: translate(-30px, 0);
+  transform: translate(-30px, 0);
+}

@@ -12,7 +12,7 @@ Vue.config.productionTip = false;
 Vue.use(VueRx);
 // 路由变化更新tabNum
 router.beforeEach((to, from,next) => {
-    // console.log('router change from:'+from.path +', to:'+to.path);
+    // //console.log('router change from:'+from.path +', to:'+to.path);
     if (store.state.token) {// 判断是否登录
         const path = to.path || '';
         if(path.indexOf('/monitor')>=0) {
@@ -62,14 +62,14 @@ if(process.env.NODE_ENV === 'production') {
 }
 // 网络断开检测
 const offlineCallback = function() {
-    console.log('off line!');
+    log('off line!');
     if(store.state.token) {
         vueIns && vueIns.$router.replace('/404');
     }
 };
 const onLine = function() {
     // Handle the online event
-    console.log('on line');
+    //console.log('on line');
     if(store.state.token) {
         vueIns &&  vueIns.$router.replace('/monitor/main');
     }

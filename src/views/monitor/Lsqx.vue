@@ -146,7 +146,7 @@
         },
         methods: {
             tabChange(index) {
-                console.log(index);
+                //console.log(index);
                if(index ===1) { // 按月统计
                   //this.drawMonthChart(261,2,201809);
                   this.currentTime = '2018-09';
@@ -161,14 +161,14 @@
                }
             },
             preByTab() {
-                console.log(this.active);
+                //console.log(this.active);
             },
             nextByTab() {
-                console.log(this.active);
+                //console.log(this.active);
             },
             drawDayChart(id,type,day) {
                 getDayLs(id,type,day).then(res => {
-                    console.log(res.data);
+                    //console.log(res.data);
                     if(res.data && res.data.results) {
                         this.chartData =res.data.results.map(val => {
                             const ctime = val.day.toString().replace(/^(\d{4})(\d{2})(\d{2})/,'$1-$2-$3') + " "+val.hour+':'+val.min;
@@ -185,7 +185,7 @@
             },
             drawMonthChart(id,type,month) {
                 getMonthLs(id,type,month).then(res => {
-                    console.log(res.data);
+                    //console.log(res.data);
                     if(res.data && res.data.results) {
                         this.chartData =res.data.results;
                         if(this.chartData.length>0) {
@@ -199,7 +199,7 @@
             },
             drawYearChart(id,type,year) {
                 getYearLs(id,type,year).then(res => {
-                    console.log(res.data);
+                    //console.log(res.data);
                     if(res.data && res.data.results) {
                         this.chartData =res.data.results;
                         if(this.chartData.length>0) {

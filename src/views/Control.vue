@@ -137,9 +137,9 @@
                 }
             },
             yqConfirm(value) {
-                console.log("dddddddddddd:")
-                console.log(value)
-                console.log(this.yqList)
+                //console.log("dddddddddddd:")
+                //console.log(value)
+                //console.log(this.yqList)
                 
                 this.yq = value;
                 this.yqShow = false;

@@ -14,7 +14,7 @@ export default {
   name: 'home',
   watch:{
       $route(to,from){
-          console.log(to.path);
+          //console.log(to.path);
       }
   }
 }

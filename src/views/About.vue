@@ -1,7 +1,7 @@
 <template>
-    <div class="">
-       <router-view></router-view>
-    </div>
+    <transition name="slide-left">
+        <router-view class="child-view"></router-view>
+    </transition>
 </template>
 <script>
 

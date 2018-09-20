@@ -32,7 +32,7 @@
                 'sbInfoAction'
             ]),
             setNewValue() {
-                console.log(this.value);
+                //console.log(this.value);
                 Toast('更新成功！');
                 this.sbInfoAction({name:this.value});
             }

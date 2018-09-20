@@ -32,12 +32,12 @@
             itemList:Object
         },
         mounted() {
-            console.log("ffffffffff:")
-            console.log(this.itemList)
+            //console.log("ffffffffff:")
+            //console.log(this.itemList)
             
             try{
                 if(this.itemList){
-                    console.log("gg:")
+                    //console.log("gg:")
                     localStorage.setItem('controList',JSON.stringify(this.itemList));
                     this.controList = this.itemList.items;
                     this.titName = this.itemList.info.name;

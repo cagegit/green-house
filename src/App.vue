@@ -1,11 +1,10 @@
 <template>
   <div id="app">
-      <transition name="slide">
-          <router-view/>
+      <transition name="slide-left">
+          <router-view class="child-view"/>
       </transition>
   </div>
 </template>
-
 <style lang="scss">
    @import "./sass/common";
    @import "./sass/variable";

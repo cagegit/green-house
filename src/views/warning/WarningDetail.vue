@@ -55,8 +55,8 @@
         },
         mounted(){
             this.detailCard = Object.assign({},JSON.parse(JSON.stringify(this.detailWarn)));
-            console.log("dddddddddddddd:")
-            console.log(this.detailWarn.peng.ctime)
+            //console.log("dddddddddddddd:")
+            //console.log(this.detailWarn.peng.ctime)
         },
         methods:{
             

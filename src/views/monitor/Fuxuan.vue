@@ -100,7 +100,7 @@
             }
         },
         beforeRouteLeave (to, from , next) {
-            console.log('leave fuxuan router');
+            //console.log('leave fuxuan router');
             this.changeFxType(this.week);
             next();
         },

@@ -1,5 +1,7 @@
 <template>
-    <router-view></router-view>
+    <transition name="slide-left">
+        <router-view class="child-view"></router-view>
+    </transition>
 </template>
 <script>
 import { Field, CellGroup,Button } from 'vant';

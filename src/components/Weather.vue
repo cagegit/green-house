@@ -89,7 +89,7 @@
                const bd_url = 'http://api.map.baidu.com/location/ip?ak=4994b436604c3ce04f25a29edbe81faa';
                this.$jsonp(bd_url,null,(err,data) => {
                    if(err) {
-                       console.log(err);
+                       //console.log(err);
                        this.isShow = false;
                        return;
                    }
@@ -144,7 +144,7 @@
                const air_url = `https://wis.qq.com/weather/common?source=pc&weather_type=air&province=${pro}&city=${city}`;
                this.$jsonp(air_url,null,(err,res) => {
                    if(err) {
-                       console.log(err);
+                       //console.log(err);
                        return;
                    }
                    if(res.status ===200 && res.data && res.data.air) {

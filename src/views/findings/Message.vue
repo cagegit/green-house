@@ -73,9 +73,9 @@
                             }
                         }else{
                             this.cardList = Object.assign([],this.cardList,res.data.results)
-                            console.log("dddddddddddd:")
-                            console.log(res.data.results)
-                            console.log(this.cardList)
+                            //console.log("dddddddddddd:")
+                            //console.log(res.data.results)
+                            //console.log(this.cardList)
                         }
                     }
                 })

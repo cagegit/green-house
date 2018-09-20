@@ -39,7 +39,7 @@
         },
         mounted() {
             this.userName = this.$store.state.user.name;
-            console.log(this.userName)
+            //console.log(this.userName)
             this.modifyAddr = this.name;
         },
         created: function () {

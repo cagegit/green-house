@@ -65,7 +65,7 @@
         },
         methods: {
             toNextPage(pid) {
-                console.log('pid:'+pid);
+                //console.log('pid:'+pid);
                 pid = 176;
                 getSensors(pid,this.token).then(res => {
                     console.log(res.data);
@@ -147,7 +147,7 @@
             },
             async login() {
                 const res = await loginIn('wq','123456');
-                console.log(res.data.token);
+                //console.log(res.data.token);
                 this.locates(res.data.token);
             },
             async getDp(pid) {
