@@ -96,9 +96,6 @@
             <span >退出</span>
             <img src="@/assets/img/return-press.png" alt="">
         </div>
-       <!--  <van-popup v-model="show" position="bottom">
-            <van-area :area-list="areaList" @confirm="addrSure" @cancel="addrCancle"/>
-        </van-popup> -->
         <FootBar :active="3"></FootBar>
     </div>
 </template>
@@ -247,6 +244,7 @@
     }
     .return-btn{
         margin-top:1.6rem;
+        margin-bottom: 100px;
         position:relative;
         img{
             width:6.4rem;

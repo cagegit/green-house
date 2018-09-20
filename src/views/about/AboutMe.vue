@@ -12,27 +12,15 @@
         </div>
         <div class="contact-way">
             <div class="contact-item flex">
-                <div class="item-name flex">
+                <div class="item-name">
                     <span>关于</span>
                 </div>
-                <div class="item-value flex">
+                <div class="item-value">
                     {{this.$store.state.aboutMes.websate}}
                 </div>
-            </div>
-        </div>
-        <!--<div class="contact-way">-->
-            <!--<div class="contact-item flex">-->
-                <!--<div class="item-name flex">-->
-                    <!--<span>热线</span>-->
-                <!--</div>-->
-                <!--<div class="item-value flex">-->
-                    <!--400-960-0727-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <div class="flex">
-            <div class="copyright">
-                版权所有copyright(c)北京康吉讯通科技有限公司
+                <div class="copyright">
+                    版权所有copyright(c)北京康吉讯通科技有限公司
+                </div>
             </div>
         </div>
     </div>
@@ -104,29 +92,25 @@
     }
     .contact-way{
         background:#fff;
-        padding:0 0.533333rem 0 0.4rem;
-        margin-bottom:0.4rem;
         box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
         border-radius: 0.266667rem;
+        padding: 20px 5px;
     }
     .contact-item{
         height:1.653333rem;
-        justify-content:space-between;
+        flex-direction: column;
         font-size:0.4rem;
     }
     .item-name{
         color:#4B4A4A;
+        line-height: 1.5;
     }
     .item-value{
         color:#B2B2B2;
-        height: 1.44rem;
+        line-height: 1.5;
     }
     .copyright{
-        position:absolute;
-        bottom:0.64rem;
-        font-size: 0.346667rem;
         color: #999999;
-        letter-spacing: 1.0.017333rem;
-        padding: 0 !important;
+        line-height: 3;
     }
 </style>
