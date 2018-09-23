@@ -118,7 +118,7 @@
         },
         methods: {
             changeWaring({limit_low,limit_high,readout_unit}){
-                readout_unit = readout_unit.replace(/RH/g,'');
+                readout_unit = readout_unit? readout_unit.replace(/RH/g,'') : '';
                 this.limit_low = limit_low+readout_unit;
                 this.limit_high = limit_high+readout_unit;
                 this.show = true;
@@ -146,13 +146,17 @@
                     results[0].forEach(val => {
                         results[1].forEach(v => {
                             if(val.id === v._id) {
-                                val['data'] =v.data;
+                                val['data'] =v.data ;
                                 val['time'] =new Date(v.utime).dateFormat("yyyy-MM-dd hh:mm:ss");
                                 val['properties'] = (val.properties && JSON.parse(val.properties)) || {};
                             }
                         });
+                        if(results[1].length===0) {
+                            val['data'] = 0;
+                            val['time'] = new Date().dateFormat("yyyy-MM-dd hh:mm:ss");
+                            val['properties'] = {};
+                        }
                     });
-                    // console.log(results[0]);
                     this.devices = results[0];
                 }).catch(err => {
                     console.log(err);
@@ -171,7 +175,9 @@
                 }
             },
             toLiang(item) {
-                return item.data + item.properties.readout_unit.replace(/RH/g,'');
+                let dw = item.properties.readout_unit;
+                dw = dw ? dw.replace(/RH/g,''): '';
+                return item.data + dw;
             }
         }
     }

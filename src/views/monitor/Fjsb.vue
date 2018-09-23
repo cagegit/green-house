@@ -8,7 +8,7 @@
                         <span>手动</span>
                     </div>
                     <div class="sb-c-right">
-                        <van-switch v-model="handCheck" />
+                        <van-switch v-model="handCheck" @change="changeDanlu"/>
                     </div>
                 </div>
             </div>
@@ -128,9 +128,9 @@
     </div>
 </template>
 <script>
-    import { Switch,Slider,DatetimePicker,Actionsheet } from 'vant'
-    import HeadBar from '../../components/HeadBar'
-    import {setController,getAutoTask,addAutoTask,modifyAutoTask} from '../../service'
+    import { Switch,Slider,DatetimePicker,Actionsheet,Dialog } from 'vant'
+    import HeadBar from '../../components/HeadBar';
+    import {setController,getAutoTask,addAutoTask,modifyAutoTask} from '../../service';
     export default {
         name: 'Fjsb',
         props: {
@@ -177,9 +177,10 @@
             [Slider.name]:Slider,
             [DatetimePicker.name]:DatetimePicker,
             [Actionsheet.name]:Actionsheet,
+            [Dialog.name]: Dialog,
             HeadBar
         },
-        mounted() {
+        created() {
             const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth} = this.$store.state;
             // console.log(propertys);
             if(!propertys) {
@@ -314,6 +315,20 @@
                     //console.log(sk);
                     this.addAutoTask(sk);
                 }
+            },
+            changeDanlu(check) {
+                // console.log('isCheck change:'+check);
+                let txt = check?'开启':'关闭';
+                Dialog.confirm({
+                    message: `确认要${txt}设备吗？`
+                }).then(() => {
+                    this.$store.commit('setControlHand',check);
+                    this.pro.value = check?1:0;
+                    this.setCtrl();
+                }).catch(() => {
+                    this.handCheck = !check;
+                    this.$store.commit('setControlHand',this.handCheck);
+                });
             }
         },
         beforeRouteLeave (to, from , next) {

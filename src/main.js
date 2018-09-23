@@ -30,7 +30,7 @@ router.beforeEach((to, from,next) => {
         }
         next();
     } else {// 没登录则跳转到登录界面
-        if(to.path==='/login'){//如果是登录页面路径，就直接next()
+        if(to.path.indexOf('login')>=0){//如果是登录页面路径，就直接next()
             next();
         }else{//不然就跳转到登录；
             next({
