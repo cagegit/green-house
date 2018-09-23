@@ -12,7 +12,7 @@
                 <!--&gt;{{tab.name}}-->
                 <!--</div>-->
             <!--</div>-->
-            <div class="dp-tab2" style="margin-top: 0">
+            <div class="dp-tab2">
                 <button type="button"  v-for="tab in tabs"
                         :key="tab.id"
                          @click="switchBtn(tab)"

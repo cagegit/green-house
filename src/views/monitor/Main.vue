@@ -198,6 +198,7 @@
                 padding: 0 15px;
                 span{
                     overflow: hidden;
+                    font-size: 14px;
                 }
                 img {
                     width: 16px;

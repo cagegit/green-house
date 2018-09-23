@@ -19,7 +19,7 @@
                     {{this.$store.state.aboutMes.websate}}
                 </div>
                 <div class="copyright">
-                    版权所有copyright(c)北京康吉讯通科技有限公司
+                    Copyright©北京康吉讯通科技有限公司
                 </div>
             </div>
         </div>

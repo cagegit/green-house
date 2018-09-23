@@ -8,7 +8,7 @@
                         <span>手动</span>
                     </div>
                     <div class="sb-c-right">
-                        <van-switch v-model="handCheck" />
+                        <van-switch v-model="handCheck" :change="changeDanlu"/>
                     </div>
                 </div>
             </div>
@@ -128,9 +128,9 @@
     </div>
 </template>
 <script>
-    import { Switch,Slider,DatetimePicker,Actionsheet } from 'vant'
-    import HeadBar from '../../components/HeadBar'
-    import {setController,getAutoTask,addAutoTask,modifyAutoTask} from '../../service'
+    import { Switch,Slider,DatetimePicker,Actionsheet,Dialog } from 'vant'
+    import HeadBar from '../../components/HeadBar';
+    import {setController,getAutoTask,addAutoTask,modifyAutoTask} from '../../service';
     export default {
         name: 'Fjsb',
         props: {
@@ -177,9 +177,10 @@
             [Slider.name]:Slider,
             [DatetimePicker.name]:DatetimePicker,
             [Actionsheet.name]:Actionsheet,
+            [Dialog.name]: Dialog,
             HeadBar
         },
-        mounted() {
+        created() {
             const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth} = this.$store.state;
             // console.log(propertys);
             if(!propertys) {
@@ -314,6 +315,9 @@
                     //console.log(sk);
                     this.addAutoTask(sk);
                 }
+            },
+            changeDanlu(check) {
+                console.log('isCheck:'+check);
             }
         },
         beforeRouteLeave (to, from , next) {

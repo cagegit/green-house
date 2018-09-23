@@ -83,6 +83,7 @@
     }
 </script>
 <style lang="scss">
+    $kz-btn-color:#B2B2B2;
     .sb-cell {
         background: #FFFFFF;
         box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
@@ -104,7 +105,7 @@
         }
         .sb-c-right {
             i,span {
-                color: #B2B2B2;
+                color: darken($kz-btn-color, 40%);
             }
         }
         img {

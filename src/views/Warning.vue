@@ -2,7 +2,7 @@
     <div>
         <HeadBar title="告警" :left="false" link=""></HeadBar>
         <div class="content-warp">
-            <div class="dp-tab2" style="margin-top: 0">
+            <div class="dp-tab2">
                 <button type="button"  v-for="tab in tabs"
                         :key="tab.id"
                         @click="switchBtn(tab.id)"
