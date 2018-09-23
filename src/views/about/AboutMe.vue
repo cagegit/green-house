@@ -15,8 +15,8 @@
                 <div class="item-name">
                     <span>关于</span>
                 </div>
-                <div class="item-value">
-                    {{this.$store.state.aboutMes.websate}}
+                <div class="item-value" @click="openWeb()">
+                    {{companyWebUrl}}
                 </div>
                 <div class="copyright">
                     Copyright©北京康吉讯通科技有限公司
@@ -38,14 +38,18 @@
                 areaLis:"",
                 show:false,
                 userAddr:"辽宁省沈阳市皇姑屯",
+                companyWebUrl:''
             }
         },
         created: function () {
-            
+            this.companyWebUrl = this.$store.state.aboutMes.websate;
         },
         methods:{
             onClickLeft(){
                 this.$router.back();
+            },
+            openWeb() {
+                window.open(this.companyWebUrl,'_blank', 'location=yes');
             }
         }
     }

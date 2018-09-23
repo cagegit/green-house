@@ -28,7 +28,7 @@
                     <span>其它联系方式</span>
                 </div>
                 <div class="item-value flex">
-                    {{user.phone}}
+                    <a :href="'tel:'+user.phone">{{user.phone}}</a>
                 </div>
             </div>
             <div class="contact-item flex" @click="toModifyAddr(user.address)">
@@ -75,7 +75,7 @@
                     <span>客服电话</span>
                 </div>
                 <div class="item-value flex">
-                    {{aboutInfo.tel}}
+                    <a :href="'tel:'+aboutInfo.tel">{{aboutInfo.tel}}</a>
                 </div>
             </div>
         </div>
@@ -235,6 +235,10 @@
     .item-value{
         color:#B2B2B2;
         height: 1.44rem;
+        a {
+            color: #B2B2B2;
+            text-decoration: none;
+        }
     }
     .add-img{
         display:inline-block;
