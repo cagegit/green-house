@@ -8,7 +8,7 @@
                         <span>手动</span>
                     </div>
                     <div class="sb-c-right">
-                        <van-switch v-model="handCheck" :change="changeDanlu"/>
+                        <van-switch v-model="handCheck" @change="changeDanlu"/>
                     </div>
                 </div>
             </div>
@@ -317,7 +317,18 @@
                 }
             },
             changeDanlu(check) {
-                console.log('isCheck:'+check);
+                // console.log('isCheck change:'+check);
+                let txt = check?'开启':'关闭';
+                Dialog.confirm({
+                    message: `确认要${txt}设备吗？`
+                }).then(() => {
+                    this.$store.commit('setControlHand',check);
+                    this.pro.value = check?1:0;
+                    this.setCtrl();
+                }).catch(() => {
+                    this.handCheck = !check;
+                    this.$store.commit('setControlHand',this.handCheck);
+                });
             }
         },
         beforeRouteLeave (to, from , next) {
