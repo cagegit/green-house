@@ -5,18 +5,19 @@
             <van-cell-group>
                 <van-field class="input-sty" v-model="phone" clearable placeholder="请输入手机号码" />
                 <van-field class="input-sty" v-model="sendMes" center clearable placeholder="请输入短信验证码">
-                    <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+                    <van-button slot="button" size="small" @click="sendPhoneMes()" type="primary">发送验证码</van-button>
                 </van-field>
             </van-cell-group>
-            <router-link to="/login/resetPassword"><van-button class="next-step">下一步</van-button></router-link>
+            <van-button class="next-step" @click="toResetPage(phone,sendMes)">下一步</van-button>
         </div>
     </div>
 </template>
 <script>
 import { Field, CellGroup, Button, NavBar } from 'vant';
 import HeadBar from '../../components/HeadBar';
+import { getPhoneCode } from '@/service'
 export default {
-    name: "ResetPassword",
+    name: "FindPassword",
     components: {
         [CellGroup.name]: CellGroup,
         [Field.name]: Field,
@@ -36,18 +37,21 @@ export default {
     methods: {
         onClickLeft() {
             this.$router.back();
+        },
+        toResetPage(phone,sendMes){
+            this.$router.push({ name: 'resetPassword', params: { phoneNumber: phone,phoneCode:sendMes }});
+        },
+        sendPhoneMes(){
+            getPhoneCode(this.phone).then(res=>{
+                console.log("res：")
+                console.log(res)
+            }).catch(err=>{
+                console.log("err：")
+                console.log(err)
+            })
         }
     },
-    filters: {
-        changePass(value) {
-            if (!value) return ''
-            let replace = "";
-            for (let i = 0; i < value.length; i++) {
-                replace += "*"
-            }
-            return replace;
-        }
-    }
+
 }
 </script>
 <style lang="scss" scoped>

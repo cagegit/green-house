@@ -10,15 +10,15 @@
                     </div>
                     <div class="detail-item flex">
                         <div class="warn-type">当前值</div>
-                        <div class="warn-value">80%</div>
+                        <div class="warn-value">{{detailCard.data1}}{{detailCard.unitname}}</div>
                     </div>
                     <div class="detail-item flex">
                         <div class="warn-type">正常值</div>
-                        <div class="warn-value">{{detailCard.low}}%~{{detailCard.high}}%</div>
+                        <div class="warn-value">{{detailCard.low}}{{detailCard.unitname}}~{{detailCard.high}}{{detailCard.unitname}}</div>
                     </div>
                     <div class="detail-item flex">
                         <div class="warn-type">告警级别</div>
-                        <div class="warn-value">{{detailCard.level}}级   风机已开启</div>
+                        <div class="warn-value">{{detailCard.level}}级</div>
                     </div>
                     <div class="detail-item flex">
                         <div class="warn-type">告警时间</div>

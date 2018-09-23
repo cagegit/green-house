@@ -17,7 +17,7 @@
             <van-field v-model="password" class="pass-input" type="password" placeholder="请输入密码" />
         </div>
 
-            <router-link to="/login/findPassword" class="forget flex"><div>忘记密码？</div></router-link>
+            <div class="forget flex" @click="toFindPass()">忘记密码？</div>
 
         <div class="flex login-btn-bottom">
             <!--<router-link to="/monitor/main"></router-link>-->
@@ -71,6 +71,10 @@ export default {
         },
         toMd5(str) {
             return MD5(str);
+        },
+        async toFindPass(){
+            console.log("gggggggggggg")
+            this.$router.push('/login/findPassword');
         },
         getWaringCount() {
             const {user} = this.$store.state;

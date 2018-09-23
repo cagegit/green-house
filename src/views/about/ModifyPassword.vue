@@ -1,54 +1,39 @@
 <template>
-    <div class="content-warp">
+    <div class="">
         <van-nav-bar 
           class="top-nav-bar"
           title="修改密码"
           left-arrow
           @click-left="onClickLeft"
         />
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <input type="" name="" v-model="oldPassword" placeholder="请输入原密码" class="item-name flex">
-                <div class="item-value flex">
-                    <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <input type="" name="" v-model="surePassword" placeholder="请输入新密码" class="item-name flex">
-                <div class="item-value flex">
-                    <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <input type="" name="" v-model="reSurePassword"  placeholder="请确认新密码" class="item-name flex">
-                <div class="item-value flex">
-                    <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="sure-btn flex" @click="onClickLeft">确定</div>
+        <van-cell-group class="cell-group">
+            <van-field class="input-sty" v-model="oldPassword" type="password" placeholder="请输入原密码" />
+            <van-field class="input-sty" v-model="newPassword" type="password" placeholder="请输入新密码" />
+            <van-field class="input-sty" v-model="sureNewPassword" type="password" placeholder="请确认新密码" />
+        </van-cell-group>
+        <div class="sure-btn flex" @click="resetPass">确定</div>
         <FootBar :active="3"></FootBar>
     </div>
 </template>
 <script>
-    import { NavBar } from 'vant'
+    import { NavBar, Field, CellGroup, Toast } from 'vant'
     import FootBar from '@/components/FootBar'
-
+    import { resetPassword } from '@/service';
+    import MD5 from 'js-md5';
     export default {
         name: "ModifyPassword",
         components: {
             [NavBar.name]: NavBar,
+            [Field.name]: Field,
+            [CellGroup.name]: CellGroup,
+            [Toast.name]: Toast,
             FootBar
         },
         data() {
             return {
                 oldPassword:"",
-                surePassword:"",
-                reSurePassword:""
+                newPassword:"",
+                sureNewPassword:""
             }
         },
         created: function () {
@@ -57,18 +42,32 @@
         methods:{
             onClickLeft(){
                 this.$router.back();
+            },
+            resetPass(){
+                var that = this;
+                if(this.newPassword === this.sureNewPassword && this.sureNewPassword!="" && this.sureNewPassword){
+                    resetPassword(MD5(this.oldPassword),MD5(this.newPassword),this.$store.state.token).then(res=>{
+                        console.log("res:")
+                        console.log(res)
+                        if(res.data.code==1){
+                            Toast.success("修改成功");
+                            setTimeout(function () {
+                                that.$router.push("/login")
+                            },2000)
+                        }else{
+                            Toast.fail("密码修改失败！");
+                            setTimeout(function () {
+                                that.$router.push("/login")
+                            },2000)
+                        }
+                    })
+                }else if(this.newPassword=="" || this.sureNewPassword==""){
+                    Toast.fail('密码不能为空');
+                }else{
+                    Toast.fail('密码不一致');
+                }
             }
         },
-        filters: {
-          changePass(value) {
-            if (!value) return ''
-            let replace="";
-            for(let i=0;i<value.length;i++){
-                replace +="*" 
-            }
-            return replace;
-          }
-        }
     }
 </script>
 <style lang="scss" scoped>
@@ -76,31 +75,6 @@
         display:flex;
         justify-content:center;
         align-items:center;
-    }
-    .content-warp {
-        padding: 0 0.533333rem;
-        margin-bottom:1.733333rem;
-    }
-    .contact-way{
-        background:#fff;
-        border-radius:0.266667rem;
-        padding:0 0.533333rem 0 0.4rem;
-        margin-bottom:0.4rem;
-        box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
-    }
-    .contact-item{
-        height:1.44rem;
-        justify-content:space-between;
-        font-size:0.4rem;
-        color: #B2B2B2 !important;
-    }
-    .item-name{
-        font-size: 0.426667rem;
-        color: #B2B2B2 !important;
-    }
-    .item-value{
-        color:#B2B2B2;
-        height: 1.44rem;
     }
     .add-img{
         display:inline-block;
@@ -131,5 +105,22 @@
         font-size: 0.453333rem;
         color: #FFFFFF;
         margin:2.026667rem auto 0;
+    }
+    .input-sty {
+        line-height: 1.253333rem;
+        font-size:0.4rem;
+        color: #B2B2B2 !important;
+        border-radius:0.266667rem;
+        padding:0 0.533333rem 0 0.4rem;
+        margin-bottom:0.6rem;
+        height: 1.44rem;
+        box-shadow: 0 6px 10px 0 rgba(190,190,190,0.20);
+    }
+    .cell-group{
+        border-radius: 0.266667rem;
+        padding: 0 0.8rem;
+    }
+    .van-cell-group{
+        background: none;
     }
 </style>

@@ -6,21 +6,24 @@
                 <van-field class="input-sty" v-model="password" type="password" placeholder="请输入新密码" />
                 <van-field class="input-sty" v-model="surePassword" type="password" placeholder="请确认新密码" />
             </van-cell-group>
-            <router-link to="/login"><van-button class="next-step">完成</van-button></router-link>
+            <van-button class="next-step" @click="resetForgetPass">完成</van-button>
         </div>
     </div>
 </template>
 <script>
-import { Field, CellGroup, Button, NavBar } from 'vant';
+import { Field, CellGroup, Button, NavBar, Toast } from 'vant';
 import HeadBar from '../../components/HeadBar';
-import {resetPwd} from '@/service';
+import {forgetPassword} from '@/service';
+import MD5 from 'js-md5';
 export default {
-    name: "FindPassword",
+    name: "ResetPassword",
+    props:['phoneNumber','phoneCode'],
     components: {
         [CellGroup.name]: CellGroup,
         [Field.name]: Field,
         [Button.name]: Button,
         [NavBar.name]: NavBar,
+        [Toast.name]: Toast,
         HeadBar
     },
     data() {
@@ -35,6 +38,32 @@ export default {
     methods: {
         onClickLeft() {
             this.$router.back();
+        },
+        resetForgetPass(){
+            var that = this;
+            if(this.surePassword === this.password && this.password!="" && this.password){
+                forgetPassword(this.phoneNumber,MD5(this.surePassword),this.phoneCode).then(res=>{
+                    console.log("res:")
+                    console.log(res)
+                    if(res.data.code==1){
+                        Toast.success(res.data.msg);
+                        setTimeout(function () {
+                            that.$router.push("/login")
+                        },2000)
+                    }else{
+                        Toast.fail(res.data.msg);
+                        setTimeout(function () {
+                            that.$router.push("/login")
+                        },2000)
+                    }
+                })
+            }else if(this.password=="" || this.surePassword==""){
+
+                Toast.fail('密码不能为空');
+            }else{
+                Toast.fail('密码不一致');
+            }
+
         }
     },
     filters: {

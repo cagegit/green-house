@@ -55,7 +55,7 @@
             <!--</div>-->
         <!--</div>-->
         <div class="contact-way">
-            <router-link to="/about/modifypassword">
+            <router-link to="/about/ModifyPassword">
                 <div class="contact-item flex">
                     <div class="item-name flex">
                         <img src="@/assets/img/my/lock.png" alt="">

@@ -2,6 +2,8 @@ import { Observable,from,pipe,interval } from 'rxjs';
 import { switchMap,map } from 'rxjs/operators';
 let warObservable;
 const DEVICE_URL= 'http://giot.kjxt.tech:3030';
+const DEVICE_URL_PORT= 'http://giot.kjxt.tech:3000';
+const FORGET_PASSWORD_URL='http://127.0.0.1:3000';
 /**
  * 登录
  * */
@@ -153,4 +155,22 @@ export  const  getRepeateWaringList = (id) => {
  */
 export const getLatestSensorData = (pid) =>{
     return axios.get(`${DEVICE_URL}/stat/sensorDataLatest?pid=${pid}`);
+};
+/**
+ * 发送手机验证码
+ */
+export const getPhoneCode = (phoneNumber) =>{
+    return axios.get(`${DEVICE_URL_PORT}/apps/sendsms?phone=${phoneNumber}`);
+};
+/**
+ * 忘记密码
+ */
+export const forgetPassword = (phone,pwd,smscode) =>{
+    return axios.get(`${DEVICE_URL_PORT}/apps/resetpwdbysms?phone=${phone}&pwd=${pwd}&smscode=${smscode}`);
+};
+/**
+ * 修改密码
+ */
+export const resetPassword = (oldPassword,newPassword,token) =>{
+    return axios.get(`${DEVICE_URL_PORT}/apps/resetPwd?oldpwd=${oldPassword}&pwd=${newPassword}&token=${token}`);
 };

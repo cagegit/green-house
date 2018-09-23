@@ -30,7 +30,8 @@ export default new Router({
               {
                   path: 'resetPassword',// 重置密码
                   name: 'resetPassword',
-                  component: () => import('./views/login/ResetPassword.vue')
+                  component: () => import('./views/login/ResetPassword.vue'),
+                  props:true
               }
           ]
       },
