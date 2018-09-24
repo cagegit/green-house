@@ -49,7 +49,7 @@
                 this.$router.back();
             },
             openWeb() {
-                window.open(this.companyWebUrl,'_blank', 'location=yes');
+                window.open('http://'+this.companyWebUrl,'_blank', 'location=yes');
             }
         }
     }
