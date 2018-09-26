@@ -2,25 +2,27 @@
     <div class="monitor">
         <HeadBar title="历史曲线" link="/monitor/main"></HeadBar>
         <DpTab :active="3"></DpTab>
-        <div class="main-body">
-            <div class="sb-input-box">
-                <button><div class="in-box"><span>光照</span> <img src="@/assets/img/Group 3.png"/></div></button>
-            </div>
-            <div class="date-panel">
-                <van-tabs v-model="active" @click="tabChange">
-                    <van-tab class="sb-tab" v-for="item in dataList" :key="item.index" :title="item.title">
-                        <div class="time-control">
-                            <span class="ctrl" @click="preByTab"><van-icon name="arrow-left" /></span>
-                            <span class="title">{{currentTime}}</span>
-                            <span class="ctrl" @click="nextByTab"><van-icon name="arrow" /></span>
-                        </div>
-                    </van-tab>
-                </van-tabs>
-                <div class="chart-wrapper">
-                    <canvas id="mountNode"></canvas>
+        <v-touch v-on:swiperight="onSwipeRight" tag="div">
+            <div class="main-body">
+                <div class="sb-input-box">
+                    <button type="button"><div class="in-box"><span>光照</span> <img src="@/assets/img/Group 3.png"/></div></button>
+                </div>
+                <div class="date-panel">
+                    <van-tabs v-model="active" @click="tabChange">
+                        <van-tab class="sb-tab" v-for="item in dataList" :key="item.index" :title="item.title">
+                            <div class="time-control">
+                                <span class="ctrl" @click="preByTab"><van-icon name="arrow-left" /></span>
+                                <span class="title">{{currentTime}}</span>
+                                <span class="ctrl" @click="nextByTab"><van-icon name="arrow" /></span>
+                            </div>
+                        </van-tab>
+                    </van-tabs>
+                    <div class="chart-wrapper">
+                        <canvas id="mountNode"></canvas>
+                    </div>
                 </div>
             </div>
-        </div>
+        </v-touch>
     </div>
 </template>
 <script>
@@ -181,6 +183,9 @@
                 }).catch(err => {
                     console.log(err);
                 });
+            },
+            onSwipeRight() {
+                this.$router.push({name:'main'});
             }
         }
 

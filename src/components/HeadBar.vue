@@ -43,14 +43,16 @@
     @import "../sass/variable";
     .van-nav-bar .van-icon {
         color: #4B4A4A;
-        font-weight: bold;
+        font-weight: 700;
     }
     .van-nav-bar {
         background-color: transparent;
+        border-bottom: 0.5px solid #ddd;
         .van-nav-bar__title {
             color: $head-bar-color;
             letter-spacing: 1.7px;
             font-size: 14px;
+            font-weight: 600;
         }
     }
 </style>

@@ -2,35 +2,36 @@
     <div class="monitor">
         <HeadBar title="实时监测" link="/monitor/main"></HeadBar>
         <DpTab :active="1"></DpTab>
-        <div class="main-body">
-            <!--\天气-->
-             <Weather></Weather>
-            <!--天气\-->
-            <div class="ss-tip" v-if="warings>0">
-                <button type="button" class="btn" @click="toWarPage()">您有{{warings}}个报警，请查看></button>
-            </div>
+        <v-touch v-on:swiperight="onSwipeRight"  tag="div">
+            <div class="main-body">
+                <!--\天气-->
+                 <Weather></Weather>
+                <!--天气\-->
+                <div class="ss-tip" v-if="warings>0">
+                    <button type="button" class="btn" @click="toWarPage()">您有{{warings}}个报警，请查看></button>
+                </div>
 
-            <div class="ss-card" v-for="item in devices" :key="item.id">
-                <div class="ss-line">
-                    <div class="ss-title">
-                        <span>{{item.name}}</span>
+                <div class="ss-card" v-for="item in devices" :key="item.id">
+                    <div class="ss-line">
+                        <div class="ss-title">
+                            <span>{{item.name}}</span>
+                        </div>
+                        <div @click="changeWaring(item.properties)">
+                            <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                        </div>
                     </div>
-                    <div @click="changeWaring(item.properties)">
-                        <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                    <div class="ss-line-no-icon">
+                        <div class="sb-pre">
+                            <img :src="toImg(item.name)"/> <span>{{toLiang(item)}}</span>
+                        </div>
+                        <div class="sb-next">
+                            <p>更新时间：{{item.time}}</p>
+                            <p><span class="sb-pink">{{item.properties.sensorType}}级</span>风机已开启</p>
+                        </div>
                     </div>
                 </div>
-                <div class="ss-line-no-icon">
-                    <div class="sb-pre">
-                        <img :src="toImg(item.name)"/> <span>{{toLiang(item)}}</span>
-                    </div>
-                    <div class="sb-next">
-                        <p>更新时间：{{item.time}}</p>
-                        <p><span class="sb-pink">{{item.properties.sensorType}}级</span>风机已开启</p>
-                    </div>
-                </div>
             </div>
-
-        </div>
+        </v-touch>
         <van-dialog v-model="show" :show-cancel-button="true">
             <div class="dia-content">
                 <div class="title">告警值设置</div>
@@ -178,6 +179,9 @@
                 let dw = item.properties.readout_unit;
                 dw = dw ? dw.replace(/RH/g,''): '';
                 return item.data + dw;
+            },
+            onSwipeRight() {
+                this.$router.push({name:'main'});
             }
         }
     }

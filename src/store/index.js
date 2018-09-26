@@ -20,7 +20,8 @@ const state = {
     },
     user: {},
     aboutMes:{},
-    warnings: 0
+    warnings: 0,
+    relations: [] // 图片对应关系
 };
 
 export default new Vuex.Store({
@@ -67,6 +68,9 @@ export default new Vuex.Store({
         },
         setWarning(state, num) {
            state.warnings += num;
+        },
+        setRelations(state, relations) {
+           state.relations = relations;
         }
     },
     actions: {

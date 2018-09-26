@@ -6,7 +6,14 @@ import store from './store/index'
 import 'lib-flexible'   //移动端布局框架
 import jsonp from 'jsonp';
 import VueRx from 'vue-rx';
+import VueTouch from 'vue-touch'
 
+Vue.use(VueTouch, {name: 'v-touch'});
+
+VueTouch.config.swipe = {
+    threshold: 100 //手指左右滑动距离
+};
+window.$store = store;
 Vue.prototype.$jsonp= jsonp;
 Vue.config.productionTip = false;
 Vue.use(VueRx);
@@ -40,7 +47,7 @@ router.beforeEach((to, from,next) => {
         }
     }
 });
-Vue.prototype.$eventHub = new Vue();// 设置全局$emit $on
+// Vue.prototype.$eventHub = new Vue();// 设置全局$emit $on
 
 let vueIns = null;
 if(process.env.NODE_ENV === 'production') {

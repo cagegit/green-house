@@ -1,10 +1,35 @@
 <template>
   <div id="app">
-      <transition name="slide-left">
+      <transition :name="transitionName">
           <router-view class="child-view"/>
       </transition>
   </div>
 </template>
+<script>
+    export default {
+        name:'App',
+        data() {
+            return {
+                transitionName: 'slide-left'
+            }
+        },
+        watch: {
+            '$route' (to, from) {
+                const toDepth = to.path.split('/').length;
+                const fromDepth = from.path.split('/').length;
+                if(from.path.indexOf('monitor')>=0 && to.path.indexOf('main')>=0) {
+                    this.transitionName = 'slide-right';
+                    return;
+                }
+                if(from.path.indexOf('current')>=0 || from.path.indexOf('main')>=0) {
+                    this.transitionName = 'slide-left';
+                    return;
+                }
+                this.transitionName = fromDepth > toDepth? 'slide-right' : 'slide-left';
+            }
+        }
+    }
+</script>
 <style lang="scss">
    @import "./sass/common";
    @import "./sass/variable";
@@ -25,6 +50,7 @@
     }
     .main-body {
         padding: 0 10px;
+        min-height: 100%;
     }
    .van-dialog__confirm, .van-dialog__confirm:active {
        color: $btn-color !important;

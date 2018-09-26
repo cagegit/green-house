@@ -1,5 +1,5 @@
 import { Observable,from,pipe,interval } from 'rxjs';
-import { switchMap,map } from 'rxjs/operators';
+import { switchMap,map,distinctUntilChanged } from 'rxjs/operators';
 let warObservable;
 const DEVICE_URL= 'http://giot.kjxt.tech:3030';
 const DEVICE_URL_PORT= 'http://giot.kjxt.tech:3000';
@@ -142,8 +142,15 @@ export  const  getRepeateWaringList = (id) => {
     if(warObservable){
         warObservable.unsubscribe();
     }
-    warObservable = interval(1000*5).pipe(
+    warObservable = interval(1000*10).pipe(
         switchMap(val =>  from(getWarings('1',id,'1','2018-09-01',''))),
+        distinctUntilChanged((p,q) => {
+            if((p.data && p.data.results) && (q.data && q.data.results)) {
+                return JSON.stringify(p.data.results) === JSON.stringify(q.data.results);
+            } else {
+               return false;
+            }
+        }),
         map(res => {
             return res.data;
         })
@@ -173,4 +180,10 @@ export const forgetPassword = (phone,pwd,smscode) =>{
  */
 export const resetPassword = (oldPassword,newPassword,token) =>{
     return axios.get(`${DEVICE_URL_PORT}/apps/resetPwd?oldpwd=${oldPassword}&pwd=${newPassword}&token=${token}`);
+};
+/**
+ * 查找对应关系
+ */
+export const getPicRelations = (token) => {
+    return axios.get(`${DEVICE_URL_PORT}/apps/controllericon?token=${encodeURIComponent(token)}`);
 };

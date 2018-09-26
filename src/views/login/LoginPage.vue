@@ -27,9 +27,8 @@
 </template>
 <script>
 import { Field, CellGroup,Button,Toast } from 'vant';
-import {loginIn,getWarings,getRepeateWaringList} from '@/service';
+import {loginIn,getWarings,getRepeateWaringList,getPicRelations} from '@/service';
 import MD5 from 'js-md5';
-
 export default {
     name: "LoginPage",
     data() {
@@ -49,7 +48,7 @@ export default {
         async login() {
             try {
                 const res = await loginIn(this.username, this.toMd5(this.password));
-                if(res.data.code===1) {
+                if(res && res.data && res.data.code===1) {
                     Toast.success({
                         message: '登录成功',
                         duration: 500
@@ -58,8 +57,8 @@ export default {
                     if(res.data.user && res.data.user.length>0) {
                         this.$store.commit('setUser',res.data.user[0]);
                     }
-                    // localStorage.setItem('token',res.data.token);
                     this.getWaringCount();
+                    this.getPicRelations(res.data.token);
                     this.$router.push('/monitor/main');
                 } else {
                     Toast.success('登录失败');
@@ -73,7 +72,7 @@ export default {
             return MD5(str);
         },
         async toFindPass(){
-            console.log("gggggggggggg")
+            // console.log("gggggggggggg");
             this.$router.push('/login/findPassword');
         },
         getWaringCount() {
@@ -113,7 +112,17 @@ export default {
             },err => {
                 console.log(err);
             });
-
+        },
+        getPicRelations(token) {
+           getPicRelations(token).then(res => {
+               if(res && res.data && Array.isArray(res.data.result)) {
+                   // console.log(res.data);
+                   this.$store.commit('setRelations',res.data.result);
+                   // console.log(this.$store.state.relations);
+               }
+           },err => {
+               console.log(err);
+           });
         }
     }
 }

@@ -2,24 +2,26 @@
     <div class="monitor">
         <HeadBar title="设备控制" link="/monitor/main"></HeadBar>
         <DpTab :active="2"></DpTab>
-        <div class="main-body">
-            <div class="sb-cell" v-for="kz in kzList" :key="kz.id" @click="toSetPage(kz)">
-                <div class="sb-c-left">
-                    <img :src="getImg(kz.properties.type)">
-                    <span>{{kz.name}}</span>
-                </div>
-                <div class="sb-c-right">
-                    <span v-if="kz.properties.ctrl==='1' || kz.properties.ctrl==='2'">{{kz.properties.value?'开启':'关闭'}}</span>
-                    <span v-else-if="kz.properties.ctrl==='3'">
-                        <i v-if="kz.properties.value===0">停止</i>
-                        <i v-if="kz.properties.value===-1">左转</i>
-                        <i v-if="kz.properties.value===1">右转</i>
-                    </span>
-                    <span v-else="kz.properties.ctrl==='4'">{{kz.properties.value+'档'}}</span>
-                    <i class="van-icon van-icon-arrow"></i>
+        <v-touch v-on:swiperight="onSwipeRight" tag="div">
+            <div class="main-body">
+                <div class="sb-cell" v-for="kz in kzList" :key="kz.id" @click="toSetPage(kz)">
+                    <div class="sb-c-left">
+                        <img :src="getImg(kz.properties.type)">
+                        <span>{{kz.name}}</span>
+                    </div>
+                    <div class="sb-c-right">
+                        <span v-if="kz.properties.ctrl==='1' || kz.properties.ctrl==='2'">{{kz.properties.value?'开启':'关闭'}}</span>
+                        <span v-else-if="kz.properties.ctrl==='3'">
+                            <i v-if="kz.properties.value===0">停止</i>
+                            <i v-if="kz.properties.value===-1">左转</i>
+                            <i v-if="kz.properties.value===1">右转</i>
+                        </span>
+                        <span v-else="kz.properties.ctrl==='4'">{{kz.properties.value+'档'}}</span>
+                        <i class="van-icon van-icon-arrow"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        </v-touch>
     </div>
 </template>
 <script>
@@ -33,13 +35,13 @@
            return {
                kzList: [],
                img_1: require("@/assets/img/fengj@2x.png"),
-               img_2: require("@/assets/img/zidc@2x.png"),
-               img_3: require("@/assets/img/juanlj@2x.png"),
-               img_4: require("@/assets/img/guang@2x.png"),
-               img_5: require("@/assets/img/jiawl@2x.png"),
-               img_6: require("@/assets/img/zheyz@2x.png"),
-               img_7: require("@/assets/img/ship@2x.png"),
-               img_8: require("@/assets/img/co2@2x.png")
+               // img_2: require("@/assets/img/zidc@2x.png"),
+               // img_3: require("@/assets/img/juanlj@2x.png"),
+               // img_4: require("@/assets/img/guang@2x.png"),
+               // img_5: require("@/assets/img/jiawl@2x.png"),
+               // img_6: require("@/assets/img/zheyz@2x.png"),
+               // img_7: require("@/assets/img/ship@2x.png"),
+               // img_8: require("@/assets/img/co2@2x.png")
            }
         },
         components: {
@@ -59,8 +61,10 @@
                this.$router.push({ name: 'fjsb', params: { name: pro.name ,id: pro.id}});
            },
             getImg(num) {
-               num = +num> 8 ? 1: +num;
-                return this['img_'+num];
+               // num = +num> 8 ? 1: +num;
+                const pics = this.$store.state.relations.filter(item => item.type===num);
+                return pics.length>0?'http://'+pics[0].icon:this.img_1;
+                // return this['img_'+num];
             },
             async getCtrls(pid,token) {
                  try {
@@ -78,6 +82,9 @@
                  }catch (err) {
                      console.log(err);
                  }
+            },
+            onSwipeRight() {
+               this.$router.push({name:'main'});
             }
         }
     }

@@ -53,21 +53,18 @@
                 dqShow: false,
                 yqShow: false,
                 img_1: require("@/assets/img/fengj@2x.png"),
-                img_2: require("@/assets/img/zidc@2x.png"),
-                img_3: require("@/assets/img/juanlj@2x.png"),
-                img_4: require("@/assets/img/guang@2x.png"),
-                img_5: require("@/assets/img/jiawl@2x.png"),
-                img_6: require("@/assets/img/zheyz@2x.png"),
-                img_7: require("@/assets/img/ship@2x.png"),
-                img_8: require("@/assets/img/co2@2x.png"),
+                // img_2: require("@/assets/img/zidc@2x.png"),
+                // img_3: require("@/assets/img/juanlj@2x.png"),
+                // img_4: require("@/assets/img/guang@2x.png"),
+                // img_5: require("@/assets/img/jiawl@2x.png"),
+                // img_6: require("@/assets/img/zheyz@2x.png"),
+                // img_7: require("@/assets/img/ship@2x.png"),
+                // img_8: require("@/assets/img/co2@2x.png"),
                 controlList:[]
 
             }
         },
-        mounted() {
-            if(!this.token) {
-                this.$router.replace('/login');
-            }
+        created() {
             this.locates(this.token);
         },
         methods: {
@@ -87,7 +84,6 @@
             async locates(token) {
                 try {
                     const res = await getLocates(token);
-                    // console.log(res.data);
                     if(res.data && res.data.results) {
                         this.areaList = Object.assign([],res.data.results) || [];
                         if(this.areaList.length>0) {
@@ -137,10 +133,6 @@
                 }
             },
             yqConfirm(value) {
-                //console.log("dddddddddddd:")
-                //console.log(value)
-                //console.log(this.yqList)
-                
                 this.yq = value;
                 this.yqShow = false;
                 this.yqList.forEach(val => {
@@ -155,14 +147,16 @@
                 this.daList = Object.assign([],res.data.results) || [];
             },
             getControList(pid){
-                getControList(this.token,176).then(res=>{
-                    if(res.data.code==1){
-                        this.controlList = Object.assign([],res.data.results)
+                getControList(this.token,176).then(res =>{
+                    if(res.data && res.data.code===1){
+                        this.controlList = Object.assign([],res.data.results);
+                        // console.log(this.controlList);
                     }
                 })
             },
             getImg(num) {
-                return this['img_'+num];
+                const pics = this.$store.state.relations.filter(item => item.type===num);
+                return pics.length > 0 ? 'http://'+pics[0].icon : this.img_1;
             },
         }
     }
