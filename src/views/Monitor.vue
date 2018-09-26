@@ -1,6 +1,6 @@
 <template>
   <div class="monitor">
-      <transition name="slide-right">
+      <transition name="slide-left">
          <router-view class="child-view"></router-view>
       </transition>
   </div>

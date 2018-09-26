@@ -6,17 +6,7 @@
 <script>
 
     export default {
-        name: "About",
-        components: {
-
-        },
-        data() {
-            return {
-              
-            }
-        },
-        methods:{
-        }
+        name: "About"
     }
 </script>
 <style lang="scss" scoped>
