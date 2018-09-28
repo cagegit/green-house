@@ -8,7 +8,7 @@
                     <div>{{user.phone}}</div>
                 </div> -->
             </div>
-            <div class="user-avater">
+            <div class="user-avater" @click="uploadPhoto()">
                 <img src="@/assets/img/Bitmap.png">
             </div>
         </div>
@@ -96,18 +96,20 @@
             <span >退出</span>
             <img src="@/assets/img/return-press.png" alt="">
         </div>
+        <Uploader v-model="isShowPhoto"></Uploader>
         <FootBar :active="3"></FootBar>
     </div>
 </template>
 <script>
     import { Area,Popup } from 'vant'
-    import FootBar from '@/components/FootBar'
-    import areaList from '@/plugins/area.js'
+    import FootBar from '@/components/FootBar';
+    import areaList from '@/plugins/area.js';
     import { getAbout } from '@/service';
-
+    import Uploader from '../../components/Uploader';
     export default {
         name: "Findings",
         components: {
+            Uploader,
             [Area.name]: Area,
             [Popup.name]: Popup,
             FootBar
@@ -117,14 +119,15 @@
                 user: {},
                 areaLis:"",
                 show:false,
-                aboutInfo:{}
+                aboutInfo:{},
+                isShowPhoto:false
             }
         },
         created: function () {
             this.areaList = areaList;
         },
         mounted() {
-            this.getAbout(this.$store.state.token)
+            this.getAbout(this.$store.state.token);
             if(JSON.stringify(this.$store.state.user)!=='{}') {
                 this.user = Object.assign({},this.$store.state.user);
             }
@@ -133,6 +136,10 @@
            chooseAddr(){
                 this.show = false;
            },
+            uploadPhoto() {
+                this.isShowPhoto = true;
+                console.log(this.isShowPhoto);
+            },
            // addrSure(content){
            //      console.log("content:");
            //      console.log(content);
@@ -152,9 +159,8 @@
                 try{
                     if(token){
                         getAbout(token).then((res)=>{
-                            this.aboutInfo = res.data.results
-                            this.$store.commit("setAboutMes",res.data.results)
-
+                            this.aboutInfo = res.data.results;
+                            this.$store.commit("setAboutMes",res.data.results);
                         })
                     }
                 }catch (err) {

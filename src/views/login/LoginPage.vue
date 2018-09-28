@@ -137,6 +137,7 @@ export default {
 
 .wrap {
     padding: 0 0.8rem;
+    height: auto;
 }
 
 .welcom-top {

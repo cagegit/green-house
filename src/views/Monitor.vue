@@ -10,10 +10,4 @@
        name: 'Monitor'
    }
 </script>
-<style lang="scss">
-    .monitor{
-        width: 100%;
-        height: 100vh;
-        text-align: left;
-    }
-</style>
+<style lang="scss"></style>

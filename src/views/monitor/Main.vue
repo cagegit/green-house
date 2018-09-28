@@ -66,7 +66,7 @@
         methods: {
             toNextPage(pid) {
                 //console.log('pid:'+pid);
-                pid = 176;
+                // pid = 176;
                 this.$store.commit('setPid',pid);
                 this.$router.push("/monitor/ssjc");
             },

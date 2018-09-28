@@ -187,3 +187,14 @@ export const resetPassword = (oldPassword,newPassword,token) =>{
 export const getPicRelations = (token) => {
     return axios.get(`${DEVICE_URL_PORT}/apps/controllericon?token=${encodeURIComponent(token)}`);
 };
+/**
+ * 上传头像
+ */
+export const uploadPhoto = (base64Data) => {
+    let config = {
+        headers: {'Content-Type': 'multipart/form-data'}
+    };
+    let param = new FormData();
+    param.append('file', base64Data);
+    return axios.post(`${DEVICE_URL_PORT}/web/upload`,param,config);
+};

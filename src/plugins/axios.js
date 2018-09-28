@@ -2,7 +2,7 @@
 
 import Vue from 'vue';
 import axios from "axios";
-
+import router from "../router";
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -30,8 +30,13 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   function(response) {
-    // Do something with response data
-    return response;
+      console.log(response.data );
+      if(response.data.code === -1){
+          router.replace('/login');
+          return Promise.reject('token time out');
+      } else  {
+          return response;
+      }
   },
   function(error) {
     // Do something with response error
@@ -56,6 +61,6 @@ Plugin.install = function(Vue, options) {
   });
 };
 
-Vue.use(Plugin)
+Vue.use(Plugin);
 
 export default Plugin;

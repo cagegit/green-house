@@ -53,6 +53,9 @@
             letter-spacing: 1.7px;
             font-size: 14px;
             font-weight: 600;
+            text-align: center;
+            max-width: 100%;
+            margin: 0;
         }
     }
 </style>

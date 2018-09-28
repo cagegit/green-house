@@ -41,13 +41,18 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-align: center;
-       color: #2c3e50;
+      color: #2c3e50;
     }
     .btn {
         padding: 5px 10px;
         border-radius: 100px;
         background-color: #fff;
     }
+   .monitor{
+       width: 100%;
+       height: 100vh;
+       text-align: left;
+   }
     .main-body {
         padding: 0 10px;
         min-height: 100%;
