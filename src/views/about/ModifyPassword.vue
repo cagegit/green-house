@@ -50,6 +50,14 @@
                         console.log("res:")
                         console.log(res)
                         if(res.data.code==1){
+                            let userSave = localStorage.getItem("userAccount")
+                            if(userSave != null){
+                                let user=JSON.parse(userSave)
+                                user.password = this.newPassword
+                                var ua=JSON.stringify(user);
+                                localStorage.setItem("userAccount",ua)
+                            }
+                            
                             Toast.success("修改成功");
                             setTimeout(function () {
                                 that.$router.push("/login")

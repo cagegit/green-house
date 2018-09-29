@@ -153,6 +153,10 @@
                 this.show = false;
            },
             logOut() {
+                let userSave = localStorage.getItem("userAccount")
+                if(userSave != null){
+                    localStorage.removeItem("userAccount")
+                }
                this.$router.replace('/login')
             },
             getAbout(token){

@@ -44,6 +44,16 @@ export default {
         [Button.name]: Button,
         [Toast.name]: Toast
     },
+    mounted(){
+        let userSave = localStorage.getItem("userAccount")
+        if(userSave != null){
+            let user=JSON.parse(userSave);
+            this.username = user.username
+            this.password = user.password
+            this.login()
+        }
+        
+    },
     methods: {
         async login() {
             try {
@@ -59,6 +69,12 @@ export default {
                     }
                     this.getWaringCount();
                     this.getPicRelations(res.data.token);
+                    let userAccount = {
+                        "username":this.username,
+                        "password":this.password
+                    }
+                    var ua=JSON.stringify(userAccount);
+                    localStorage.setItem("userAccount",ua)
                     this.$router.push('/monitor/main');
                 } else {
                     Toast.success('登录失败');
