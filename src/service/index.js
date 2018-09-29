@@ -190,11 +190,8 @@ export const getPicRelations = (token) => {
 /**
  * 上传头像
  */
-export const uploadPhoto = (base64Data) => {
-    let config = {
-        headers: {'Content-Type': 'multipart/form-data'}
-    };
-    let param = new FormData();
-    param.append('file', base64Data);
-    return axios.post(`${DEVICE_URL_PORT}/web/upload`,param,config);
+export const uploadPhoto = (token,loginname,base64Data) => {
+    // param.append('file', base64Data);
+    console.log('uploadPhoto');
+    return axios.post(`${DEVICE_URL_PORT}/apps/updateEmployee`,{loginname:loginname,token:token,icon:base64Data});
 };

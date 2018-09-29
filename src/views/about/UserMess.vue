@@ -9,7 +9,7 @@
                 </div> -->
             </div>
             <div class="user-avater" @click="uploadPhoto()">
-                <img src="@/assets/img/Bitmap.png">
+                <img :src="user.icon">
             </div>
         </div>
         <div class="contact-way">
@@ -96,7 +96,7 @@
             <span >退出</span>
             <img src="@/assets/img/return-press.png" alt="">
         </div>
-        <Uploader v-model="isShowPhoto"></Uploader>
+        <Uploader v-model="isShowPhoto" @photo-src="getUploaderData($event)"></Uploader>
         <FootBar :active="3"></FootBar>
     </div>
 </template>
@@ -120,7 +120,8 @@
                 areaLis:"",
                 show:false,
                 aboutInfo:{},
-                isShowPhoto:false
+                isShowPhoto:false,
+                userPhoto: require('@/assets/img/Bitmap.png')
             }
         },
         created: function () {
@@ -130,6 +131,9 @@
             this.getAbout(this.$store.state.token);
             if(JSON.stringify(this.$store.state.user)!=='{}') {
                 this.user = Object.assign({},this.$store.state.user);
+                if(!this.user.icon) {
+                    Object.assign(user,{icon:this.userPhoto});
+                }
             }
         },
         methods:{
@@ -169,6 +173,9 @@
             },
             toModifyAddr(addr){
                 this.$router.push({ name: 'modifyaddr', params: { name: addr }});
+            },
+            getUploaderData($event) {
+               this.user.icon = $event;
             }
         }
     }

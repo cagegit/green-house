@@ -32,11 +32,15 @@
     import F2 from '@antv/f2/lib';
     import {getDayLs,getMonthLs,getYearLs} from '../../service';
     import _ from 'lodash/fp';
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const can_width = document.getElementById('app').offsetWidth - 50;
+    const can_height = 250;
     function initChart(data) {
+        const canvas = document.getElementById('mountNode');
         const chart = new F2.Chart({
             id: 'mountNode',
-            width: document.getElementById('app').offsetWidth - 50,
-            height: 250
+            width: can_width * devicePixelRatio,
+            height: can_height * devicePixelRatio
         });
 
         const defs = {
@@ -84,6 +88,8 @@
             lineWidth: 6
         });
         chart.render();
+        canvas.style.width = can_width +"px";
+        canvas.style.height = can_height +"px";
     }
     export default {
         name: 'Lsqx',

@@ -30,7 +30,7 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   function(response) {
-      console.log(response.data );
+      // console.log(response.data );
       if(response.data.code === -1){
           router.replace('/login');
           return Promise.reject('token time out');
