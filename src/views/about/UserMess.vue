@@ -80,7 +80,7 @@
             </div>
         </div>
         <div class="contact-way">
-            <router-link to="/about/aboutme">
+            <div @click="toAboutMe(aboutInfo.QRCode_Pay)">
                 <div class="contact-item flex">
                     <div class="item-name flex">
                         <img src="@/assets/img/my/about.png" alt="">
@@ -90,7 +90,7 @@
                         <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
                     </div>
                 </div>
-            </router-link>
+            </div>
         </div>
         <div class="return-btn flex" @click="logOut()">
             <span >退出</span>
@@ -173,6 +173,9 @@
             },
             toModifyAddr(addr){
                 this.$router.push({ name: 'modifyaddr', params: { name: addr }});
+            },
+            toAboutMe(qrcode){
+                this.$router.push({ name: 'aboutme', params: { qrcode: qrcode }});
             }
         }
     }

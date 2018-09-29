@@ -161,7 +161,8 @@ export default new Router({
               }, {
                   path: 'aboutme',// 关于
                   name: 'aboutme',
-                  component: () => import('./views/about/AboutMe.vue')
+                  component: () => import('./views/about/AboutMe.vue'),
+                  props:true
               },  {
                   path: 'modifyaddr',// 修改地址
                   name: 'modifyaddr',
