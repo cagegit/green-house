@@ -4,21 +4,13 @@
             WELCOME
         </div>
         <div class="welcom">
-            欢迎来到康吉物联
+            欢迎来到G物联
         </div>
         <div class="login-area">
-            <div>
-                账户
-            </div>
-            <van-field v-model="username" placeholder="请输入用户名" />
-            <div class="pass-txt">
-                密码
-            </div>
-            <van-field v-model="password" class="pass-input" type="password" placeholder="请输入密码" />
+            <van-field class="login-field" label="账户" v-model="username" placeholder="请输入用户名" />
+            <van-field label="密码" v-model="password" class="login-field pass-input" type="password" placeholder="请输入密码" />
         </div>
-
-            <div class="forget flex" @click="toFindPass()">忘记密码？</div>
-
+        <div class="forget flex" @click="toFindPass()">忘记密码？</div>
         <div class="flex login-btn-bottom">
             <!--<router-link to="/monitor/main"></router-link>-->
             <van-button type="primary" class="login-btn"  @click="login()">登录</van-button>
@@ -44,6 +36,16 @@ export default {
         [Button.name]: Button,
         [Toast.name]: Toast
     },
+    mounted(){
+        let userSave = localStorage.getItem("userAccount")
+        if(userSave != null){
+            let user=JSON.parse(userSave);
+            this.username = user.username
+            this.password = user.password
+            this.login()
+        }
+        
+    },
     methods: {
         async login() {
             try {
@@ -59,6 +61,12 @@ export default {
                     }
                     this.getWaringCount();
                     this.getPicRelations(res.data.token);
+                    let userAccount = {
+                        "username":this.username,
+                        "password":this.password
+                    }
+                    var ua=JSON.stringify(userAccount);
+                    localStorage.setItem("userAccount",ua)
                     this.$router.push('/monitor/main');
                 } else {
                     Toast.success('登录失败');
@@ -156,18 +164,13 @@ export default {
     margin: 0.106667rem 0 0.933333rem 0;
     width: 100%;
     text-align: left;
+    font-weight:700;
 }
 
 .login-area {
-    height: 5.653333rem;
-    background: #FFFFFF;
-    box-shadow: 0 0.16rem 0.32rem 0 rgba(84, 160, 156, 0.09);
-    border-radius: 0.213333rem;
-    padding: 0.746667rem 0.72rem 0;
-    width: 100%;
-    text-align: left;
-    font-size: 0.373333rem;
+    font-size: 0.4rem;
 	color: #777777;
+    text-align:right;
 }
 
 .pass-txt{
@@ -186,7 +189,6 @@ export default {
 	color: #B7C1CB;
 	justify-content:flex-end;
 	width:100%;
-	margin-top:0.373333rem;
     float:right;
 }
 .login-btn-bottom{
@@ -201,5 +203,21 @@ export default {
 	background:#44e3a8;
 	font-size: 0.426667rem;
 	border:none;
+}
+.login-field{
+    background: #FFFFFF;
+    box-shadow: 0 0.16rem 0.32rem 0 rgba(84,160,156,0.09);
+    border-radius: 0.213333rem;
+    width:8.4rem;
+    height:1.493333rem;
+    margin-bottom:0.48rem;
+    text-align:center;
+}
+.van-cell__title{
+    width:0.533333rem !important;
+    flex:auto;
+}
+.van-cell__value input{
+    color:#D7D7D7;
 }
 </style>

@@ -50,6 +50,10 @@
                         console.log("res:")
                         console.log(res)
                         if(res.data.code==1){
+                            let userSave = localStorage.getItem("userAccount")
+                            if(userSave != null){
+                                localStorage.removeItem("userAccount")
+                            }
                             Toast.success("修改成功");
                             setTimeout(function () {
                                 that.$router.push("/login")

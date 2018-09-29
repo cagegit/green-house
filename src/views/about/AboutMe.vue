@@ -10,6 +10,9 @@
             <img src="@/assets/img/logo-ico.png" alt="" class="logo-ico">
             <div class="logo-txt">康吉物联 V1.1.0</div>
         </div>
+        <div class="qrcode flex">
+            <img class="codeImg" :src="qrcodeUrl" alt=""/>
+        </div>
         <div class="contact-way">
             <div class="contact-item flex">
                 <div class="item-name">
@@ -23,6 +26,10 @@
                 </div>
             </div>
         </div>
+        <div class="return-btn flex" @click="logOut()">
+            <span >退出</span>
+            <img src="@/assets/img/return-press.png" alt="">
+        </div>
     </div>
 </template>
 <script>
@@ -33,16 +40,21 @@
         components: {
             [NavBar.name]: NavBar,
         },
+        props:['qrcode'],
         data() {
             return {
                 areaLis:"",
                 show:false,
                 userAddr:"辽宁省沈阳市皇姑屯",
-                companyWebUrl:''
+                companyWebUrl:'',
+                qrcodeUrl:""
             }
         },
         created: function () {
             this.companyWebUrl = this.$store.state.aboutMes.websate;
+        },
+        mounted:function(){
+            this.qrcodeUrl = this.qrcode
         },
         methods:{
             onClickLeft(){
@@ -50,7 +62,14 @@
             },
             openWeb() {
                 window.open('http://'+this.companyWebUrl,'_blank', 'location=yes');
-            }
+            },
+            logOut() {
+                let userSave = localStorage.getItem("userAccount")
+                if(userSave != null){
+                    localStorage.removeItem("userAccount")
+                }
+               this.$router.replace('/login')
+            },
         }
     }
 </script>
@@ -116,5 +135,26 @@
     .copyright{
         color: #999999;
         line-height: 3;
+    }
+    .codeImg{
+        width:2rem;
+        height:2rem;
+        margin-bottom:0.373333rem;
+    }
+    .return-btn{
+        margin-top:1.6rem;
+        margin-bottom: 100px;
+        position:relative;
+        img{
+            width:6.4rem;
+            height:1.173333rem;
+        }
+        span{
+            position:absolute;
+            left:46%;
+            top:0.266667rem;
+            font-size:0.453333rem;
+            color:#fff;
+        }
     }
 </style>
