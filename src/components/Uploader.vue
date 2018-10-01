@@ -101,6 +101,7 @@
                     console.log(imageData);
                     const base64Data = "data:image/jpeg;base64,"+ imageData;
                     if(imageData) {
+                        console.log(imageData);
                         this.uploadPic(base64Data);
                     }
                 }

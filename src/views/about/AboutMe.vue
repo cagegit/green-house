@@ -52,8 +52,6 @@
         },
         created: function () {
             this.companyWebUrl = this.$store.state.aboutMes.websate;
-        },
-        mounted:function(){
             this.qrcodeUrl = this.qrcode
         },
         methods:{

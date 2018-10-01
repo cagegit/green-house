@@ -126,8 +126,6 @@
         },
         created: function () {
             this.areaList = areaList;
-        },
-        mounted() {
             this.getAbout(this.$store.state.token);
             if(JSON.stringify(this.$store.state.user)!=='{}') {
                 this.user = Object.assign({},this.$store.state.user);
@@ -157,7 +155,7 @@
                 this.show = false;
            },
             logOut() {
-                let userSave = localStorage.getItem("userAccount")
+                let userSave = localStorage.getItem("userAccount");
                 if(userSave != null){
                     localStorage.removeItem("userAccount")
                 }
@@ -182,7 +180,7 @@
                 this.user.icon = $event;
             },
             toAboutMe(qrcode){
-                this.$router.push({ name: 'aboutme', params: { qrcode: qrcode }});
+                this.$router.push({ name: 'aboutme', params: { qrcode: 'http://'+qrcode }});
             }
         }
     }
