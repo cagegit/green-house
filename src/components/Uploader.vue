@@ -97,12 +97,12 @@
                     allowEdit: true,
                     correctOrientation: true
                 });
+                const that = this;
                 function onSuccess(imageData) {
                     console.log(imageData);
                     const base64Data = "data:image/jpeg;base64,"+ imageData;
                     if(imageData) {
-                        console.log(imageData);
-                        this.uploadPic(base64Data);
+                        that.uploadPic(base64Data);
                     }
                 }
                 function onFail(message) {
@@ -120,11 +120,12 @@
                     targetWidth :200,
                     allowEdit: true
                 });
+                const that = this;
                 function onSuccess(imageData) {
                     console.log(imageData);
                     const base64Data = "data:image/jpeg;base64,"+ imageData;
                     if(imageData) {
-                        this.uploadPic(base64Data);
+                        that.uploadPic(base64Data);
                     }
                 }
                 function onFail(message) {

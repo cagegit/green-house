@@ -130,7 +130,7 @@
             if(JSON.stringify(this.$store.state.user)!=='{}') {
                 this.user = Object.assign({},this.$store.state.user);
                 if(!this.user.icon) {
-                    Object.assign(user,{icon:this.userPhoto});
+                    Object.assign(this.user,{icon:this.userPhoto});
                 }
             }
         },
@@ -142,15 +142,6 @@
                 this.isShowPhoto = true;
                 console.log(this.isShowPhoto);
             },
-           // addrSure(content){
-           //      console.log("content:");
-           //      console.log(content);
-           //      this.userAddr = "";
-           //      for(let i=0;i<content.length;i++){
-           //          this.userAddr =this.userAddr + content[i].name + " ";
-           //      }
-           //      this.show = false;
-           // },
            addrCancle(){
                 this.show = false;
            },
@@ -266,7 +257,7 @@
     }
     .return-btn{
         margin-top:1.6rem;
-        margin-bottom: 100px;
+        margin-bottom: 200px;
         position:relative;
         img{
             width:6.4rem;

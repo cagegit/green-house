@@ -1,19 +1,21 @@
 <template>
-    <div class="wrap flex">
-        <div class="welcom-top">
-            WELCOME
-        </div>
-        <div class="welcom">
-            欢迎来到G物联
-        </div>
-        <div class="login-area">
-            <van-field class="login-field" label="账户" v-model="username" placeholder="请输入用户名" />
-            <van-field label="密码" v-model="password" class="login-field pass-input" type="password" placeholder="请输入密码" />
-        </div>
-        <div class="forget flex" @click="toFindPass()">忘记密码？</div>
-        <div class="flex login-btn-bottom">
-            <!--<router-link to="/monitor/main"></router-link>-->
-            <van-button type="primary" class="login-btn"  @click="login()">登录</van-button>
+    <div class="login-main">
+        <div class="wrap flex">
+            <div class="welcom-top">
+                WELCOME
+            </div>
+            <div class="welcom">
+                欢迎来到G物联
+            </div>
+            <div class="login-area">
+                <van-field class="login-field" label="账户" v-model="username" placeholder="请输入用户名" />
+                <van-field label="密码" v-model="password" class="login-field pass-input" type="password" placeholder="请输入密码" />
+            </div>
+            <div class="forget flex" @click="toFindPass()">忘记密码？</div>
+            <div class="flex login-btn-bottom">
+                <!--<router-link to="/monitor/main"></router-link>-->
+                <van-button type="primary" class="login-btn"  @click="login()">登录</van-button>
+            </div>
         </div>
     </div>
 </template>
@@ -36,15 +38,14 @@ export default {
         [Button.name]: Button,
         [Toast.name]: Toast
     },
-    mounted(){
-        let userSave = localStorage.getItem("userAccount")
-        if(userSave != null){
-            let user=JSON.parse(userSave);
-            this.username = user.username
-            this.password = user.password
-            this.login()
-        }
-        
+    created(){
+        // let userSave = localStorage.getItem("userAccount");
+        // if(userSave != null) {
+        //     let user = JSON.parse(userSave);
+        //     this.username = user.username;
+        //     this.password = user.password;
+        //     this.login()
+        // }
     },
     methods: {
         async login() {
@@ -64,15 +65,15 @@ export default {
                     let userAccount = {
                         "username":this.username,
                         "password":this.password
-                    }
-                    var ua=JSON.stringify(userAccount);
-                    localStorage.setItem("userAccount",ua)
+                    };
+                    const ua=JSON.stringify(userAccount);
+                    localStorage.setItem("userAccount",ua);
                     this.$router.push('/monitor/main');
                 } else {
                     Toast.success('登录失败');
                 }
             }catch (err) {
-                //console.log(err);
+                console.log(err);
                 Toast.success('网络错误');
             }
         },
@@ -142,12 +143,15 @@ export default {
     align-items: center;
     flex-wrap: wrap;
 }
-
+.login-main {
+    height: 100%;
+    background: url("../../assets/logo_bg.png") no-repeat center bottom;
+    background-size: contain;
+}
 .wrap {
     padding: 0 0.8rem;
     height: auto;
 }
-
 .welcom-top {
     margin-top: 1.48rem;
     font-size: 0.32rem;
@@ -156,7 +160,6 @@ export default {
     width: 100%;
     text-align: left;
 }
-
 .welcom {
     font-size: 0.64rem;
     line-height: 0.893333rem;
@@ -166,13 +169,12 @@ export default {
     text-align: left;
     font-weight:700;
 }
-
 .login-area {
     font-size: 0.4rem;
 	color: #777777;
     text-align:right;
+    width: 100%;
 }
-
 .pass-txt{
 	margin-top:0.986667rem;
 }
@@ -208,7 +210,6 @@ export default {
     background: #FFFFFF;
     box-shadow: 0 0.16rem 0.32rem 0 rgba(84,160,156,0.09);
     border-radius: 0.213333rem;
-    width:8.4rem;
     height:1.493333rem;
     margin-bottom:0.48rem;
     text-align:center;
