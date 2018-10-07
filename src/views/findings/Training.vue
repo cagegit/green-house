@@ -88,6 +88,7 @@
         width:8.933333rem;
         height:4.106667rem;
         margin-bottom:0.4rem;
+        padding-bottom:1.5rem;
     }
     .card-img{
         height:2.666667rem;

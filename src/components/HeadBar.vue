@@ -47,7 +47,7 @@
     }
     .van-nav-bar {
         background-color: transparent;
-        border-bottom: 0.5px solid #ddd;
+        border-bottom: 1px solid darken($main-bg,5%);
         .van-nav-bar__title {
             color: $head-bar-color;
             letter-spacing: 1.7px;

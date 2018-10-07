@@ -62,11 +62,11 @@
                 window.open('http://'+this.companyWebUrl,'_blank', 'location=yes');
             },
             logOut() {
-                let userSave = localStorage.getItem("userAccount")
+                let userSave = localStorage.getItem("userAccount");
                 if(userSave != null){
-                    localStorage.removeItem("userAccount")
+                    localStorage.removeItem("userAccount");
                 }
-               this.$router.replace('/login')
+               this.$router.replace('/login');
             },
         }
     }

@@ -24,7 +24,7 @@
                     :finished="finished"
                     :immediate-check="check"
                     @load="onLoad"
-                    class="card-wrap"
+                    class="card-wrap find-list"
             >
 
                 <van-cell class="card-list" v-for="(item,index) in cardList" :key="index">
@@ -180,7 +180,9 @@
         margin-bottom: 0.4rem;
         padding: 0;
     }
-
+    .find-list {
+        padding-bottom:1.5rem;
+    }
     .card-img {
         height: 2.666667rem;
         position: relative;

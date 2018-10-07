@@ -105,6 +105,7 @@
   .foot-bar {
       .van-tabbar-item--active {
           color: $main-border-color;
+          transform: scale(1.1);
       }
   }
 </style>

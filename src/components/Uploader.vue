@@ -42,7 +42,7 @@
         },
         methods: {
             onSelect(item) {
-                console.log(item);
+                // console.log(item);
                 if(item.id===1) {
                    this.takePhoto();
                 } else {
@@ -50,7 +50,7 @@
                 }
             },
             onCancel() {
-                console.log('cancel !',this.show);
+                // console.log('cancel !',this.show);
                 this.$emit('input',this.show);
             },
             onPhoto(src) {
@@ -87,11 +87,9 @@
             },
             takePhoto() {
                 navigator.camera.getPicture(onSuccess, onFail, {
-                    quality: 50,
+                    quality: 60,
                     destinationType: Camera.DestinationType.DATA_URL,
                     sourceType: Camera.PictureSourceType.CAMERA,
-                    encodingType: Camera.EncodingType.JPEG,
-                    mediaType: Camera.MediaType.PICTURE,
                     targetHeight:200,
                     targetWidth :200,
                     allowEdit: true,
@@ -99,7 +97,7 @@
                 });
                 const that = this;
                 function onSuccess(imageData) {
-                    console.log(imageData);
+                    // console.log(imageData);
                     const base64Data = "data:image/jpeg;base64,"+ imageData;
                     if(imageData) {
                         that.uploadPic(base64Data);
@@ -122,7 +120,7 @@
                 });
                 const that = this;
                 function onSuccess(imageData) {
-                    console.log(imageData);
+                    // console.log(imageData);
                     const base64Data = "data:image/jpeg;base64,"+ imageData;
                     if(imageData) {
                         that.uploadPic(base64Data);

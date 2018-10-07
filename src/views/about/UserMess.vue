@@ -1,100 +1,103 @@
 <template>
-    <div class="content-warp">
-        <div class="top-avater flex">
-            <div class="name-mes">
-                <div class="user-name flex">{{user.name}}</div>
-                <!-- <div class="user-id flex">
-                    <img src="@/assets/img/my/user-id-ico.png">
-                    <div>{{user.phone}}</div>
-                </div> -->
-            </div>
-            <div class="user-avater" @click="uploadPhoto()">
-                <img :src="user.icon">
-            </div>
-        </div>
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <div class="item-name flex">
-                    <img src="@/assets/img/my/user-name.png" alt="">
-                    <span>用户名</span>
+    <div>
+        <div class="content-warp">
+            <div class="top-avater flex">
+                <div class="name-mes">
+                    <div class="user-name flex">{{user.name}}</div>
+                    <!-- <div class="user-id flex">
+                        <img src="@/assets/img/my/user-id-ico.png">
+                        <div>{{user.phone}}</div>
+                    </div> -->
                 </div>
-                <div class="item-value flex">
-                    {{user.name}}
+                <div class="user-avater" @click="uploadPhoto()">
+                    <img :src="user.icon">
                 </div>
             </div>
-            <div class="contact-item flex">
-                <div class="item-name flex">
-                    <img src="@/assets/img/my/tele-ico.png" alt="">
-                    <span>其它联系方式</span>
+            <div class="contact-way">
+                <div class="contact-item flex">
+                    <div class="item-name flex">
+                        <img src="@/assets/img/my/user-name.png" alt="">
+                        <span>用户名</span>
+                    </div>
+                    <div class="item-value flex">
+                        {{user.name}}
+                    </div>
                 </div>
-                <div class="item-value flex">
-                    <a :href="'tel:'+user.phone">{{user.phone}}</a>
+                <div class="contact-item flex">
+                    <div class="item-name flex">
+                        <img src="@/assets/img/my/tele-ico.png" alt="">
+                        <span>其它联系方式</span>
+                    </div>
+                    <div class="item-value flex">
+                        <a :href="'tel:'+user.phone">{{user.phone}}</a>
+                    </div>
+                </div>
+                <div class="contact-item flex" @click="toModifyAddr(user.address)">
+                    <div class="item-name flex">
+                        <img src="@/assets/img/my/add-ico.png" alt="">
+                        <span>地址</span>
+                    </div>
+                    <div class="item-value flex" @click="chooseAddr">
+                        {{user.address}}
+                        <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
+                    </div>
                 </div>
             </div>
-            <div class="contact-item flex" @click="toModifyAddr(user.address)">
-                <div class="item-name flex">
-                    <img src="@/assets/img/my/add-ico.png" alt="">
-                    <span>地址</span>
-                </div>
-                <div class="item-value flex" @click="chooseAddr">
-                    {{user.address}}
-                    <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                </div>
-            </div>
-        </div>
-        <!--<div class="contact-way">-->
+            <!--<div class="contact-way">-->
             <!--<div class="contact-item flex">-->
-                <!--<div class="item-name flex">-->
-                    <!--<img src="@/assets/img/my/planet.png" alt="">-->
-                    <!--<span>主要作物品类</span>-->
-                <!--</div>-->
-                <!--<div class="item-value flex">-->
-                    <!--西红柿、黄瓜……-->
-                    <!--<img class="add-img" src="@/assets/img/ion-chevron.png" alt="">-->
-                <!--</div>-->
+            <!--<div class="item-name flex">-->
+            <!--<img src="@/assets/img/my/planet.png" alt="">-->
+            <!--<span>主要作物品类</span>-->
             <!--</div>-->
-        <!--</div>-->
-        <div class="contact-way">
-            <router-link to="/about/ModifyPassword">
-                <div class="contact-item flex">
-                    <div class="item-name flex">
-                        <img src="@/assets/img/my/lock.png" alt="">
-                        <span>修改密码</span>
+            <!--<div class="item-value flex">-->
+            <!--西红柿、黄瓜……-->
+            <!--<img class="add-img" src="@/assets/img/ion-chevron.png" alt="">-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="contact-way">
+                <router-link to="/about/ModifyPassword">
+                    <div class="contact-item flex">
+                        <div class="item-name flex">
+                            <img src="@/assets/img/my/lock.png" alt="">
+                            <span>修改密码</span>
+                        </div>
+                        <div class="item-value flex">
+                            <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
+                        </div>
                     </div>
-                    <div class="item-value flex">
-                        <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
-                    </div>
-                </div>
-            </router-link>
-            
-        </div>
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <div class="item-name flex">
-                    <img src="@/assets/img/my/tele-ico.png" alt="">
-                    <span>客服电话</span>
-                </div>
-                <div class="item-value flex">
-                    <a :href="'tel:'+aboutInfo.tel">{{aboutInfo.tel}}</a>
-                </div>
+                </router-link>
+
             </div>
-        </div>
-        <div class="contact-way">
-            <div @click="toAboutMe(aboutInfo.QRCode_Pay)">
+            <div class="contact-way">
                 <div class="contact-item flex">
                     <div class="item-name flex">
-                        <img src="@/assets/img/my/about.png" alt="">
-                        <span>关于</span>
+                        <img src="@/assets/img/my/tele-ico.png" alt="">
+                        <span>客服电话</span>
                     </div>
                     <div class="item-value flex">
-                        <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
+                        <a :href="'tel:'+aboutInfo.tel">{{aboutInfo.tel}}</a>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="return-btn flex" @click="logOut()">
-            <span >退出</span>
-            <img src="@/assets/img/return-press.png" alt="">
+            <div class="contact-way">
+                <div @click="toAboutMe(aboutInfo.QRCode_Pay)">
+                    <div class="contact-item flex">
+                        <div class="item-name flex">
+                            <img src="@/assets/img/my/about.png" alt="">
+                            <span>关于</span>
+                        </div>
+                        <div class="item-value flex">
+                            <img class="add-img" src="@/assets/img/ion-chevron.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="return-btn flex" @click="logOut()">
+                <span >退出</span>
+                <img src="@/assets/img/return-press.png" alt="">
+            </div>
+            <div class="padding-box">&nbsp;</div>
         </div>
         <Uploader v-model="isShowPhoto" @photo-src="getUploaderData($event)"></Uploader>
         <FootBar :active="3"></FootBar>
@@ -257,7 +260,7 @@
     }
     .return-btn{
         margin-top:1.6rem;
-        margin-bottom: 200px;
+        margin-bottom: 100px;
         position:relative;
         img{
             width:6.4rem;
@@ -271,5 +274,7 @@
             color:#fff;
         }
     }
-
+   .padding-box {
+       height: 100px;
+   }
 </style>
