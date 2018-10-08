@@ -1,6 +1,6 @@
 import { Observable,from,pipe,interval } from 'rxjs';
 import { switchMap,map,distinctUntilChanged } from 'rxjs/operators';
-let warObservable;
+let warObservable$;
 const DEVICE_URL= 'http://giot.kjxt.tech:3030';
 const DEVICE_URL_PORT= 'http://giot.kjxt.tech:3000';
 const FORGET_PASSWORD_URL='http://127.0.0.1:3000';
@@ -139,10 +139,7 @@ export const getWaringList = (userId, status, pageNum) =>{
  * 轮询接口
  */
 export  const  getRepeateWaringList = (id) => {
-    if(warObservable){
-        warObservable.unsubscribe();
-    }
-    warObservable = interval(1000*10).pipe(
+    return interval(1000*10).pipe(
         switchMap(val =>  from(getWarings('1',id,'1','2018-09-01',''))),
         distinctUntilChanged((p,q) => {
             if((p.data && p.data.results) && (q.data && q.data.results)) {
@@ -155,7 +152,6 @@ export  const  getRepeateWaringList = (id) => {
             return res.data;
         })
     );
-    return warObservable;
 };
 /**
  * 查询最新设备信息

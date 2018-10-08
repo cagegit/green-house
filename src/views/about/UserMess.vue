@@ -260,7 +260,7 @@
     }
     .return-btn{
         margin-top:1.6rem;
-        margin-bottom: 100px;
+        margin-bottom: 50px;
         position:relative;
         img{
             width:6.4rem;

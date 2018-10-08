@@ -23,6 +23,7 @@
 import { Field, CellGroup,Button,Toast } from 'vant';
 import {loginIn,getWarings,getRepeateWaringList,getPicRelations} from '@/service';
 import MD5 from 'js-md5';
+let observe$;
 export default {
     name: "LoginPage",
     data() {
@@ -39,13 +40,13 @@ export default {
         [Toast.name]: Toast
     },
     created(){
-        // let userSave = localStorage.getItem("userAccount");
-        // if(userSave != null) {
-        //     let user = JSON.parse(userSave);
-        //     this.username = user.username;
-        //     this.password = user.password;
-        //     this.login()
-        // }
+        let userSave = localStorage.getItem("userAccount");
+        if(userSave) {
+            let user = JSON.parse(userSave);
+            this.username = user.username;
+            this.password = user.password;
+            this.login()
+        }
     },
     methods: {
         async login() {
@@ -105,7 +106,10 @@ export default {
             }).catch(err => {
                 console.log(err);
             });
-            getRepeateWaringList(user.corp_id).subscribe(res => {
+            if(observe$) {
+                observe$.unsubscribe();
+            }
+            observe$ = getRepeateWaringList(user.corp_id).subscribe(res => {
                 // console.log(res);
                 if(res && res.status ===1) {
                     if(res.results && res.results.length>0) {
