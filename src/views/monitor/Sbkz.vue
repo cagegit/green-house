@@ -1,28 +1,28 @@
 <template>
-    <div class="monitor">
-        <HeadBar title="设备控制" link="/monitor/main"></HeadBar>
-        <DpTab :active="2"></DpTab>
-        <v-touch v-on:swiperight="onSwipeRight" tag="div">
-            <div class="main-body">
-                <div class="sb-cell" v-for="kz in kzList" :key="kz.id" @click="toSetPage(kz)">
-                    <div class="sb-c-left">
-                        <img :src="getImg(kz.properties.type)">
-                        <span>{{kz.name}}</span>
-                    </div>
-                    <div class="sb-c-right">
-                        <span v-if="kz.properties.ctrl==='1' || kz.properties.ctrl==='2'">{{kz.properties.value?'开启':'关闭'}}</span>
-                        <span v-else-if="kz.properties.ctrl==='3'">
-                            <i v-if="kz.properties.value===0">停止</i>
-                            <i v-if="kz.properties.value===-1">左转</i>
-                            <i v-if="kz.properties.value===1">右转</i>
-                        </span>
-                        <span v-else="kz.properties.ctrl==='4'">{{kz.properties.value+'档'}}</span>
-                        <i class="van-icon van-icon-arrow"></i>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <HeadBar title="设备控制" link="/monitor/main"></HeadBar>
+            <DpTab :active="2"></DpTab>
+                <div class="main-body">
+                    <div class="sb-cell" v-for="kz in kzList" :key="kz.id" @click="toSetPage(kz)">
+                        <div class="sb-c-left">
+                            <img :src="getImg(kz.properties.type)">
+                            <span>{{kz.name}}</span>
+                        </div>
+                        <div class="sb-c-right">
+                            <span v-if="kz.properties.ctrl==='1' || kz.properties.ctrl==='2'">{{kz.properties.value?'开启':'关闭'}}</span>
+                            <span v-else-if="kz.properties.ctrl==='3'">
+                                <i v-if="kz.properties.value===0">停止</i>
+                                <i v-if="kz.properties.value===-1">左转</i>
+                                <i v-if="kz.properties.value===1">右转</i>
+                            </span>
+                            <span v-else="kz.properties.ctrl==='4'">{{kz.properties.value+'档'}}</span>
+                            <i class="van-icon van-icon-arrow"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </v-touch>
-    </div>
+        </div>
+    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'

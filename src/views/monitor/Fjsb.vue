@@ -1,131 +1,133 @@
 <template>
-    <div class="monitor">
-        <HeadBar :title="name+'设备'" link="/monitor/main"></HeadBar>
-        <div class="main-body">
-            <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='1' || pro.ctrl==='2'">
-                <div class="fj-flex">
-                    <div class="sb-c-left">
-                        <span>手动</span>
-                    </div>
-                    <div class="sb-c-right">
-                        <van-switch v-model="handCheck" @change="changeDanlu"/>
-                    </div>
-                </div>
-            </div>
-            <!--三路控制-->
-            <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='3'">
-                <div class="fj-flex">
-                    <div class="sb-c-left">
-                        <span>手动</span>
-                    </div>
-                    <div class="sb-c-right">
-                        <van-switch v-model="handCheck" />
-                    </div>
-                </div>
-                <div class="fj-content">
-                    <div class="fj-zx">
-                        <div class="zx-item" @click="setZx(-1)">
-                            <img :src="currentZx===-1?zxMap.leftPress:zxMap.leftNormal">
-                            <span :class="{'active':currentZx===-1}">左转</span>
-                        </div>
-                        <div class="zx-item" @click="setZx(0)">
-                            <img :src="currentZx===0?zxMap.stopPress:zxMap.stopNormal">
-                            <span :class="{'active':currentZx===0}">停止</span>
-                        </div>
-                        <div class="zx-item" @click="setZx(1)">
-                            <img :src="currentZx===1?zxMap.rightPress:zxMap.rightNormal">
-                            <span :class="{'active':currentZx===1}">右转</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--阶段控制-->
-            <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='4'">
-                <div class="fj-flex">
-                    <div class="sb-c-left">
-                        <span>手动</span>
-                    </div>
-                    <div class="sb-c-right">
-                        <van-switch v-model="handCheck" />
-                    </div>
-                </div>
-                <div class="fj-content">
-                    <div class="fj-slider">
-                        <van-slider v-model="current" :step="25" bar-height="8px" />
-                        <div class="slider-kd">
-                            <span>关闭</span>
-                            <span>25%</span>
-                            <span>50%</span>
-                            <span>75%</span>
-                            <span>100%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="sb-com-cell"  v-if="pro.ctrl==='1' || pro.ctrl==='2'">
-                <div class="fj-flex">
-                    <div class="sb-c-left">
-                        <span>自动</span>
-                    </div>
-                    <div class="sb-c-right">
-                        <van-switch v-model="autoCheck" />
-                    </div>
-                </div>
-                <div class="fj-content" v-if="autoCheck">
-                    <div class="fj-in-flex">
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <HeadBar :title="name+'设备'" link="/monitor/main"></HeadBar>
+            <div class="main-body">
+                <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='1' || pro.ctrl==='2'">
+                    <div class="fj-flex">
                         <div class="sb-c-left">
-                            <span>开启时间</span>
+                            <span>手动</span>
                         </div>
-                        <div class="sb-c-right" @click="setStartTime()">
-                            <input type="text" placeholder="请选择" :value="stTime" readonly/>
-                            <i class="van-icon van-icon-arrow"></i>
-                        </div>
-                    </div>
-                    <div class="fj-in-flex">
-                        <div class="sb-c-left">
-                            <span>关闭时间</span>
-                        </div>
-                        <div class="sb-c-right" @click="setEndTime()">
-                            <input type="text" placeholder="请选择" :value="enTime" readonly/>
-                            <i class="van-icon van-icon-arrow"></i>
+                        <div class="sb-c-right">
+                            <van-switch v-model="handCheck" @change="changeDanlu"/>
                         </div>
                     </div>
-                    <div class="fj-in-flex">
-                        <div class="sb-c-left">
-                            <span>重复</span>
-                        </div>
-                        <div class="sb-c-right" @click="chongFu()">
-                            <input type="text" class="cf-input" placeholder="请选择" :value="chongfu" readonly/>
-                            <i class="van-icon van-icon-arrow"></i>
-                        </div>
-                    </div>
-
                 </div>
-            </div>
+                <!--三路控制-->
+                <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='3'">
+                    <div class="fj-flex">
+                        <div class="sb-c-left">
+                            <span>手动</span>
+                        </div>
+                        <div class="sb-c-right">
+                            <van-switch v-model="handCheck" />
+                        </div>
+                    </div>
+                    <div class="fj-content">
+                        <div class="fj-zx">
+                            <div class="zx-item" @click="setZx(-1)">
+                                <img :src="currentZx===-1?zxMap.leftPress:zxMap.leftNormal">
+                                <span :class="{'active':currentZx===-1}">左转</span>
+                            </div>
+                            <div class="zx-item" @click="setZx(0)">
+                                <img :src="currentZx===0?zxMap.stopPress:zxMap.stopNormal">
+                                <span :class="{'active':currentZx===0}">停止</span>
+                            </div>
+                            <div class="zx-item" @click="setZx(1)">
+                                <img :src="currentZx===1?zxMap.rightPress:zxMap.rightNormal">
+                                <span :class="{'active':currentZx===1}">右转</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--阶段控制-->
+                <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='4'">
+                    <div class="fj-flex">
+                        <div class="sb-c-left">
+                            <span>手动</span>
+                        </div>
+                        <div class="sb-c-right">
+                            <van-switch v-model="handCheck" />
+                        </div>
+                    </div>
+                    <div class="fj-content">
+                        <div class="fj-slider">
+                            <van-slider v-model="current" :step="25" bar-height="8px" />
+                            <div class="slider-kd">
+                                <span>关闭</span>
+                                <span>25%</span>
+                                <span>50%</span>
+                                <span>75%</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="sb-com-cell"  v-if="pro.ctrl==='1' || pro.ctrl==='2'">
+                    <div class="fj-flex">
+                        <div class="sb-c-left">
+                            <span>自动</span>
+                        </div>
+                        <div class="sb-c-right">
+                            <van-switch v-model="autoCheck" />
+                        </div>
+                    </div>
+                    <div class="fj-content" v-if="autoCheck">
+                        <div class="fj-in-flex">
+                            <div class="sb-c-left">
+                                <span>开启时间</span>
+                            </div>
+                            <div class="sb-c-right" @click="setStartTime()">
+                                <input type="text" placeholder="请选择" :value="stTime" readonly/>
+                                <i class="van-icon van-icon-arrow"></i>
+                            </div>
+                        </div>
+                        <div class="fj-in-flex">
+                            <div class="sb-c-left">
+                                <span>关闭时间</span>
+                            </div>
+                            <div class="sb-c-right" @click="setEndTime()">
+                                <input type="text" placeholder="请选择" :value="enTime" readonly/>
+                                <i class="van-icon van-icon-arrow"></i>
+                            </div>
+                        </div>
+                        <div class="fj-in-flex">
+                            <div class="sb-c-left">
+                                <span>重复</span>
+                            </div>
+                            <div class="sb-c-right" @click="chongFu()">
+                                <input type="text" class="cf-input" placeholder="请选择" :value="chongfu" readonly/>
+                                <i class="van-icon van-icon-arrow"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <van-actionsheet v-model="startTimePanel">
+                <van-datetime-picker
+                        v-model="stTime"
+                        type="time"
+                        :min-hour="stMinHour"
+                        :max-hour="stMaxHour"
+                        @confirm="startConfirm"
+                        @cancel="startCancel"
+                />
+            </van-actionsheet>
+            <van-actionsheet v-model="endTimePanel">
+                <van-datetime-picker
+                        v-model="enTime"
+                        type="time"
+                        :min-hour="enMinHour"
+                        :max-hour="enMaxHour"
+                        @confirm="endConfirm"
+                        @cancel="endCancel"
+                />
+            </van-actionsheet>
         </div>
-        <van-actionsheet v-model="startTimePanel">
-            <van-datetime-picker
-                    v-model="stTime"
-                    type="time"
-                    :min-hour="stMinHour"
-                    :max-hour="stMaxHour"
-                    @confirm="startConfirm"
-                    @cancel="startCancel"
-            />
-        </van-actionsheet>
-        <van-actionsheet v-model="endTimePanel">
-            <van-datetime-picker
-                    v-model="enTime"
-                    type="time"
-                    :min-hour="enMinHour"
-                    :max-hour="enMaxHour"
-                    @confirm="endConfirm"
-                    @cancel="endCancel"
-            />
-        </van-actionsheet>
-    </div>
+    </v-touch>
 </template>
 <script>
     import { Switch,Slider,DatetimePicker,Actionsheet,Dialog } from 'vant'
@@ -329,6 +331,9 @@
                     this.handCheck = !check;
                     this.$store.commit('setControlHand',this.handCheck);
                 });
+            },
+            onSwipeRight() {
+                this.$router.go(-1);
             }
         },
         beforeRouteLeave (to, from , next) {

@@ -1,63 +1,63 @@
 <template>
-    <div class="monitor">
-        <HeadBar title="设施信息" link="/monitor/main"></HeadBar>
-        <DpTab :active="4"></DpTab>
-        <v-touch v-on:swiperight="onSwipeRight" tag="div">
-            <div class="main-body">
-                <div class="sb-cell">
-                    <div class="sb-c-left">
-                        <span>图像</span>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <HeadBar title="设施信息" link="/monitor/main"></HeadBar>
+            <DpTab :active="4"></DpTab>
+                <div class="main-body">
+                    <div class="sb-cell">
+                        <div class="sb-c-left">
+                            <span>图像</span>
+                        </div>
+                        <div class="sb-c-right">
+                            <img src="@/assets/img/dp@2x.png">
+                            <i class="van-icon van-icon-arrow"></i>
+                        </div>
                     </div>
-                    <div class="sb-c-right">
-                        <img src="@/assets/img/dp@2x.png">
-                        <i class="van-icon van-icon-arrow"></i>
+                    <div class="sb-cell">
+                        <div class="sb-c-left">
+                            <span>大棚名称</span>
+                        </div>
+                        <div class="sb-c-right" @click="editSbxx(1)">
+                            <span>{{sbInfo.name}}</span>
+                            <i class="van-icon van-icon-arrow"></i>
+                        </div>
                     </div>
+                    <div class="sb-cell">
+                        <div class="sb-c-left">
+                            <span>作物种类</span>
+                        </div>
+                        <div class="sb-c-right" @click="editSbxx(2)">
+                            <span>{{sbInfo.type}}</span>
+                            <i class="van-icon van-icon-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="sb-cell">
+                        <div class="sb-c-left">
+                            <span>大棚尺寸</span>
+                        </div>
+                        <div class="sb-c-right" @click="editSbxx(3)">
+                            <span>{{sbInfo.size}}</span>
+                            <i class="van-icon van-icon-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="sb-cell">
+                        <div class="sb-c-left">
+                            <span>所在地</span>
+                        </div>
+                        <div class="sb-c-right" @click="editSbxx(4)">
+                            <span>{{sbInfo.area}}</span>
+                            <i class="van-icon van-icon-arrow"></i>
+                        </div>
+                    </div>
+                    <div class="sb-button">
+                        <button type="button" :disabled="isSaving" @click="modifyDpInfo()">保存</button>
+                    </div>
+                    <!--<van-actionsheet v-model="showTimePanel">-->
+                        <!--<van-area :area-list="addressList" @confirm="getArea" @cancel="showTimePanel=false;" />-->
+                    <!--</van-actionsheet>-->
                 </div>
-                <div class="sb-cell">
-                    <div class="sb-c-left">
-                        <span>大棚名称</span>
-                    </div>
-                    <div class="sb-c-right" @click="editSbxx(1)">
-                        <span>{{sbInfo.name}}</span>
-                        <i class="van-icon van-icon-arrow"></i>
-                    </div>
-                </div>
-                <div class="sb-cell">
-                    <div class="sb-c-left">
-                        <span>作物种类</span>
-                    </div>
-                    <div class="sb-c-right" @click="editSbxx(2)">
-                        <span>{{sbInfo.type}}</span>
-                        <i class="van-icon van-icon-arrow"></i>
-                    </div>
-                </div>
-                <div class="sb-cell">
-                    <div class="sb-c-left">
-                        <span>大棚尺寸</span>
-                    </div>
-                    <div class="sb-c-right" @click="editSbxx(3)">
-                        <span>{{sbInfo.size}}</span>
-                        <i class="van-icon van-icon-arrow"></i>
-                    </div>
-                </div>
-                <div class="sb-cell">
-                    <div class="sb-c-left">
-                        <span>所在地</span>
-                    </div>
-                    <div class="sb-c-right" @click="editSbxx(4)">
-                        <span>{{sbInfo.area}}</span>
-                        <i class="van-icon van-icon-arrow"></i>
-                    </div>
-                </div>
-                <div class="sb-button">
-                    <button type="button" :disabled="isSaving" @click="modifyDpInfo()">保存</button>
-                </div>
-                <!--<van-actionsheet v-model="showTimePanel">-->
-                    <!--<van-area :area-list="addressList" @confirm="getArea" @cancel="showTimePanel=false;" />-->
-                <!--</van-actionsheet>-->
-            </div>
-        </v-touch>
-    </div>
+        </div>
+    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'

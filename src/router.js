@@ -125,19 +125,20 @@ export default new Router({
           component: () => import('./views/Findings.vue'),
           children: [
               {
-                  path: '/',
-                  name: 'message',
-                  component: () => import('./views/findings/Message.vue')
+                  path: '',
+                  redirect: {name: 'message'}
               },
               {
                   path: 'message',// 消息页面
-                  name: 'msg',
-                  component: () => import('./views/findings/Message.vue')
+                  name: 'message',
+                  component: () => import('./views/findings/Message.vue'),
+                  props:true
               },
               {
                   path: 'training',// 培训页面
                   name: 'training',
-                  component: () => import('./views/findings/Training.vue')
+                  component: () => import('./views/findings/Training.vue'),
+                  props:true
               },
           ]
       }, {
@@ -145,9 +146,8 @@ export default new Router({
           component: () => import('./views/About.vue'),
           children: [
               {
-                  path: '/',
-                  name: 'userMess',
-                  component: () => import('./views/about/UserMess.vue')
+                  path: '',
+                  redirect: {name: 'usermess'}
               },
               {
                   path: 'usermess',// 消息页面

@@ -11,7 +11,8 @@ import VueTouch from 'vue-touch'
 Vue.use(VueTouch, {name: 'v-touch'});
 
 VueTouch.config.swipe = {
-    threshold: 100 //手指左右滑动距离
+    threshold: 100, //手指左右滑动距离
+    direction: 'horizontal'
 };
 window.$store = store;
 Vue.prototype.$jsonp= jsonp;
@@ -40,6 +41,7 @@ router.beforeEach((to, from,next) => {
         if(to.path.indexOf('login')>=0){//如果是登录页面路径，就直接next()
             next();
         }else{//不然就跳转到登录；
+            console.log('2333');
             next({
                 path:'/login',
                 replace:true

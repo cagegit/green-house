@@ -1,36 +1,36 @@
 <template>
-    <div class="content-warp">
-        <van-nav-bar 
-          class="top-nav-bar"
-          title="关于"
-          left-arrow
-          @click-left="onClickLeft"
-        />
-        <div class="logo-box flex">
-            <img src="@/assets/img/logo-ico.png" alt="" class="logo-ico">
-            <div class="logo-txt">康吉物联 V1.1.0</div>
-        </div>
-        <div class="qrcode flex">
-            <img class="codeImg" :src="qrcodeUrl" alt=""/>
-        </div>
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <div class="item-name">
-                    <span>关于</span>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <div class="content-warp">
+                <van-nav-bar
+                  class="top-nav-bar"
+                  title="关于"
+                  left-arrow
+                  @click-left="onClickLeft"/>
+                <div class="logo-box flex">
+                    <img src="@/assets/img/logo-ico.png" alt="" class="logo-ico">
+                    <div class="logo-txt">康吉物联 V1.1.0</div>
                 </div>
-                <div class="item-value" @click="openWeb()">
-                    {{companyWebUrl}}
+                <div class="qrcode flex">
+                    <img class="codeImg" :src="qrcodeUrl" alt=""/>
                 </div>
-                <div class="copyright">
-                    Copyright©北京康吉讯通科技有限公司
+                <div class="contact-way">
+                    <div class="contact-item flex">
+                        <div class="item-value" @click="openWeb()">
+                            {{companyWebUrl}}
+                        </div>
+                        <div class="copyright">
+                            Copyright©北京康吉讯通科技有限公司
+                        </div>
+                    </div>
+                </div>
+                <div class="return-btn flex" @click="logOut()">
+                    <span >退出</span>
+                    <img src="@/assets/img/return-press.png" alt="">
                 </div>
             </div>
         </div>
-        <div class="return-btn flex" @click="logOut()">
-            <span >退出</span>
-            <img src="@/assets/img/return-press.png" alt="">
-        </div>
-    </div>
+    </v-touch>
 </template>
 <script>
     import { NavBar } from 'vant'
@@ -62,12 +62,12 @@
                 window.open('http://'+this.companyWebUrl,'_blank', 'location=yes');
             },
             logOut() {
-                let userSave = localStorage.getItem("userAccount");
-                if(userSave != null){
-                    localStorage.removeItem("userAccount");
-                }
+                localStorage.clear();
                this.$router.replace('/login');
             },
+            onSwipeRight() {
+                this.$router.go(-1);
+            }
         }
     }
 </script>

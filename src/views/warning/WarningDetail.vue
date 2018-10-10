@@ -1,42 +1,44 @@
 <template>
-    <div>
-        <HeadBar title="告警详情" link="" class="top-nav-bar"></HeadBar>
-        <div class="main-body">
-            <div class="war-detail">
-                <div class="warn-top">
-                    <div class="detail-item flex">
-                        <div class="warn-type">告警类型</div>
-                        <div class="warn-value">{{detailCard.name}}告警</div>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <HeadBar title="告警详情" link="" class="top-nav-bar"></HeadBar>
+            <div class="main-body">
+                <div class="war-detail">
+                    <div class="warn-top">
+                        <div class="detail-item flex">
+                            <div class="warn-type">告警类型</div>
+                            <div class="warn-value">{{detailCard.name}}告警</div>
+                        </div>
+                        <div class="detail-item flex">
+                            <div class="warn-type">当前值</div>
+                            <div class="warn-value">{{detailCard.data1}}{{detailCard.unitname}}</div>
+                        </div>
+                        <div class="detail-item flex">
+                            <div class="warn-type">正常值</div>
+                            <div class="warn-value">{{detailCard.low}}{{detailCard.unitname}}~{{detailCard.high}}{{detailCard.unitname}}</div>
+                        </div>
+                        <div class="detail-item flex">
+                            <div class="warn-type">告警级别</div>
+                            <div class="warn-value">{{detailCard.level}}级</div>
+                        </div>
+                        <div class="detail-item flex">
+                            <div class="warn-type">告警时间</div>
+                            <div class="warn-value">{{detailWarn.peng.ctime}}</div>
+                        </div>
                     </div>
-                    <div class="detail-item flex">
-                        <div class="warn-type">当前值</div>
-                        <div class="warn-value">{{detailCard.data1}}{{detailCard.unitname}}</div>
-                    </div>
-                    <div class="detail-item flex">
-                        <div class="warn-type">正常值</div>
-                        <div class="warn-value">{{detailCard.low}}{{detailCard.unitname}}~{{detailCard.high}}{{detailCard.unitname}}</div>
-                    </div>
-                    <div class="detail-item flex">
-                        <div class="warn-type">告警级别</div>
-                        <div class="warn-value">{{detailCard.level}}级</div>
-                    </div>
-                    <div class="detail-item flex">
-                        <div class="warn-type">告警时间</div>
-                        <div class="warn-value">{{detailWarn.peng.ctime}}</div>
-                    </div>
-                </div>
-                <!-- <div class="warn-bottom">
-                    <div class="detail-item flex">
-                        <div class="warn-type">告警位置</div>
-                    </div>
-                    <div class="detail-item flex">
-                        <div class="warn-value">房山区农委—园区1—一号西红柿大棚</div>
-                    </div>
-                </div> -->
+                    <!-- <div class="warn-bottom">
+                        <div class="detail-item flex">
+                            <div class="warn-type">告警位置</div>
+                        </div>
+                        <div class="detail-item flex">
+                            <div class="warn-value">房山区农委—园区1—一号西红柿大棚</div>
+                        </div>
+                    </div> -->
 
+                </div>
             </div>
         </div>
-    </div>
+    </v-touch>
 </template>
 <script>
     import HeadBar from '@/components/HeadBar'
@@ -55,11 +57,11 @@
         },
         mounted(){
             this.detailCard = Object.assign({},JSON.parse(JSON.stringify(this.detailWarn)));
-            //console.log("dddddddddddddd:")
-            //console.log(this.detailWarn.peng.ctime)
         },
         methods:{
-            
+            onSwipeRight() {
+                this.$router.go(-1);
+            }
         }
     }
 </script>

@@ -1,27 +1,29 @@
 <template>
-    <div class="content-warp">
-        <van-nav-bar 
-          class="top-nav-bar"
-          title="修改地址"
-          left-arrow
-          @click-left="onClickLeft"
-        />
-        <div class="contact-way">
-            <div class="contact-item flex">
-                <van-field v-model="modifyAddr" clearable class="item-name flex" />
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <div class="content-warp">
+                <van-nav-bar
+                  class="top-nav-bar"
+                  title="修改地址"
+                  left-arrow
+                  @click-left="onClickLeft"/>
+                <div class="contact-way">
+                    <div class="contact-item flex">
+                        <van-field v-model="modifyAddr" clearable class="item-name flex" />
+                    </div>
+                </div>
+                <div class="flex opea-btn">
+                    <van-button type="warning" class="sure-btn" @click="sureModify">确定</van-button>
+                    <van-button type="danger" class="cancle-btn" @click="onClickLeft">取消</van-button>
+                </div>
             </div>
         </div>
-        <div class="flex opea-btn">
-            <van-button type="warning" class="sure-btn" @click="sureModify">确定</van-button>
-            <van-button type="danger" class="cancle-btn" @click="onClickLeft">取消</van-button> 
-        </div>
-    </div>
+    </v-touch>
 </template>
 <script>
     import { NavBar, Field, Button } from 'vant'
     import FootBar from '@/components/FootBar'
     import { modifyAddrAndTel } from '@/service';
-
     export default {
         name: "ModifyAddr",
         props:['name'],
@@ -42,21 +44,21 @@
             //console.log(this.userName)
             this.modifyAddr = this.name;
         },
-        created: function () {
-            
-        },
         methods:{
             onClickLeft(){
                 this.$router.back();
             },
             sureModify(){
-                var that = this;
+                const that = this;
                 modifyAddrAndTel(this.$store.state.token,this.userName,this.modifyAddr,false).then((res)=>{
-                    if(res.data.code==1){
+                    if(res.data.code===1){
                         that.$store.state.user.address=that.modifyAddr;
                         that.$router.back();
                     }
                 })
+            },
+            onSwipeRight() {
+                this.$router.go(-1);
             }
         },
         filters: {

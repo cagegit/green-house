@@ -1,61 +1,62 @@
 <template>
-    <div class="monitor">
-        <HeadBar title="实时监测" link="/monitor/main"></HeadBar>
-        <DpTab :active="1"></DpTab>
-        <v-touch v-on:swiperight="onSwipeRight"  tag="div">
-            <div class="main-body">
-                <!--\天气-->
-                 <Weather></Weather>
-                <!--天气\-->
-                <div class="ss-tip" v-if="warings>0">
-                    <button type="button" class="btn" @click="toWarPage()">您有{{warings}}个报警，请查看></button>
-                </div>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <HeadBar title="实时监测" link="/monitor/main"></HeadBar>
+            <DpTab :active="1"></DpTab>
+                <div class="main-body">
+                    <!--\天气-->
+                     <Weather></Weather>
+                    <!--天气\-->
+                    <div class="ss-tip" v-if="warings>0">
+                        <button type="button" class="btn" @click="toWarPage()">您有{{warings}}个报警，请查看></button>
+                    </div>
 
-                <div class="ss-card" v-for="item in devices" :key="item.id">
-                    <div class="ss-line">
-                        <div class="ss-title">
-                            <span>{{item.name}}</span>
+                    <div class="ss-card" v-for="item in devices" :key="item.id">
+                        <div class="ss-line">
+                            <div class="ss-title">
+                                <span>{{item.name}}</span>
+                            </div>
+                            <div @click="changeWaring(item.properties)">
+                                <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                            </div>
                         </div>
-                        <div @click="changeWaring(item.properties)">
-                            <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
+                        <div class="ss-line-no-icon">
+                            <div class="sb-pre">
+                                <img :src="toImg(item.name)"/> <span>{{toLiang(item)}}</span>
+                            </div>
+                            <div class="sb-next">
+                                <p>更新时间：{{item.time}}</p>
+                                <p><span class="sb-pink">{{item.properties.sensorType}}级</span>风机已开启</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="ss-line-no-icon">
-                        <div class="sb-pre">
-                            <img :src="toImg(item.name)"/> <span>{{toLiang(item)}}</span>
+                    <div style="height: 100px;"></div>
+                </div>
+            <van-dialog v-model="show" :show-cancel-button="true">
+                <div class="dia-content">
+                    <div class="title">告警值设置</div>
+                    <div class="gj-box">
+                        <div class="flex-st">
+                            <div class="st-left">上限</div>
+                            <div class="gj-set">
+                                <button type="button">-</button>
+                                <div class="sb"><input type="text" :value="limit_high"/></div>
+                                <button type="button">+</button>
+                            </div>
                         </div>
-                        <div class="sb-next">
-                            <p>更新时间：{{item.time}}</p>
-                            <p><span class="sb-pink">{{item.properties.sensorType}}级</span>风机已开启</p>
+                        <div class="flex-st">
+                            <div class="st-left">下限</div>
+                            <div class="gj-set">
+                                <button type="button">-</button>
+                                <div class="sb"><input type="text" :value="limit_low"/></div>
+                                <button type="button">+</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </v-touch>
-        <van-dialog v-model="show" :show-cancel-button="true">
-            <div class="dia-content">
-                <div class="title">告警值设置</div>
-                <div class="gj-box">
-                    <div class="flex-st">
-                        <div class="st-left">上限</div>
-                        <div class="gj-set">
-                            <button type="button">-</button>
-                            <div class="sb"><input type="text" :value="limit_high"/></div>
-                            <button type="button">+</button>
-                        </div>
-                    </div>
-                    <div class="flex-st">
-                        <div class="st-left">下限</div>
-                        <div class="gj-set">
-                            <button type="button">-</button>
-                            <div class="sb"><input type="text" :value="limit_low"/></div>
-                            <button type="button">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </van-dialog>
-    </div>
+            </van-dialog>
+        </div>
+    </v-touch>
 </template>
 <script>
     import { Tabbar, TabbarItem,Icon,Dialog } from 'vant'

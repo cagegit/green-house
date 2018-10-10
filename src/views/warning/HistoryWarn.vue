@@ -1,23 +1,25 @@
 <template>
-   <div>
-    <van-list
-        v-model="loading"
-        :finished="finished"
-        @load="onLoad"
-        class="warn-list">
-        <van-cell class="warn-item" v-for="(item,index) in warnList" :key="index" @click="toDetail(item)">
-            <div class="flex item-top">
-                <div class="house-name">{{item.peng.name}}</div>   
-                <div class="warn-time"><span>{{item.peng.ctime}}</span></div>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+           <div>
+            <van-list
+                v-model="loading"
+                :finished="finished"
+                @load="onLoad"
+                class="warn-list">
+                <van-cell class="warn-item" v-for="(item,index) in warnList" :key="index" @click="toDetail(item)">
+                    <div class="flex item-top">
+                        <div class="house-name">{{item.peng.name}}</div>
+                        <div class="warn-time"><span>{{item.peng.ctime}}</span></div>
+                    </div>
+                    <div class="item-bottom flex">
+                        <span>{{item.name}}：</span>
+                        <span class="warn-rank">{{item.level}}级告警</span>
+                        <!-- <span>{{item.addr}}</span>       -->
+                    </div>
+                </van-cell>
+            </van-list>
             </div>
-            <div class="item-bottom flex">
-                <span>{{item.name}}：</span>
-                <span class="warn-rank">{{item.level}}级告警</span>
-                <!-- <span>{{item.addr}}</span>       -->
-            </div>      
-        </van-cell>
-    </van-list>
-    </div>
+    </v-touch>
 </template>
 <script>
     import FootBar from '@/components/FootBar'
@@ -72,6 +74,9 @@
                     console.log(err);
                     this.loading = false;
                 });
+            },
+            onSwipeRight() {
+                this.$router.push({name:'currentwarn'});
             }
         }
     }

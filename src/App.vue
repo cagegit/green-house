@@ -90,6 +90,7 @@
        width: 100%;
        height: 100vh;
        text-align: left;
+       overflow-y: auto;
    }
     .main-body {
         padding: 0 10px;

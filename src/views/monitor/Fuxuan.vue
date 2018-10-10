@@ -1,42 +1,44 @@
 <template>
-    <div class="monitor">
-        <HeadBar title="重复选择" link="/monitor/fjsb"></HeadBar>
-        <div class="main-body">
-            <div class="dp-tab2">
-                <button type="button" :class="{'active':week===0}" @click="changeFxType(0)">按天</button>
-                <button type="button" :class="{'active':week===1}" @click="changeFxType(1)">按周</button>
-                <button type="button" :class="{'active':week===2}" @click="changeFxType(2)">按月</button>
-            </div>
-            <div v-if="week===1">
-                <div class="fu-box">
-                    <div class="fu-flex" v-for="item in weeks" :key="item.value">
-                        <div class="sb-c-left">
-                            <span>{{item.name}}</span>
-                        </div>
-                        <div class="sb-c-right" @click="item.check=!item.check">
-                            <i class="van-icon" :class="{'van-icon-success':item.check,'kong':!item.check}"></i>
-                        </div>
-                    </div>
-
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <HeadBar title="重复选择" link="/monitor/fjsb"></HeadBar>
+            <div class="main-body">
+                <div class="dp-tab2">
+                    <button type="button" :class="{'active':week===0}" @click="changeFxType(0)">按天</button>
+                    <button type="button" :class="{'active':week===1}" @click="changeFxType(1)">按周</button>
+                    <button type="button" :class="{'active':week===2}" @click="changeFxType(2)">按月</button>
                 </div>
-            </div>
-            <div v-else-if="week===2">
-               <div class="fu-box">
-                   <div class="fu-month">
-                       <div v-for="item in months" :key="item.value" class="month" :class="{'active':item.check}"
-                            @click="item.check=!item.check">{{item.value}}</div>
+                <div v-if="week===1">
+                    <div class="fu-box">
+                        <div class="fu-flex" v-for="item in weeks" :key="item.value">
+                            <div class="sb-c-left">
+                                <span>{{item.name}}</span>
+                            </div>
+                            <div class="sb-c-right" @click="item.check=!item.check">
+                                <i class="van-icon" :class="{'van-icon-success':item.check,'kong':!item.check}"></i>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div v-else-if="week===2">
+                   <div class="fu-box">
+                       <div class="fu-month">
+                           <div v-for="item in months" :key="item.value" class="month" :class="{'active':item.check}"
+                                @click="item.check=!item.check">{{item.value}}</div>
+                       </div>
                    </div>
-               </div>
-            </div>
-            <div v-else>
-                <div class="fu-box">
-                    <div class="fu-day">
-                        每天重复
+                </div>
+                <div v-else>
+                    <div class="fu-box">
+                        <div class="fu-day">
+                            每天重复
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar';
@@ -119,6 +121,9 @@
                 }
                 this.week = num;
                 this.fxAction({type:num,value:list});
+            },
+            onSwipeRight() {
+                this.$router.go(-1);
             }
         }
     }

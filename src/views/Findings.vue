@@ -2,23 +2,12 @@
     <div>
         <HeadBar title="发现" :left="false" link=""></HeadBar>
         <div class="content-warp">
-            <!--<div class="find-txt">发现</div>-->
-            <!--<div class="switch-tab flex">-->
-                <!--<div class="mess"-->
-                     <!--v-for="tab in tabs"-->
-                     <!--:key="tab.id"-->
-                     <!--v-bind:class="{ 'active-tab':currentTab===tab.id }"-->
-                     <!--v-on:click="switchBtn(tab)"-->
-                <!--&gt;{{tab.name}}-->
-                <!--</div>-->
-            <!--</div>-->
             <div class="dp-tab2">
                 <button type="button"  v-for="tab in tabs"
                         :key="tab.id"
                          @click="switchBtn(tab)"
                         :class="{'active':currentTab===tab.id}">{{ tab.name }}</button>
             </div>
-
             <van-list
                     v-model="loading"
                     :finished="finished"
@@ -103,7 +92,7 @@
                         this.loading = false;
                         if (res.data.results.length === 0) {
                             this.finished = true
-                            
+
                         } else {
                             this.cardList = Object.assign([], this.cardList, res.data.results);
                             for (let i = 0; i < this.cardList.length; i++) {

@@ -80,7 +80,7 @@
                     }
                 })
             },
-            
+
         }
     }
 </script>
@@ -92,7 +92,7 @@
     }
     .mess {
         width: 2.0rem;
-        height: 0.8rem;     
+        height: 0.8rem;
         border-radius:0.4rem;
         text-align:center;
         line-height:0.8rem;
@@ -133,7 +133,7 @@
     .card-date{
         padding:0 0.32rem;
         height:0.586667rem;
-        background: rgba(0,0,0,0.40);    
+        background: rgba(0,0,0,0.40);
         position:absolute;
         top:0;
         right:0;
@@ -143,6 +143,6 @@
             font-size:0.426667rem;
             margin-right:0.16rem;
         }
-        
+
     }
 </style>

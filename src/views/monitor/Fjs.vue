@@ -1,25 +1,27 @@
 <template>
-    <div class="monitor">
-        <HeadBar :title="titName" link="/control"></HeadBar>
-        <div class="main-body">
-            <div class="fj-cell" style="margin-top: 10px" v-for="item in controList" :key="item.id">
-                <div class="sb-c-left">
-                    <img :src="getImg(item.properties.type)">
-                    <span>{{item.name}}</span>
-                </div>
-                <div class="sb-c-right" @click="toSetPage(item)">
-                    <span v-if="item.properties.ctrl==='1' || item.properties.ctrl==='2'">{{item.properties.value?'开启':'关闭'}}</span>
-                    <span v-else-if="item.properties.ctrl==='3'">
-                        <i v-if="item.properties.value===0">停止</i>
-                        <i v-if="item.properties.value===-1">左转</i>
-                        <i v-if="item.properties.value===1">右转</i>
-                    </span>
-                    <span v-else="item.properties.ctrl==='4'">{{item.properties.value+'档'}}</span>
-                    <i class="van-icon van-icon-arrow"></i>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <HeadBar :title="titName" link="/control"></HeadBar>
+            <div class="main-body">
+                <div class="fj-cell" style="margin-top: 10px" v-for="item in controList" :key="item.id">
+                    <div class="sb-c-left">
+                        <img :src="getImg(item.properties.type)">
+                        <span>{{item.name}}</span>
+                    </div>
+                    <div class="sb-c-right" @click="toSetPage(item)">
+                        <span v-if="item.properties.ctrl==='1' || item.properties.ctrl==='2'">{{item.properties.value?'开启':'关闭'}}</span>
+                        <span v-else-if="item.properties.ctrl==='3'">
+                            <i v-if="item.properties.value===0">停止</i>
+                            <i v-if="item.properties.value===-1">左转</i>
+                            <i v-if="item.properties.value===1">右转</i>
+                        </span>
+                        <span v-else="item.properties.ctrl==='4'">{{item.properties.value+'档'}}</span>
+                        <i class="van-icon van-icon-arrow"></i>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
@@ -32,12 +34,8 @@
             itemList:Object
         },
         mounted() {
-            //console.log("ffffffffff:")
-            //console.log(this.itemList)
-            
             try{
                 if(this.itemList){
-                    //console.log("gg:")
                     localStorage.setItem('controList',JSON.stringify(this.itemList));
                     this.controList = this.itemList.items;
                     this.titName = this.itemList.info.name;
@@ -74,6 +72,9 @@
             getImg(num) {
                 return this['img_'+num];
             },
+            onSwipeRight() {
+                this.$router.push({name:'control'});
+            }
         }
     }
 </script>

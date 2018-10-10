@@ -67,7 +67,6 @@
                         </div>
                     </div>
                 </router-link>
-
             </div>
             <div class="contact-way">
                 <div class="contact-item flex">
@@ -149,10 +148,11 @@
                 this.show = false;
            },
             logOut() {
-                let userSave = localStorage.getItem("userAccount");
-                if(userSave != null){
-                    localStorage.removeItem("userAccount")
-                }
+                // let userSave = localStorage.getItem("userAccount");
+                // if(userSave != null){
+                //     localStorage.removeItem("userAccount")
+                // }
+                localStorage.clear();
                this.$router.replace('/login')
             },
             getAbout(token){

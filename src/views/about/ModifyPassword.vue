@@ -1,19 +1,20 @@
 <template>
-    <div class="">
-        <van-nav-bar 
-          class="top-nav-bar"
-          title="修改密码"
-          left-arrow
-          @click-left="onClickLeft"
-        />
-        <van-cell-group class="cell-group">
-            <van-field class="input-sty" v-model="oldPassword" type="password" placeholder="请输入原密码" />
-            <van-field class="input-sty" v-model="newPassword" type="password" placeholder="请输入新密码" />
-            <van-field class="input-sty" v-model="sureNewPassword" type="password" placeholder="请确认新密码" />
-        </van-cell-group>
-        <div class="sure-btn flex" @click="resetPass">确定</div>
-        <FootBar :active="3"></FootBar>
-    </div>
+    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+        <div>
+            <van-nav-bar
+              class="top-nav-bar"
+              title="修改密码"
+              left-arrow
+              @click-left="onClickLeft"/>
+            <van-cell-group class="cell-group">
+                <van-field class="input-sty" v-model="oldPassword" type="password" placeholder="请输入原密码" />
+                <van-field class="input-sty" v-model="newPassword" type="password" placeholder="请输入新密码" />
+                <van-field class="input-sty" v-model="sureNewPassword" type="password" placeholder="请确认新密码" />
+            </van-cell-group>
+            <div class="sure-btn flex" @click="resetPass">确定</div>
+            <FootBar :active="3"></FootBar>
+        </div>
+    </v-touch>
 </template>
 <script>
     import { NavBar, Field, CellGroup, Toast } from 'vant'
@@ -35,9 +36,6 @@
                 newPassword:"",
                 sureNewPassword:""
             }
-        },
-        created: function () {
-            
         },
         methods:{
             onClickLeft(){
@@ -70,8 +68,11 @@
                 }else{
                     Toast.fail('密码不一致');
                 }
+            },
+            onSwipeRight() {
+                this.$router.go(-1);
             }
-        },
+        }
     }
 </script>
 <style lang="scss" scoped>
