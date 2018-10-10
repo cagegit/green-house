@@ -41,7 +41,6 @@ router.beforeEach((to, from,next) => {
         if(to.path.indexOf('login')>=0){//如果是登录页面路径，就直接next()
             next();
         }else{//不然就跳转到登录；
-            console.log('2333');
             next({
                 path:'/login',
                 replace:true

@@ -52,16 +52,16 @@
                 token: this.$store.state.token,
                 dqShow: false,
                 yqShow: false,
-                img_1: require("@/assets/img/fengj@2x.png"),
-                // img_2: require("@/assets/img/zidc@2x.png"),
-                // img_3: require("@/assets/img/juanlj@2x.png"),
-                // img_4: require("@/assets/img/guang@2x.png"),
-                // img_5: require("@/assets/img/jiawl@2x.png"),
-                // img_6: require("@/assets/img/zheyz@2x.png"),
-                // img_7: require("@/assets/img/ship@2x.png"),
-                // img_8: require("@/assets/img/co2@2x.png"),
+                img_1: require("@/assets/img_1.png"),
+                img_2: require("@/assets/img_2.png"),
+                img_3: require("@/assets/img_3.png"),
+                img_4: require("@/assets/img_4.png"),
+                img_5: require("@/assets/img_5.png"),
+                img_6: require("@/assets/img_6.png"),
+                img_7: require("@/assets/img_7.png"),
+                img_8: require("@/assets/img_8.png"),
+                img_9: require("@/assets/img_9.png"),
                 controlList:[]
-
             }
         },
         created() {
@@ -155,8 +155,11 @@
                 })
             },
             getImg(num) {
-                const pics = this.$store.state.relations.filter(item => item.type===num);
-                return pics.length > 0 ? 'http://'+pics[0].icon : this.img_1;
+                // const pics = this.$store.state.relations.filter(item => item.type===num);
+                // return pics.length > 0 ? 'http://'+pics[0].icon : this.img_1;
+                const arr = [1,2,3,4,5,6,7,8,9];
+                num = arr.indexOf(+num)>=0 ? +num: 1;
+                return this['img_'+num];
             },
         }
     }

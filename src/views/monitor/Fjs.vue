@@ -3,12 +3,12 @@
         <div>
             <HeadBar :title="titName" link="/control"></HeadBar>
             <div class="main-body">
-                <div class="fj-cell" style="margin-top: 10px" v-for="item in controList" :key="item.id">
+                <div class="fj-cell" style="margin-top: 10px" v-for="item in controList" :key="item.id" @click="toSetPage(item)">
                     <div class="sb-c-left">
                         <img :src="getImg(item.properties.type)">
                         <span>{{item.name}}</span>
                     </div>
-                    <div class="sb-c-right" @click="toSetPage(item)">
+                    <div class="sb-c-right">
                         <span v-if="item.properties.ctrl==='1' || item.properties.ctrl==='2'">{{item.properties.value?'开启':'关闭'}}</span>
                         <span v-else-if="item.properties.ctrl==='3'">
                             <i v-if="item.properties.value===0">停止</i>
@@ -54,14 +54,15 @@
             return {
                 controList:[],
                 titName:"",
-                img_1: require("@/assets/img/fengj@2x.png"),
-                img_2: require("@/assets/img/zidc@2x.png"),
-                img_3: require("@/assets/img/juanlj@2x.png"),
-                img_4: require("@/assets/img/guang@2x.png"),
-                img_5: require("@/assets/img/jiawl@2x.png"),
-                img_6: require("@/assets/img/zheyz@2x.png"),
-                img_7: require("@/assets/img/ship@2x.png"),
-                img_8: require("@/assets/img/co2@2x.png"),
+                img_1: require("@/assets/img_1.png"),
+                img_2: require("@/assets/img_2.png"),
+                img_3: require("@/assets/img_3.png"),
+                img_4: require("@/assets/img_4.png"),
+                img_5: require("@/assets/img_5.png"),
+                img_6: require("@/assets/img_6.png"),
+                img_7: require("@/assets/img_7.png"),
+                img_8: require("@/assets/img_8.png"),
+                img_9: require("@/assets/img_9.png")
             }
         },
         methods: {
@@ -70,6 +71,8 @@
                this.$router.push({ name: 'fjsb', params: { name: pro.name }});
             },
             getImg(num) {
+                const arr = [1,2,3,4,5,6,7,8,9];
+                num = arr.indexOf(+num)>=0 ? +num: 1;
                 return this['img_'+num];
             },
             onSwipeRight() {

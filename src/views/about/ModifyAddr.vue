@@ -1,12 +1,12 @@
 <template>
     <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
+            <van-nav-bar
+                    class="top-nav-bar"
+                    title="修改地址"
+                    left-arrow
+                    @click-left="onClickLeft"/>
             <div class="content-warp">
-                <van-nav-bar
-                  class="top-nav-bar"
-                  title="修改地址"
-                  left-arrow
-                  @click-left="onClickLeft"/>
                 <div class="contact-way">
                     <div class="contact-item flex">
                         <van-field v-model="modifyAddr" clearable class="item-name flex" />

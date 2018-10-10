@@ -1,12 +1,12 @@
 <template>
     <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
+            <van-nav-bar
+                    class="top-nav-bar"
+                    title="关于"
+                    left-arrow
+                    @click-left="onClickLeft"/>
             <div class="content-warp">
-                <van-nav-bar
-                  class="top-nav-bar"
-                  title="关于"
-                  left-arrow
-                  @click-left="onClickLeft"/>
                 <div class="logo-box flex">
                     <img src="@/assets/img/logo-ico.png" alt="" class="logo-ico">
                     <div class="logo-txt">康吉物联 V1.1.0</div>
@@ -135,9 +135,9 @@
         line-height: 3;
     }
     .codeImg{
-        width:2rem;
-        height:2rem;
-        margin-bottom:0.373333rem;
+        width: 150px;
+        height: 150px;
+        margin-bottom:10px;
     }
     .return-btn{
         margin-top:1.6rem;
