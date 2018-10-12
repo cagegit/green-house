@@ -37,6 +37,11 @@ export const getSensors = (pid,token) => axios.get('/apps/sensors?token='+encode
  * */
 export const getControllers = (pid,token) => axios.get('/apps/controllers?token='+encodeURIComponent(token)+'&pid='+pid);
 /**
+ *  获取控制器状态
+ *  @param pid 棚ID
+ */
+export const getControllerStatus = (pid) => axios.get(`${DEVICE_URL}/stat/controllerStatus?pengId=${pid}`);
+/**
  * 设置值
  * */
 export const setController = (deviceId,sensorChannel,val,gatewayID) => axios.get(`${DEVICE_URL}/gateway/tcpcmd?cmd=control_power&value=${deviceId}:${sensorChannel}*${val}&gatewayId=${gatewayID}`);
@@ -97,21 +102,21 @@ export const setControl = (gatewayId,value) => { // value 格式：100:17*1;传�
 /**
  * 获取自动任务列表
  * */
-export const getAutoTask = (controllerId,token) => {
-    return axios.get(`/apps/gettask?controllerid=${controllerId}&token=${token}`);
-};
+// export const getAutoTask = (controllerId,token) => {
+//     return axios.get(`/apps/gettask?controllerid=${controllerId}&token=${token}`);
+// };
 /**
  * 添加自动任务
  * */
-export const  addAutoTask = (ctrlId,token,content) => {
-     return axios.post(`/apps/createtask`,{controllerid:ctrlId,content:content,token:token});
-};
+// export const  addAutoTask = (ctrlId,token,content,type,status) => {
+//      return axios.post(`/apps/createtask`,{controllerid:ctrlId,content:content,token:token,type:type,status:status});
+// };
 /**
  * 修改自动任务
  * */
-export const modifyAutoTask = (taskId,ctrlId,content,token) => {
-   return axios.post(`/apps/modifytask?`,{id:taskId,controllerid:ctrlId,content:content,token:token});
-};
+// export const modifyAutoTask = (taskId,ctrlId,content,token) => {
+//    return axios.post(`/apps/modifytask?`,{id:taskId,controllerid:ctrlId,content:content,token:token});
+// };
 /**
  * 获取告警统计
  * */
@@ -188,6 +193,47 @@ export const getPicRelations = (token) => {
  */
 export const uploadPhoto = (token,loginname,base64Data) => {
     // param.append('file', base64Data);
-    console.log('uploadPhoto');
+    // console.log('uploadPhoto');
     return axios.post(`${DEVICE_URL_PORT}/apps/updateEmployee`,{loginname:loginname,token:token,icon:base64Data});
+};
+/**
+ * 获取自动任务
+ * @param controllerid 控制器id
+ * @param token
+ */
+export const getAutoTask = (controllerid,token) => {
+    return axios.get(`${DEVICE_URL}/apps/gettask?controllerid=${controllerid}&token=${encodeURIComponent(token)}`);
+};
+/**
+ * 修改自动任务
+ * @param controllerid 控制器id
+ * @param token
+ * @param content 可选
+ * @param status 自动任务状态(启用 1\停用 0) 可选
+ * @param type  控制器类型(单路:1;双路:2;三路:3) 可选
+ */
+export const modifyAutoTask = (controllerid,token,content,status,type) => {
+    let params = {controllerid:controllerid,token:encodeURIComponent(token)};
+    if(content) {
+        params.content = content;
+    }
+    if(status) {
+        params.status = status;
+    }
+    if(type) {
+        params.type = type;
+    }
+    return axios.post(`${DEVICE_URL}/apps/modifytask`,params);
+};
+/**
+ * 添加自动任务
+ * @param controllerid 控制器id
+ * @param token
+ * @param content 可选
+ * @param status 自动任务状态(启用 1\停用 0) 可选
+ * @param type  控制器类型(单路:1;双路:2;三路:3) 可选
+ */
+export const addAutoTask = (controllerid,token,content,status,type) => {
+    return axios.post(`${DEVICE_URL}/apps/createtask`,{controllerid:controllerid,token:encodeURIComponent(token),
+        content:content,status:status,type:type});
 };

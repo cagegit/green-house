@@ -10,13 +10,13 @@
                             <span>{{kz.name}}</span>
                         </div>
                         <div class="sb-c-right">
-                            <span v-if="kz.properties.ctrl==='1' || kz.properties.ctrl==='2'">{{kz.properties.value?'开启':'关闭'}}</span>
+                            <span v-if="kz.properties.ctrl==='1' || kz.properties.ctrl==='2'">{{kz.status?'开启':'关闭'}}</span>
                             <span v-else-if="kz.properties.ctrl==='3'">
-                                <i v-if="kz.properties.value===0">停止</i>
-                                <i v-if="kz.properties.value===-1">左转</i>
-                                <i v-if="kz.properties.value===1">右转</i>
+                                <i v-if="kz.status===0">停止</i>
+                                <i v-if="kz.status===-1">左转</i>
+                                <i v-if="kz.status===1">右转</i>
                             </span>
-                            <span v-else="kz.properties.ctrl==='4'">{{kz.properties.value+'档'}}</span>
+                            <span v-else="kz.properties.ctrl==='4'">{{kz.status+'档'}}</span>
                             <i class="van-icon van-icon-arrow"></i>
                         </div>
                     </div>
@@ -27,13 +27,13 @@
 <script>
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
-    import {getControllers} from '../../service'
-
+    import {getControllers,getControllerStatus} from '../../service'
     export default {
         name: 'Sbkz',
         data() {
            return {
                kzList: [],
+               intervalId:0,
                img_1: require("@/assets/img_1.png"),
                img_2: require("@/assets/img_2.png"),
                img_3: require("@/assets/img_3.png"),
@@ -54,9 +54,14 @@
             this.name = this.name || '';
             this.getCtrls(pid,token);
         },
+        destroyed() {
+            clearInterval(this.intervalId);
+        },
         methods: {
            toSetPage(pro) {
                this.$store.commit('setPropertys',Object.assign({},pro.properties));
+               console.log(pro.status);
+               this.$store.commit('setControlHand',pro.status===1);
                this.$router.push({ name: 'fjsb', params: { name: pro.name ,id: pro.id}});
            },
             getImg(num) {
@@ -68,18 +73,41 @@
                  try {
                     const res = await getControllers(pid,token);
                     // console.log(res.data);
-                    if(res.data && res.data.results) {
+                    if(res.data && res.data.results && Array.isArray(res.data.results)) {
                         res.data.results.forEach(val => {
                             if(val.properties) {
                                 val.properties = JSON.parse(val.properties);
-                                val.properties.value = 0;
                             }
+                            val.status = 0;
                         });
+                        this.getStatusRepeat(pid);
                         this.kzList = Object.assign([], res.data.results);
                     }
                  }catch (err) {
                      console.log(err);
                  }
+            },
+            getCtrlStatus(pid) {
+                getControllerStatus(pid).then(res => {
+                    if(res.data && res.data.results && Array.isArray(res.data.results)) {
+                        const arr = res.data.results;
+                        this.kzList.forEach(item => {
+                            const ob = arr.find(val => val._id === item.id);
+                            if(ob) {
+                                item.status = ob.status || 0;
+                            }
+                        });
+                        this.kzList = Object.assign([],this.kzList);
+                    }
+                }, err => {
+                    console.log(err);
+                });
+            },
+            getStatusRepeat(pid) {
+               this.getCtrlStatus(pid);
+               this.intervalId = setInterval(() => {
+                   this.getCtrlStatus(pid);
+               },5000);
             },
             onSwipeRight() {
                this.$router.push({name:'main'});

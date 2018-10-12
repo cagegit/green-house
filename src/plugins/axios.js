@@ -31,7 +31,7 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   function(response) {
       // console.log(response.data );
-      if(response.data.code === -1){
+      if(response.data && response.data.code === -1 && response.data.msg.indexOf('token失效')>=0){
           router.replace('/login');
           return Promise.reject('token time out');
       } else  {

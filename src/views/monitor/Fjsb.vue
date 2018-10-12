@@ -20,7 +20,7 @@
                             <span>手动</span>
                         </div>
                         <div class="sb-c-right">
-                            <van-switch v-model="handCheck" />
+                            <van-switch v-model="handCheck" @change="changeDanlu" />
                         </div>
                     </div>
                     <div class="fj-content">
@@ -47,7 +47,7 @@
                             <span>手动</span>
                         </div>
                         <div class="sb-c-right">
-                            <van-switch v-model="handCheck" />
+                            <van-switch v-model="handCheck" @change="changeDanlu" />
                         </div>
                     </div>
                     <div class="fj-content">
@@ -64,53 +64,57 @@
                     </div>
                 </div>
 
-                <div class="sb-com-cell"  v-if="pro.ctrl==='1' || pro.ctrl==='2'">
+                <div class="sb-com-cell"  v-if="pro.ctrl==='1' || pro.ctrl==='2' || pro.ctrl==='4'">
                     <div class="fj-flex">
                         <div class="sb-c-left">
                             <span>自动</span>
                         </div>
                         <div class="sb-c-right">
-                            <van-switch v-model="autoCheck" />
+                            <van-switch v-model="autoCheck" @change="changeAutoCheck"/>
                         </div>
                     </div>
-                    <div class="fj-content" v-if="autoCheck">
-                        <div class="fj-in-flex">
-                            <div class="sb-c-left">
-                                <span>开启时间</span>
+                    <div v-if="autoCheck">
+                        <div class="fj-content" v-for="(item, index) in taskList" :key="index">
+                            <div class="fj-in-flex">
+                                <div class="sb-c-left">
+                                    <span>开启时间</span>
+                                </div>
+                                <div class="sb-c-right" @click="setStartTime()">
+                                    <input type="text" placeholder="请选择" :value="item.stTime" readonly/>
+                                    <i class="van-icon van-icon-arrow"></i>
+                                </div>
                             </div>
-                            <div class="sb-c-right" @click="setStartTime()">
-                                <input type="text" placeholder="请选择" :value="stTime" readonly/>
-                                <i class="van-icon van-icon-arrow"></i>
+                            <div class="fj-in-flex">
+                                <div class="sb-c-left">
+                                    <span>关闭时间</span>
+                                </div>
+                                <div class="sb-c-right" @click="setEndTime()">
+                                    <input type="text" placeholder="请选择" :value="item.enTime" readonly/>
+                                    <i class="van-icon van-icon-arrow"></i>
+                                </div>
                             </div>
-                        </div>
-                        <div class="fj-in-flex">
-                            <div class="sb-c-left">
-                                <span>关闭时间</span>
+                            <div class="fj-in-flex">
+                                <div class="sb-c-left">
+                                    <span>重复</span>
+                                </div>
+                                <div class="sb-c-right" @click="chongFu()">
+                                    <input type="text" class="cf-input" placeholder="请选择" :value="item.chongfu" readonly/>
+                                    <i class="van-icon van-icon-arrow"></i>
+                                </div>
                             </div>
-                            <div class="sb-c-right" @click="setEndTime()">
-                                <input type="text" placeholder="请选择" :value="enTime" readonly/>
-                                <i class="van-icon van-icon-arrow"></i>
-                            </div>
-                        </div>
-                        <div class="fj-in-flex">
-                            <div class="sb-c-left">
-                                <span>重复</span>
-                            </div>
-                            <div class="sb-c-right" @click="chongFu()">
-                                <input type="text" class="cf-input" placeholder="请选择" :value="chongfu" readonly/>
-                                <i class="van-icon van-icon-arrow"></i>
-                            </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
-
+                <div class="add-button-area" @click="addTask">
+                    <van-icon name="add-o" />
+                </div>
             </div>
             <van-actionsheet v-model="startTimePanel">
                 <van-datetime-picker
                         v-model="stTime"
                         type="time"
-                        :min-hour="stMinHour"
+                        :min-hour="starthour"
                         :max-hour="stMaxHour"
                         @confirm="startConfirm"
                         @cancel="startCancel"
@@ -120,7 +124,7 @@
                 <van-datetime-picker
                         v-model="enTime"
                         type="time"
-                        :min-hour="enMinHour"
+                        :min-hour="endhour"
                         :max-hour="enMaxHour"
                         @confirm="endConfirm"
                         @cancel="endCancel"
@@ -133,6 +137,8 @@
     import { Switch,Slider,DatetimePicker,Actionsheet,Dialog } from 'vant'
     import HeadBar from '../../components/HeadBar';
     import {setController,getAutoTask,addAutoTask,modifyAutoTask} from '../../service';
+    import { mapActions} from 'vuex';
+    import { Icon } from 'vant';
     export default {
         name: 'Fjsb',
         props: {
@@ -149,6 +155,7 @@
             return {
                 handCheck:false,
                 autoCheck: false,
+                timeoutId: 0,
                 current: 0,
                 currentZx: 0, // -1:左转 0：停止 1:右转
                 zxMap: {
@@ -165,13 +172,16 @@
                 startTimePanel: false,
                 endTimePanel: false,
                 currentDate: new Date(),
-                stMinHour: 0,
+                starthour: 0,
                 stMaxHour: 23,
+                startminute: 0,
                 stTime:'00:00',
-                enMinHour: 0,
+                endhour: 0,
                 enMaxHour: 23,
+                endminute: 0,
                 enTime:'14:00',
-                chongfu: '每天'
+                chongfu: '每天',
+                taskList: []
             }
         },
         components: {
@@ -180,6 +190,7 @@
             [DatetimePicker.name]:DatetimePicker,
             [Actionsheet.name]:Actionsheet,
             [Dialog.name]: Dialog,
+            [Icon.name]: Icon,
             HeadBar
         },
         created() {
@@ -204,7 +215,6 @@
                      this.chongfu = '每天';
                  }
             }
-
             this.pro = propertys;
             if(this.pro) {
                 this.currentZx = this.pro.value || 0;
@@ -213,6 +223,9 @@
             }
         },
         methods: {
+            ...mapActions([
+                'fxAction'
+            ]),
             chongFu() {
                 this.$router.push('/monitor/fuxuan');
             },
@@ -222,7 +235,8 @@
                 this.setCtrl();
             },
             setCtrl() {
-                setTimeout(() => {
+                clearTimeout(this.timeoutId);
+                this.timeoutId = setTimeout(() => {
                     const {deviceId,Channel,value,gatewayId} = this.pro;
                     setController(deviceId,Channel,value,gatewayId)
                         .then(res => {
@@ -259,15 +273,36 @@
                 // console.log(this.id);
                 const token = this.$store.state.token;
                 getAutoTask(this.id,token).then(res => {
-                   //console.log(res);
+                   console.log(res);
+                    if(res && res.results && res.results.content) {
+                       const content = res.results.content;
+                        const strType = content.looptype;// 周期类型
+                        let type = 1;
+                        if(strType ==='week') {
+                             type =1;
+                        } else if(strType === 'month') {
+                             type = 2;
+                        } else {
+                             type = 3;
+                        }
+                        this.fxAction({type: type,value:content.days});
+                    }
                 }).catch(err => {
                     console.log(err);
                 });
             },
             addAutoTask(content) {
                 const token = this.$store.state.token;
-                content && (content.controllerid= this.id);
-                addAutoTask(this.id,token,content)
+                content.controllerid= this.id;
+                let type = 1;
+                if(this.pro.ctrl == '4') {
+                    type = 3;
+                } else if(this.pro.ctrl == '3'){
+                    type = 2;
+                } else  {
+                    type = 1;
+                }
+                addAutoTask(this.id,token,content,this.autoCheck,type)
                     .then(res => {
                         //console.log(res);
                     }).catch(err => {
@@ -332,6 +367,26 @@
                     this.$store.commit('setControlHand',this.handCheck);
                 });
             },
+            changeAutoCheck(check) {
+                this.$store.commit('setControlAuto',check);
+                if(check) {
+                    this.taskList.push({
+                         stTime: '0:0',
+                         enTime: '23:0',
+                         chongfu: '每天'
+                    });
+                } else {
+                    this.taskList = [];
+                }
+                // this.setCtrl();
+            },
+            addTask() {
+                this.taskList.push({
+                    stTime: '0:0',
+                    enTime: '23:0',
+                    chongfu: '每天'
+                });
+            },
             onSwipeRight() {
                 this.$router.go(-1);
             }
@@ -345,7 +400,7 @@
                 console.log('isCheck:'+isCheck);
                 this.$store.commit('setControlHand',isCheck);
                 this.pro.value = isCheck?1:0;
-                this.setCtrl();
+                // this.setCtrl();
             },
             'autoCheck':function (isCheck) {
                 //console.log(isCheck);
@@ -354,7 +409,7 @@
             'current': function (val) {
                 this.pro.value = val;
                 // this.$store.commit('setPropertys',Object.assign({},this.pro));
-                this.setCtrl();
+                // this.setCtrl();
             }
         }
     }
@@ -473,5 +528,13 @@
             border: 0;
         }
 
+    }
+    .add-button-area {
+        position: fixed;
+        z-index: 1000;
+        bottom: 10px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 24px;
     }
 </style>
