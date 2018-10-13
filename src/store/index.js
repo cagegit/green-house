@@ -7,7 +7,7 @@ const state = {
     pid:'',// 当前pid
     propertys: null, // 当前ctrl的propertys
     activeTab: 0,
-    fxType:0,// 0: 天，1：周,2: 月
+    fxType:'day',// day: 天，week：周,month: 月
     fxWeek: [],
     fxMonth: [],
     controlHand: false, // 手动控制
@@ -21,7 +21,9 @@ const state = {
     user: {},
     aboutMes:{},
     warnings: 0,
-    relations: [] // 图片对应关系
+    relations: [], // 图片对应关系
+    taskList: [],
+    taskItemId: ''
 };
 
 export default new Vuex.Store({
@@ -71,6 +73,10 @@ export default new Vuex.Store({
         },
         setRelations(state, relations) {
            state.relations = relations;
+        },
+        setTaskList(state,{tasks,id}) {
+           state.taskList = tasks;
+           state.taskItemId = id;
         }
     },
     actions: {

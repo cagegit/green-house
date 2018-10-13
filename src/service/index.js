@@ -202,7 +202,7 @@ export const uploadPhoto = (token,loginname,base64Data) => {
  * @param token
  */
 export const getAutoTask = (controllerid,token) => {
-    return axios.get(`${DEVICE_URL}/apps/gettask?controllerid=${controllerid}&token=${encodeURIComponent(token)}`);
+    return axios.get(`${DEVICE_URL_PORT}/apps/gettask?controllerid=${controllerid}&token=${encodeURIComponent(token)}`);
 };
 /**
  * 修改自动任务
@@ -223,7 +223,7 @@ export const modifyAutoTask = (controllerid,token,content,status,type) => {
     if(type) {
         params.type = type;
     }
-    return axios.post(`${DEVICE_URL}/apps/modifytask`,params);
+    return axios.post(`${DEVICE_URL_PORT}/apps/modifytask`,params);
 };
 /**
  * 添加自动任务
@@ -234,6 +234,6 @@ export const modifyAutoTask = (controllerid,token,content,status,type) => {
  * @param type  控制器类型(单路:1;双路:2;三路:3) 可选
  */
 export const addAutoTask = (controllerid,token,content,status,type) => {
-    return axios.post(`${DEVICE_URL}/apps/createtask`,{controllerid:controllerid,token:encodeURIComponent(token),
+    return axios.post(`${DEVICE_URL_PORT}/apps/createtask`,{controllerid:controllerid,token:encodeURIComponent(token),
         content:content,status:status,type:type});
 };

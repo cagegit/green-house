@@ -79,7 +79,7 @@
                                 <div class="sb-c-left">
                                     <span>开启时间</span>
                                 </div>
-                                <div class="sb-c-right" @click="setStartTime()">
+                                <div class="sb-c-right" @click="setStartTime(item)">
                                     <input type="text" placeholder="请选择" :value="item.stTime" readonly/>
                                     <i class="van-icon van-icon-arrow"></i>
                                 </div>
@@ -88,7 +88,7 @@
                                 <div class="sb-c-left">
                                     <span>关闭时间</span>
                                 </div>
-                                <div class="sb-c-right" @click="setEndTime()">
+                                <div class="sb-c-right" @click="setEndTime(item)">
                                     <input type="text" placeholder="请选择" :value="item.enTime" readonly/>
                                     <i class="van-icon van-icon-arrow"></i>
                                 </div>
@@ -97,7 +97,7 @@
                                 <div class="sb-c-left">
                                     <span>重复</span>
                                 </div>
-                                <div class="sb-c-right" @click="chongFu()">
+                                <div class="sb-c-right" @click="chongFu(item)">
                                     <input type="text" class="cf-input" placeholder="请选择" :value="item.chongfu" readonly/>
                                     <i class="van-icon van-icon-arrow"></i>
                                 </div>
@@ -136,9 +136,10 @@
 <script>
     import { Switch,Slider,DatetimePicker,Actionsheet,Dialog } from 'vant'
     import HeadBar from '../../components/HeadBar';
-    import {setController,getAutoTask,addAutoTask,modifyAutoTask} from '../../service';
+    import {setController,getAutoTask,addAutoTask,modifyAutoTask,missionObservable$} from '../../service';
     import { mapActions} from 'vuex';
     import { Icon } from 'vant';
+    import { Subject,Observable} from 'rxjs';
     export default {
         name: 'Fjsb',
         props: {
@@ -181,7 +182,9 @@
                 endminute: 0,
                 enTime:'14:00',
                 chongfu: '每天',
-                taskList: []
+                taskList: [],
+                currentItem: null,
+                obserer$:null
             }
         },
         components: {
@@ -194,22 +197,35 @@
             HeadBar
         },
         created() {
-            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth} = this.$store.state;
+            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,taskList,taskItemId} = this.$store.state;
             // console.log(propertys);
             if(!propertys) {
                 this.$router.replace('/monitor/sbkz');
                 return;
             }
-            this.handCheck = controlHand;
+            // this.handCheck = controlHand;
             this.autoCheck = controlAuto;
-            this.getAutoTasks();// 获取自动任务列表
+            taskList.forEach(v => {
+                if(v.id === taskItemId) {
+                   v.looptype = fxType;
+                   if(fxType==='week') {
+                     v.days = fxWeek;
+                   } else if(fxType==='month') {
+                     v.days = fxMonth;
+                   } else {
+                       v.days = [];
+                   }
+                }
+            });
+            this.taskList = taskList;
+            // this.getAutoTasks();// 获取自动任务列表
             if(this.autoCheck) {
-                 if(fxType===1) {
+                 if(fxType==='week') {
                     let sk = '';
                     const wk ={0:'周一',1:'周二',2:'周三',3:'周四',4:'周五',5:'周六',6:'周日'};
                      sk = fxWeek.map(v => wk[v]).join(',');
                      this.chongfu = '每周 '+sk;
-                 } else if(fxType===2) {
+                 } else if(fxType==='month') {
                      this.chongfu = '每月 '+fxMonth.slice(0,5).join(',');
                  } else {
                      this.chongfu = '每天';
@@ -221,12 +237,19 @@
                 this.current = this.pro.value || 0;
                 // this.handCheck = !!this.pro.value;
             }
+           if(this.currentItem) {
+                      const {days,num,type} = data; 
+                      this.currentItem.days = days;
+                      this.currentItem.looptype = type;
+                      this.currentItem.days = days;
+                   }
+             console.log('fjsb init');
         },
         methods: {
             ...mapActions([
                 'fxAction'
             ]),
-            chongFu() {
+            chongFu(item) {
                 this.$router.push('/monitor/fuxuan');
             },
             setZx(num) {
@@ -247,10 +270,12 @@
                         })
                 },200)
             },
-            setStartTime() {
+            setStartTime(item) {
+                this.stTime = item.stTime;
                 this.startTimePanel = true;
             },
-            setEndTime() {
+            setEndTime(item) {
+                this.enTime = item.enTime;
                 this.endTimePanel = true;
             },
             startConfirm(currentVal) {
@@ -319,39 +344,39 @@
                     });
             },
             saveAutoInfo() {
-                if(this.autoCheck) {
-                    const sk = {};
-                    const {fxType,fxWeek,fxMonth} = this.$store.state;
-                    const fx = {0:'day',1:'week',2:'month'};
-                    sk.looptype = fx[fxType];
-                    if(fxType===1) {
-                        sk.days = fxWeek;
-                    } else if(fxType === 2) {
-                        sk.days = fxMonth;
-                    } else {
-                        sk.days = [];
-                    }
-                    sk.tims = [];
-                    let fw = {
-                        starthour: "8",
-                        startminute: "30",
-                        endhour: "9",
-                        endminute: "30"
-                    };
-                    if(this.stTime) {
-                        let [a,b] = this.stTime.split(':');
-                        fw.starthour = a && a.replace(/^0/,'');
-                        fw.startminute = b && b.replace(/^0/,'');
-                    }
-                    if(this.enTime) {
-                        let [a,b] = this.enTime.split(':');
-                        fw.endhour = a && a.replace(/^0/,'');
-                        fw.endminute = b && b.replace(/^0/,'');
-                    }
-                    sk.tims.push(fw);
-                    //console.log(sk);
-                    this.addAutoTask(sk);
-                }
+                // if(this.autoCheck) {
+                //     const sk = {};
+                //     const {fxType,fxWeek,fxMonth} = this.$store.state;
+                //     const fx = {0:'day',1:'week',2:'month'};
+                //     sk.looptype = fx[fxType];
+                //     if(fxType===1) {
+                //         sk.days = fxWeek;
+                //     } else if(fxType === 2) {
+                //         sk.days = fxMonth;
+                //     } else {
+                //         sk.days = [];
+                //     }
+                //     sk.tims = [];
+                //     let fw = {
+                //         starthour: "8",
+                //         startminute: "30",
+                //         endhour: "9",
+                //         endminute: "30"
+                //     };
+                //     if(this.stTime) {
+                //         let [a,b] = this.stTime.split(':');
+                //         fw.starthour = a && a.replace(/^0/,'');
+                //         fw.startminute = b && b.replace(/^0/,'');
+                //     }
+                //     if(this.enTime) {
+                //         let [a,b] = this.enTime.split(':');
+                //         fw.endhour = a && a.replace(/^0/,'');
+                //         fw.endminute = b && b.replace(/^0/,'');
+                //     }
+                //     sk.tims.push(fw);
+                //     //console.log(sk);
+                //     this.addAutoTask(sk);
+                // }
             },
             changeDanlu(check) {
                 // console.log('isCheck change:'+check);
@@ -382,17 +407,32 @@
             },
             addTask() {
                 this.taskList.push({
-                    stTime: '0:0',
-                    enTime: '23:0',
-                    chongfu: '每天'
+                    id: this.createUUID(),
+                    stTime: '00:00',
+                    enTime: '23:59',
+                    chongfu: '每天',
+                    looptype: 'day',// week:1 month:2 day: 0
+                    loopflag: 0,
+                    days: []
                 });
+                this.$store.commit('setTaskList',{tasks:this.taskList});
             },
             onSwipeRight() {
                 this.$router.go(-1);
+            },
+            createUUID() {
+                let uuid = 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+                function (c) {
+                    let r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                }).toUpperCase();
+                return uuid;
             }
         },
         beforeRouteLeave (to, from , next) {
             this.saveAutoInfo();
+            this.$store.commit('setTaskList',[]);
             next();
         },
         watch: {
