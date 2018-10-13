@@ -11,12 +11,12 @@
                         </div>
                         <div class="sb-c-right">
                             <span v-if="kz.properties.ctrl==='1' || kz.properties.ctrl==='2'">{{kz.status?'开启':'关闭'}}</span>
-                            <span v-else-if="kz.properties.ctrl==='3'">
+                            <span v-if="kz.properties.ctrl==='3'">
                                 <i v-if="kz.status===0">停止</i>
                                 <i v-if="kz.status===-1">左转</i>
                                 <i v-if="kz.status===1">右转</i>
                             </span>
-                            <span v-else="kz.properties.ctrl==='4'">{{kz.status+'档'}}</span>
+                            <span v-if="kz.properties.ctrl==='4'">{{kz.status+'档'}}</span>
                             <i class="van-icon van-icon-arrow"></i>
                         </div>
                     </div>

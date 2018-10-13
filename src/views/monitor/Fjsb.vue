@@ -64,7 +64,7 @@
                     </div>
                 </div>
 
-                <div class="sb-com-cell"  v-if="pro.ctrl==='1' || pro.ctrl==='2' || pro.ctrl==='4'">
+                <div class="sb-com-cell"  v-if="pro.ctrl==='1' || pro.ctrl==='2' || pro.ctrl==='3'">
                     <div class="fj-flex">
                         <div class="sb-c-left">
                             <span>自动</span>
