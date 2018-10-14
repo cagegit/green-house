@@ -20,7 +20,7 @@
                             {{companyWebUrl}}
                         </div>
                         <div class="copyright">
-                            Copyright©北京康吉讯通科技有限公司
+                            Copyright©北京康吉迅通科技有限公司
                         </div>
                     </div>
                 </div>

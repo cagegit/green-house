@@ -16,6 +16,9 @@
                         <div class="sb-name">{{item.info.name}}</div>
                     </div>
                 </div>
+                <router-link to="/monitor/videoMonitor" class="sb-box">
+                    <div class="sb-name">视频监控测试入口</div>
+                </router-link>
             </div>
             <van-popup v-model="dqShow" position="bottom">
                 <van-picker show-toolbar :columns="areaNameList" @cancel="dqShow=false" @confirm="dpConfirm"/>
@@ -70,6 +73,9 @@
         methods: {
             toSbList(list) {
                 this.$router.push({ name: 'fjs', params: { itemList: list }});
+            },
+            toVideo(){
+                this.$router.push({ name: 'VideoMonitor'});
             },
             showDqPanel(){
                 if(this.areaNameList.length>0){

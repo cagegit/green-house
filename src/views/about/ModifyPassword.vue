@@ -10,6 +10,9 @@
                 <van-field class="input-sty" v-model="oldPassword" type="password" placeholder="请输入原密码" />
                 <van-field class="input-sty" v-model="newPassword" type="password" placeholder="请输入新密码" />
                 <van-field class="input-sty" v-model="sureNewPassword" type="password" placeholder="请确认新密码" />
+                <van-field class="input-sty" v-model="sendMes" center clearable placeholder="请输入短信验证码">
+                    <van-button slot="button" size="small" @click="sendPhoneMes()" type="primary">发送验证码</van-button>
+                </van-field>
             </van-cell-group>
             <div class="sure-btn flex" @click="resetPass">确定</div>
             <FootBar :active="3"></FootBar>
@@ -17,9 +20,9 @@
     </v-touch>
 </template>
 <script>
-    import { NavBar, Field, CellGroup, Toast } from 'vant'
+    import { NavBar, Field, CellGroup, Toast, Button } from 'vant'
     import FootBar from '@/components/FootBar'
-    import { resetPassword } from '@/service';
+    import { resetPassword, getPhoneCode } from '@/service';
     import MD5 from 'js-md5';
     export default {
         name: "ModifyPassword",
@@ -28,13 +31,15 @@
             [Field.name]: Field,
             [CellGroup.name]: CellGroup,
             [Toast.name]: Toast,
+            [Button.name]: Button,
             FootBar
         },
         data() {
             return {
                 oldPassword:"",
                 newPassword:"",
-                sureNewPassword:""
+                sureNewPassword:"",
+                sendMes:""
             }
         },
         methods:{
@@ -43,8 +48,8 @@
             },
             resetPass(){
                 var that = this;
-                if(this.newPassword === this.sureNewPassword && this.sureNewPassword!="" && this.sureNewPassword){
-                    resetPassword(MD5(this.oldPassword),MD5(this.newPassword),this.$store.state.token).then(res=>{
+                if(this.newPassword === this.sureNewPassword && this.sureNewPassword!="" && this.sureNewPassword && this.sendMes){
+                    resetPassword(MD5(this.oldPassword),MD5(this.newPassword),this.sendMes,this.$store.state.token).then(res=>{
                         console.log("res:")
                         console.log(res)
                         if(res.data.code==1){
@@ -65,9 +70,24 @@
                     })
                 }else if(this.newPassword=="" || this.sureNewPassword==""){
                     Toast.fail('密码不能为空');
-                }else{
+                }else if(this.sendMes==""){
+                    Toast.fail('请输入验证码');
+                }
+                else{
                     Toast.fail('密码不一致');
                 }
+            },
+            sendPhoneMes(){
+                console.log("this.$store.state.user")
+                console.log(this.$store.state.user)
+
+                getPhoneCode(this.$store.state.user.phone).then(res=>{
+                    console.log("res：")
+                    console.log(res)
+                }).catch(err=>{
+                    console.log("err：")
+                    console.log(err)
+                })
             },
             onSwipeRight() {
                 this.$router.go(-1);

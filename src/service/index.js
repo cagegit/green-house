@@ -179,8 +179,8 @@ export const forgetPassword = (phone,pwd,smscode) =>{
 /**
  * 修改密码
  */
-export const resetPassword = (oldPassword,newPassword,token) =>{
-    return axios.get(`${DEVICE_URL_PORT}/apps/resetPwd?oldpwd=${oldPassword}&pwd=${newPassword}&token=${token}`);
+export const resetPassword = (oldPassword,newPassword,smscode,token) =>{
+    return axios.get(`${DEVICE_URL_PORT}/apps/resetPwd?oldpwd=${oldPassword}&pwd=${newPassword}&smscode=${smscode}&token=${token}`);
 };
 /**
  * 查找对应关系
