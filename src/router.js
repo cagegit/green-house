@@ -70,6 +70,11 @@ export default new Router({
                   component: () => import('./views/monitor/Lsqx.vue')
               },
               {
+                  path: 'heng',// 历史曲线横屏
+                  name: 'heng',
+                  component: () => import('./views/monitor/Heng.vue')
+              },
+              {
                   path: 'ssxx',// 设施信息页面
                   name: 'ssxx',
                   component: () => import('./views/monitor/Ssxx.vue')

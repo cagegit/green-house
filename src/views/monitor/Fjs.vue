@@ -9,13 +9,13 @@
                         <span>{{item.name}}</span>
                     </div>
                     <div class="sb-c-right">
-                        <span v-if="item.properties.ctrl==='1' || item.properties.ctrl==='2'">{{item.properties.value?'开启':'关闭'}}</span>
+                        <span v-if="item.properties.ctrl==='1' || item.properties.ctrl==='2'">{{item.status?'开启':'关闭'}}</span>
                         <span v-else-if="item.properties.ctrl==='3'">
-                            <i v-if="item.properties.value===0">停止</i>
-                            <i v-if="item.properties.value===-1">左转</i>
-                            <i v-if="item.properties.value===1">右转</i>
+                            <i v-if="item.status===0">停止</i>
+                            <i v-if="item.status===-1">左转</i>
+                            <i v-if="item.status===1">右转</i>
                         </span>
-                        <span v-else="item.properties.ctrl==='4'">{{item.properties.value+'档'}}</span>
+                        <span v-else="item.properties.ctrl==='4'">{{item.status+'档'}}</span>
                         <i class="van-icon van-icon-arrow"></i>
                     </div>
                 </div>
@@ -24,7 +24,8 @@
     </v-touch>
 </template>
 <script>
-    import HeadBar from '../../components/HeadBar'
+    import HeadBar from '../../components/HeadBar';
+    import {getCtrlStatusByDeviceId} from '../../service';
     export default {
         name:'Fjs',
         components:{
@@ -46,14 +47,16 @@
                         this.titName = JSON.parse(localStorage.getItem("controList")).info.name;
                     }
                 }
-            }catch(e){
-
-            }
+                if(this.controList && Array.isArray(this.controList)) {
+                    this.getCtrlStatus(100);
+                }
+            }catch(e){}
         },
         data(){
             return {
                 controList:[],
                 titName:"",
+                intervalId:0,
                 img_1: require("@/assets/img_1.png"),
                 img_2: require("@/assets/img_2.png"),
                 img_3: require("@/assets/img_3.png"),
@@ -65,10 +68,13 @@
                 img_9: require("@/assets/img_9.png")
             }
         },
+        destroyed() {
+            clearInterval(this.intervalId);
+        },
         methods: {
             toSetPage(pro) {
                 this.$store.commit('setPropertys',Object.assign({},pro.properties));
-               this.$router.push({ name: 'fjsb', params: { name: pro.name }});
+               this.$router.push({ name: 'fjsb', params: { name: pro.name,id:pro.id}});
             },
             getImg(num) {
                 const arr = [1,2,3,4,5,6,7,8,9];
@@ -77,6 +83,24 @@
             },
             onSwipeRight() {
                 this.$router.push({name:'control'});
+            },
+            getCtrlStatus(deviceId) {
+                getCtrlStatusByDeviceId(deviceId).then(res => {
+                    if(res.data && res.data.results && Array.isArray(res.data.results)) {
+                        const arr = res.data.results;
+                        const newArr = [];
+                        this.controList.forEach(item => {
+                            const ob = arr.find(val => val._id === item.id);
+                            if(ob) {
+                                item.status = ob.status || 0;
+                            }
+                            newArr.push(item);
+                        });
+                        this.controList = Object.assign([],newArr);
+                    }
+                }, err => {
+                    console.log(err);
+                });
             }
         }
     }

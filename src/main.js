@@ -53,12 +53,18 @@ router.beforeEach((to, from,next) => {
 let vueIns = null;
 if(process.env.NODE_ENV === 'production') {
     const deviceReady = function() {
+        window.open = cordova.InAppBrowser.open; // 替换 window.open方法
+        if (cordova.platformId === 'android') {
+            StatusBar.backgroundColorByHexString("#F5F7F9");
+        }
+        if(screen.orientation) {
+            screen.orientation.lock('portrait');
+        }
         vueIns = new Vue({
             router,
             store,
             render: h => h(App)
         }).$mount('#app');
-        window.open = cordova.InAppBrowser.open; // 替换 window.open方法
     };
     document.addEventListener("deviceready", deviceReady, false);
 } else {

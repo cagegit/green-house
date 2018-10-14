@@ -74,6 +74,9 @@
        -ms-user-select: none;
        user-select: none;
    }
+   .status-bar {
+       background-color: $status-bar-bg;
+   }
     #app {
       font-family: 'Avenir', Helvetica, Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
