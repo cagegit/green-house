@@ -10,12 +10,14 @@
                 </div>
                 <div v-if="week==='week'">
                     <div class="fu-box">
-                        <div class="fu-flex" v-for="item in weeks" :key="item.value">
-                            <div class="sb-c-left">
-                                <span>{{item.name}}</span>
-                            </div>
-                            <div class="sb-c-right" @click="item.check=!item.check">
-                                <i class="van-icon" :class="{'van-icon-success':item.check,'kong':!item.check}"></i>
+                        <div v-for="item in weeks" :key="item.value">
+                            <div class="fu-flex" @click="item.check=!item.check">
+                                <div class="sb-c-left">
+                                    <span>{{item.name}}</span>
+                                </div>
+                                <div class="sb-c-right">
+                                    <i class="van-icon" :class="{'van-icon-success':item.check,'kong':!item.check}"></i>
+                                </div>
                             </div>
                         </div>
 

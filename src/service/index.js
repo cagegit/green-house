@@ -202,7 +202,7 @@ export const uploadPhoto = (token,loginname,base64Data) => {
  * @param token
  */
 export const getAutoTask = (controllerid,token) => {
-    return axios.get(`${DEVICE_URL_PORT}/apps/gettask?controllerid=${controllerid}&token=${encodeURIComponent(token)}`);
+    return axios.get(`/apps/gettask?controllerid=${controllerid}&token=${encodeURIComponent(token)}`);
 };
 /**
  * 修改自动任务
@@ -213,17 +213,7 @@ export const getAutoTask = (controllerid,token) => {
  * @param type  控制器类型(单路:1;双路:2;三路:3) 可选
  */
 export const modifyAutoTask = (controllerid,token,content,status,type) => {
-    let params = {controllerid:controllerid,token:encodeURIComponent(token)};
-    if(content) {
-        params.content = content;
-    }
-    if(status) {
-        params.status = status;
-    }
-    if(type) {
-        params.type = type;
-    }
-    return axios.post(`${DEVICE_URL_PORT}/apps/modifytask`,params);
+    return axios.get(`/apps/modifytask?controllerid=${controllerid}&content=${JSON.stringify(content)}&status=${status}&type=${type}&token=${encodeURIComponent(token)}`);
 };
 /**
  * 添加自动任务
@@ -233,7 +223,6 @@ export const modifyAutoTask = (controllerid,token,content,status,type) => {
  * @param status 自动任务状态(启用 1\停用 0) 可选
  * @param type  控制器类型(单路:1;双路:2;三路:3) 可选
  */
-export const addAutoTask = (controllerid,token,content,status,type) => {
-    return axios.post(`${DEVICE_URL_PORT}/apps/createtask`,{controllerid:controllerid,token:encodeURIComponent(token),
-        content:content,status:status,type:type});
+export const addAutoTasks = (controllerid,token,content,status,type) => {
+    return axios.get(`/apps/createtask?controllerid=${controllerid}&content=${JSON.stringify(content)}&status=${status}&type=${type}&token=${encodeURIComponent(token)}`);
 };

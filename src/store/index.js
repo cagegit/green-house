@@ -22,8 +22,8 @@ const state = {
     aboutMes:{},
     warnings: 0,
     relations: [], // 图片对应关系
-    taskList: [],
-    taskItemId: ''
+    tasks: [],
+    ctrlId: 0
 };
 
 export default new Vuex.Store({
@@ -35,9 +35,9 @@ export default new Vuex.Store({
        },
        changeFx(state, {type,value}) {
            state.fxType = type;
-           if(type===1) {
+           if(type==='week') {
                state.fxWeek = value;
-           } else if(type===2) {
+           } else if(type==='month') {
                state.fxMonth = value;
            } else {
                state.fxWeek = [];
@@ -74,9 +74,11 @@ export default new Vuex.Store({
         setRelations(state, relations) {
            state.relations = relations;
         },
-        setTaskList(state,{tasks,id}) {
-           state.taskList = tasks;
-           state.taskItemId = id;
+        setTaskList(state,tasks) {
+           state.tasks = tasks;
+        },
+        setCtrlId(state,ctrlId){
+           state.ctrlId = ctrlId;
         }
     },
     actions: {

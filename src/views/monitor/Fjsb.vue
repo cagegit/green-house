@@ -9,7 +9,7 @@
                             <span>手动</span>
                         </div>
                         <div class="sb-c-right">
-                            <van-switch v-model="handCheck" @change="changeDanlu"/>
+                            <van-switch :value="handCheck" @input="changeDanlu"/>
                         </div>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                             <span>手动</span>
                         </div>
                         <div class="sb-c-right">
-                            <van-switch v-model="handCheck" @change="changeDanlu" />
+                            <van-switch :value="handCheck" @input="changeDanlu" />
                         </div>
                     </div>
                     <div class="fj-content">
@@ -47,7 +47,7 @@
                             <span>手动</span>
                         </div>
                         <div class="sb-c-right">
-                            <van-switch v-model="handCheck" @change="changeDanlu" />
+                            <van-switch :value="handCheck" @input="changeDanlu" />
                         </div>
                     </div>
                     <div class="fj-content">
@@ -70,39 +70,38 @@
                             <span>自动</span>
                         </div>
                         <div class="sb-c-right">
-                            <van-switch v-model="autoCheck" @change="changeAutoCheck"/>
+                            <van-switch :value="autoCheck" @input="onAutoInput"/>
                         </div>
                     </div>
                     <div v-if="autoCheck">
+                        <div class="fj-in-flex fj-head" @click="chongFu()">
+                            <div class="sb-c-left">
+                                <span>重复</span>
+                            </div>
+                            <div class="sb-c-right">
+                                <input type="text" class="cf-input" placeholder="请选择" :value="chongfu" readonly/>
+                                <i class="van-icon van-icon-arrow"></i>
+                            </div>
+                        </div>
                         <div class="fj-content" v-for="(item, index) in taskList" :key="index">
-                            <div class="fj-in-flex">
+                            <div class="fj-in-flex" @click="setStartTime(item)">
                                 <div class="sb-c-left">
                                     <span>开启时间</span>
                                 </div>
-                                <div class="sb-c-right" @click="setStartTime(item)">
+                                <div class="sb-c-right">
                                     <input type="text" placeholder="请选择" :value="item.stTime" readonly/>
                                     <i class="van-icon van-icon-arrow"></i>
                                 </div>
                             </div>
-                            <div class="fj-in-flex">
+                            <div class="fj-in-flex" @click="setEndTime(item)">
                                 <div class="sb-c-left">
                                     <span>关闭时间</span>
                                 </div>
-                                <div class="sb-c-right" @click="setEndTime(item)">
+                                <div class="sb-c-right">
                                     <input type="text" placeholder="请选择" :value="item.enTime" readonly/>
                                     <i class="van-icon van-icon-arrow"></i>
                                 </div>
                             </div>
-                            <div class="fj-in-flex">
-                                <div class="sb-c-left">
-                                    <span>重复</span>
-                                </div>
-                                <div class="sb-c-right" @click="chongFu(item)">
-                                    <input type="text" class="cf-input" placeholder="请选择" :value="item.chongfu" readonly/>
-                                    <i class="van-icon van-icon-arrow"></i>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -134,12 +133,11 @@
     </v-touch>
 </template>
 <script>
-    import { Switch,Slider,DatetimePicker,Actionsheet,Dialog } from 'vant'
+    import { Switch,Slider,DatetimePicker,Actionsheet,Dialog,Toast } from 'vant'
     import HeadBar from '../../components/HeadBar';
-    import {setController,getAutoTask,addAutoTask,modifyAutoTask,missionObservable$} from '../../service';
+    import {setController,getAutoTask,addAutoTasks,modifyAutoTask} from '../../service';
     import { mapActions} from 'vuex';
     import { Icon } from 'vant';
-    import { Subject,Observable} from 'rxjs';
     export default {
         name: 'Fjsb',
         props: {
@@ -183,8 +181,10 @@
                 enTime:'14:00',
                 chongfu: '每天',
                 taskList: [],
+                looptype: 'day',
+                days:[],
                 currentItem: null,
-                obserer$:null
+                isEdit: false
             }
         },
         components: {
@@ -197,60 +197,45 @@
             HeadBar
         },
         created() {
-            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,taskList,taskItemId} = this.$store.state;
-            // console.log(propertys);
+            console.log(this.id);
+            if(this.id) {
+                this.$store.commit('setCtrlId',this.id);
+            }
+            this.getAutoTasks();
+            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,tasks,ctrlId} = this.$store.state;
+            // console.log('taskId:'+taskItemId);
             if(!propertys) {
                 this.$router.replace('/monitor/sbkz');
                 return;
             }
-            // this.handCheck = controlHand;
+            this.handCheck = controlHand;
             this.autoCheck = controlAuto;
-            taskList.forEach(v => {
-                if(v.id === taskItemId) {
-                   v.looptype = fxType;
-                   if(fxType==='week') {
-                     v.days = fxWeek;
-                   } else if(fxType==='month') {
-                     v.days = fxMonth;
-                   } else {
-                       v.days = [];
-                   }
-                }
-            });
-            this.taskList = taskList;
-            // this.getAutoTasks();// 获取自动任务列表
-            if(this.autoCheck) {
-                 if(fxType==='week') {
-                    let sk = '';
-                    const wk ={0:'周一',1:'周二',2:'周三',3:'周四',4:'周五',5:'周六',6:'周日'};
-                     sk = fxWeek.map(v => wk[v]).join(',');
-                     this.chongfu = '每周 '+sk;
-                 } else if(fxType==='month') {
-                     this.chongfu = '每月 '+fxMonth.slice(0,5).join(',');
-                 } else {
-                     this.chongfu = '每天';
-                 }
-            }
+            this.looptype = fxType;
+            this.setChongFu(fxType,fxWeek,fxMonth);
+            this.taskList = tasks;
             this.pro = propertys;
-            if(this.pro) {
-                this.currentZx = this.pro.value || 0;
-                this.current = this.pro.value || 0;
-                // this.handCheck = !!this.pro.value;
-            }
-           if(this.currentItem) {
-                      const {days,num,type} = data; 
-                      this.currentItem.days = days;
-                      this.currentItem.looptype = type;
-                      this.currentItem.days = days;
-                   }
-             console.log('fjsb init');
+            this.currentZx = this.pro.value || 0;
+            this.current = this.pro.value || 0;
         },
         methods: {
             ...mapActions([
                 'fxAction'
             ]),
-            chongFu(item) {
+            chongFu() {
                 this.$router.push('/monitor/fuxuan');
+            },
+            setChongFu(fxType,fxWeek,fxMonth) {
+                if(fxType==='week') {
+                    this.days = fxWeek;
+                    const wk ={1:'周一',2:'周二',3:'周三',4:'周四',5:'周五',6:'周六',7:'周日'};
+                    this.chongfu = fxWeek.map(v => wk[v]).join(',');
+                } else if(fxType==='month') {
+                    this.days = fxMonth;
+                    this.chongfu = '每月 '+fxMonth.slice(0,5).join(',');
+                } else {
+                    this.days = [];
+                    this.chongfu = '每天';
+                }
             },
             setZx(num) {
                 this.currentZx = num;
@@ -271,24 +256,26 @@
                 },200)
             },
             setStartTime(item) {
-                this.stTime = item.stTime;
+                // this.stTime = item.stTime;
+                this.currentItem = item;
                 this.startTimePanel = true;
             },
             setEndTime(item) {
-                this.enTime = item.enTime;
+                // this.enTime = item.enTime;
+                this.currentItem = item;
                 this.endTimePanel = true;
             },
             startConfirm(currentVal) {
-                //console.log(currentVal);
                 this.stTime = currentVal;
+                this.currentItem.stTime = currentVal;
                 this.startTimePanel = false;
             },
             startCancel() {
                 this.startTimePanel = false;
             },
             endConfirm(currentVal) {
-                //console.log(currentVal);
                 this.enTime = currentVal;
+                this.currentItem.enTime = currentVal;
                 this.endTimePanel = false;
             },
             endCancel() {
@@ -298,19 +285,49 @@
                 // console.log(this.id);
                 const token = this.$store.state.token;
                 getAutoTask(this.id,token).then(res => {
-                   console.log(res);
-                    if(res && res.results && res.results.content) {
-                       const content = res.results.content;
-                        const strType = content.looptype;// 周期类型
-                        let type = 1;
-                        if(strType ==='week') {
-                             type =1;
-                        } else if(strType === 'month') {
-                             type = 2;
-                        } else {
-                             type = 3;
+                   // console.log(res);
+                    if(res && res.data && res.data.results && Array.isArray(res.data.results)) {
+                        this.isEdit = true; // 是否编辑
+                        if(res.data.results.length>0) {
+                            const data = res.data.results[0];
+                            const content = JSON.parse(data.content);
+                            // {"looptype":"week","tims":[{"starthour":"0","startminute":"0","endhour":"14","endminute":"0"}],"days":[2,3],"controllerid":0}"
+                            const strType = content.looptype;// 周期类型
+                            // this.days = content.days;
+                            this.looptype = strType;
+                            let fxWeek = [];
+                            let fxMonth = [];
+                            if(strType ==='week') {
+                                fxWeek = content.days;
+                            } else {
+                                fxMonth = content.days;
+                            }
+                            if(content.tims && Array.isArray(content.tims)) {
+                                const arr = [];
+                                content.tims.forEach(v => {
+                                    let st = '';
+                                    let et = '';
+                                    st += v.starthour.length>1?v.starthour:'0'+v.starthour;
+                                    st += ':';
+                                    st += v.startminute.length>1?v.startminute:'0'+v.startminute;
+
+                                    et += v.endhour.length>1?v.endhour:'0'+v.endhour;
+                                    et += ':';
+                                    et += v.endminute.length>1?v.endminute:'0'+v.endminute;
+                                    arr.push({
+                                        id: this.createUUID(),
+                                        stTime: st,
+                                        enTime: et,
+                                    });
+                                });
+                                this.taskList = arr;
+                                this.$store.commit('setTaskList',this.taskList);
+                            }
+                            this.autoCheck = data.status ===1;
+                            this.setChongFu(strType,fxWeek,fxMonth);
+                            this.fxAction({type: strType,value:content.days});
+                            this.$store.commit('setControlAuto',this.autoCheck);
                         }
-                        this.fxAction({type: type,value:content.days});
                     }
                 }).catch(err => {
                     console.log(err);
@@ -320,9 +337,9 @@
                 const token = this.$store.state.token;
                 content.controllerid= this.id;
                 let type = 1;
-                if(this.pro.ctrl == '4') {
+                if(this.pro.ctrl === '4') {
                     type = 3;
-                } else if(this.pro.ctrl == '3'){
+                } else if(this.pro.ctrl === '3'){
                     type = 2;
                 } else  {
                     type = 1;
@@ -344,112 +361,142 @@
                     });
             },
             saveAutoInfo() {
-                // if(this.autoCheck) {
-                //     const sk = {};
-                //     const {fxType,fxWeek,fxMonth} = this.$store.state;
-                //     const fx = {0:'day',1:'week',2:'month'};
-                //     sk.looptype = fx[fxType];
-                //     if(fxType===1) {
-                //         sk.days = fxWeek;
-                //     } else if(fxType === 2) {
-                //         sk.days = fxMonth;
-                //     } else {
-                //         sk.days = [];
-                //     }
-                //     sk.tims = [];
-                //     let fw = {
-                //         starthour: "8",
-                //         startminute: "30",
-                //         endhour: "9",
-                //         endminute: "30"
-                //     };
-                //     if(this.stTime) {
-                //         let [a,b] = this.stTime.split(':');
-                //         fw.starthour = a && a.replace(/^0/,'');
-                //         fw.startminute = b && b.replace(/^0/,'');
-                //     }
-                //     if(this.enTime) {
-                //         let [a,b] = this.enTime.split(':');
-                //         fw.endhour = a && a.replace(/^0/,'');
-                //         fw.endminute = b && b.replace(/^0/,'');
-                //     }
-                //     sk.tims.push(fw);
-                //     //console.log(sk);
-                //     this.addAutoTask(sk);
-                // }
+                const sk = {};
+                if(this.autoCheck) {
+                    const {fxType,token,ctrlId} = this.$store.state;
+                    sk.token = token;
+                    sk.controllerid = ctrlId;
+                    sk.type = 1;
+                    if(this.pro.ctrl == '4') {
+                        sk.type = 3;
+                    } else if(this.pro.ctrl == '3'){
+                        sk.type = 2;
+                    } else  {
+                        sk.type = 1;
+                    }
+                    sk.status =1;
+                    sk.content = {};
+                    sk.content.looptype = fxType;
+                    sk.content.tims = [];
+                    sk.content.days = this.days;
+                    sk.content.controllerid = this.id;
+                    this.taskList.forEach(v => {
+                        let fw = {
+                            starthour: "",
+                            startminute: "",
+                            endhour: "",
+                            endminute: ""
+                        };
+                        if(v.stTime) {
+                            let [a,b] = v.stTime.split(':');
+                            fw.starthour = a && a.replace(/^0/,'');
+                            fw.startminute = b && b.replace(/^0/,'');
+                        }
+                        if(v.enTime) {
+                            let [a,b] = v.enTime.split(':');
+                            fw.endhour = a && a.replace(/^0/,'');
+                            fw.endminute = b && b.replace(/^0/,'');
+                        }
+                        sk.content.tims.push(fw);
+                    });
+                } else {
+                    const {token,ctrlId} = this.$store.state;
+                    // let sk ={};
+                    sk.controllerid = ctrlId;
+                    sk.token = token;
+                    sk.type = 1;
+                    if(this.pro.ctrl == '4') {
+                        sk.type = 3;
+                    } else if(this.pro.ctrl == '3'){
+                        sk.type = 2;
+                    } else  {
+                        sk.type = 1;
+                    }
+                    sk.status = 0;
+                    sk.content = {};
+                }
+                if(this.isEdit) {
+                    modifyAutoTask(sk.controllerid,sk.token,sk.content,sk.status,sk.type).then(res => {
+                        if(res.data && res.data.code ===1 && res.data.msg==='ok') {
+                          Toast.success('修改成功');
+                        }
+                    });
+                } else {
+                    addAutoTasks(sk.controllerid,sk.token,sk.content,sk.status,sk.type).then(res => {
+                        if(res.data && res.data.code ===1 && res.data.msg==='ok') {
+                            Toast.success('保存成功');
+                        }
+                    });
+                }
             },
             changeDanlu(check) {
-                // console.log('isCheck change:'+check);
                 let txt = check?'开启':'关闭';
                 Dialog.confirm({
-                    message: `确认要${txt}设备吗？`
+                    message: `确认要${txt}吗？`
                 }).then(() => {
+                    this.handCheck = check;
                     this.$store.commit('setControlHand',check);
                     this.pro.value = check?1:0;
                     this.setCtrl();
-                }).catch(() => {
-                    this.handCheck = !check;
-                    this.$store.commit('setControlHand',this.handCheck);
                 });
             },
-            changeAutoCheck(check) {
-                this.$store.commit('setControlAuto',check);
-                if(check) {
-                    this.taskList.push({
-                         stTime: '0:0',
-                         enTime: '23:0',
-                         chongfu: '每天'
-                    });
-                } else {
-                    this.taskList = [];
-                }
-                // this.setCtrl();
+            onAutoInput(check) {
+                let txt = check?'确认要开启自动任务吗？':'确认要关闭自动任务吗？';
+                Dialog.confirm({
+                    message: txt
+                }).then(() => {
+                    if(check) {
+                        this.taskList.push({
+                            id: this.createUUID(),
+                            stTime: '00:00',
+                            enTime: '23:59',
+                        });
+                    }
+                    this.autoCheck = check;
+                    this.$store.commit('setControlAuto',check);
+                    this.$store.commit('setTaskList',this.taskList);
+                });
             },
             addTask() {
                 this.taskList.push({
                     id: this.createUUID(),
                     stTime: '00:00',
-                    enTime: '23:59',
-                    chongfu: '每天',
-                    looptype: 'day',// week:1 month:2 day: 0
-                    loopflag: 0,
-                    days: []
+                    enTime: '23:59'
                 });
-                this.$store.commit('setTaskList',{tasks:this.taskList});
+                this.$store.commit('setTaskList',this.taskList);
             },
             onSwipeRight() {
                 this.$router.go(-1);
             },
             createUUID() {
-                let uuid = 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+                const uuid = 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
                 function (c) {
                     let r = Math.random() * 16 | 0,
-                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    v = c === 'x' ? r : (r & 0x3 | 0x8);
                     return v.toString(16);
                 }).toUpperCase();
                 return uuid;
             }
         },
         beforeRouteLeave (to, from , next) {
-            this.saveAutoInfo();
-            this.$store.commit('setTaskList',[]);
+            if(to.path.indexOf('sbkz')>=0) {
+                this.saveAutoInfo();
+                this.$store.commit('setTaskList',[]);
+            }
             next();
         },
         watch: {
-            'handCheck':function (isCheck) {
-                console.log('isCheck:'+isCheck);
-                this.$store.commit('setControlHand',isCheck);
-                this.pro.value = isCheck?1:0;
-                // this.setCtrl();
-            },
-            'autoCheck':function (isCheck) {
-                //console.log(isCheck);
-                this.$store.commit('setControlAuto',isCheck);
-            },
+            // 'handCheck':function (isCheck) {
+            //     console.log('isCheck:'+isCheck);
+            //     this.$store.commit('setControlHand',isCheck);
+            //     this.pro.value = isCheck?1:0;
+            //     // this.setCtrl();
+            // },
+            // 'autoCheck':function (isCheck) {
+            //     this.$store.commit('setControlAuto',isCheck);
+            // },
             'current': function (val) {
                 this.pro.value = val;
-                // this.$store.commit('setPropertys',Object.assign({},this.pro));
-                // this.setCtrl();
             }
         }
     }
@@ -501,6 +548,10 @@
         }
         .cf-input {
             width: 120px !important;
+        }
+        .fj-head {
+            border-top: 1px solid #ddd;
+            padding: 15px;
         }
         .fj-content{
             border-top: 1px solid #ddd;

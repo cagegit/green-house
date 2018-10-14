@@ -26,7 +26,7 @@
                             </div>
                             <div class="sb-next">
                                 <p>更新时间：{{item.time}}</p>
-                                <p><span class="sb-pink">{{item.properties.sensorType}}级</span>风机已开启</p>
+                                <p><span class="sb-pink">{{item.properties.sensorType}}级</span></p>
                             </div>
                         </div>
                     </div>

@@ -60,7 +60,6 @@
         methods: {
            toSetPage(pro) {
                this.$store.commit('setPropertys',Object.assign({},pro.properties));
-               console.log(pro.status);
                this.$store.commit('setControlHand',pro.status===1);
                this.$router.push({ name: 'fjsb', params: { name: pro.name ,id: pro.id}});
            },
