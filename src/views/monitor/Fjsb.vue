@@ -180,6 +180,7 @@
                 enTime:'14:00',
                 chongfu: '每天',
                 taskList: [],
+                firstList: [],// 原始列表
                 looptype: 'day',
                 days:[],
                 currentItem: null,
@@ -202,8 +203,8 @@
             if(this.id) {
                 this.$store.commit('setCtrlId',this.id);
             }
-            this.getAutoTasks();
-            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,tasks,} = this.$store.state;
+            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,tasks,ctrlId,token} = this.$store.state;
+            this.getAutoTasks(ctrlId,token);
             // console.log('taskId:'+taskItemId);
             if(!propertys) {
                 this.$router.replace('/monitor/sbkz');
@@ -217,6 +218,9 @@
             this.pro = propertys;
             this.currentZx = this.pro.value || 0;
             this.current = this.pro.value || 0;
+            if(this.currentZx ==='3') {
+                this.firstList = localStorage.getItem('firstList') || [];
+            }
         },
         methods: {
             ...mapActions([
@@ -241,6 +245,7 @@
             setZx(num) {
                 this.currentZx = num;
                 this.pro.value = num;
+                this.taskList = this.firstList.filter(v => v.startvalue === this.currentZx);
                 this.setCtrl();
             },
             setCtrl() {
@@ -282,10 +287,9 @@
             endCancel() {
                 this.endTimePanel = false;
             },
-            getAutoTasks() {
+            getAutoTasks(ctrlId,token) {
                 // console.log(this.id);
-                const token = this.$store.state.token;
-                getAutoTask(this.id,token).then(res => {
+                getAutoTask(ctrlId,token).then(res => {
                    // console.log(res);
                     if(res && res.data && res.data.results && Array.isArray(res.data.results)) {
                         this.isEdit = true; // 是否编辑
@@ -324,7 +328,12 @@
                                 });
                                 metaInfo.tims = content.tims;
                                 metaInfo.type = strType;
-                                this.taskList = arr;
+                                this.firstList = arr;
+                                if(this.pro.ctrl ==='3') {
+                                    this.taskList = arr.filter(v => v.startvalue === this.currentZx);
+                                } else {
+                                    this.taskList = arr;
+                                }
                                 this.$store.commit('setTaskList',this.taskList);
                             }
                             metaInfo.days = content.days;
@@ -387,6 +396,9 @@
                     sk.content.tims = [];
                     sk.content.days = this.days;
                     sk.content.controllerid = this.id;
+                    if(sk.type===2) {
+                       this.taskList = this.firstList.slice(0);
+                    }
                     this.taskList.forEach(v => {
                         let fw = {
                             starthour: "",
@@ -460,12 +472,17 @@
                     message: txt
                 }).then(() => {
                     if(check) {
-                        this.taskList.push({
+                        const obj = {
                             id: this.createUUID(),
                             stTime: '00:00',
                             enTime: '23:59',
                             startvalue: this.currentZx
-                        });
+                        };
+                        this.taskList.push(obj);
+                        if(this.pro.ctrl ==='3') {
+                            this.firstList.push(obj);
+                            localStorage.setItem('firstList',this.firstList);
+                        }
                     }
                     this.autoCheck = check;
                     this.$store.commit('setControlAuto',check);
@@ -473,12 +490,17 @@
                 });
             },
             addTask() {
-                this.taskList.push({
+                const obj ={
                     id: this.createUUID(),
                     stTime: '00:00',
                     enTime: '23:59',
                     startvalue: this.currentZx
-                });
+                };
+                this.taskList.push(obj);
+                if(this.pro.ctrl ==='3') {
+                    this.firstList.push(obj);
+                    localStorage.setItem('firstList',this.firstList);
+                }
                 this.$store.commit('setTaskList',this.taskList);
             },
             onSwipeRight() {
