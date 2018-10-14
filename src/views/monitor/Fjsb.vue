@@ -170,7 +170,6 @@
                 },
                 startTimePanel: false,
                 endTimePanel: false,
-                currentDate: new Date(),
                 starthour: 0,
                 stMaxHour: 23,
                 startminute: 0,
@@ -181,10 +180,13 @@
                 enTime:'14:00',
                 chongfu: '每天',
                 taskList: [],
+                firstList: [],// 原始列表
                 looptype: 'day',
                 days:[],
                 currentItem: null,
-                isEdit: false
+                isEdit: false,
+                oldArrStr:'',
+                newArrStr:''
             }
         },
         components: {
@@ -201,8 +203,8 @@
             if(this.id) {
                 this.$store.commit('setCtrlId',this.id);
             }
-            this.getAutoTasks();
-            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,tasks,ctrlId} = this.$store.state;
+            const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,tasks,ctrlId,token} = this.$store.state;
+            this.getAutoTasks(ctrlId,token);
             // console.log('taskId:'+taskItemId);
             if(!propertys) {
                 this.$router.replace('/monitor/sbkz');
@@ -216,6 +218,9 @@
             this.pro = propertys;
             this.currentZx = this.pro.value || 0;
             this.current = this.pro.value || 0;
+            if(this.currentZx ==='3') {
+                this.firstList = localStorage.getItem('firstList') || [];
+            }
         },
         methods: {
             ...mapActions([
@@ -240,6 +245,7 @@
             setZx(num) {
                 this.currentZx = num;
                 this.pro.value = num;
+                this.taskList = this.firstList.filter(v => v.startvalue === this.currentZx);
                 this.setCtrl();
             },
             setCtrl() {
@@ -281,17 +287,15 @@
             endCancel() {
                 this.endTimePanel = false;
             },
-            getAutoTasks() {
+            getAutoTasks(ctrlId,token) {
                 // console.log(this.id);
-                const token = this.$store.state.token;
-                getAutoTask(this.id,token).then(res => {
+                getAutoTask(ctrlId,token).then(res => {
                    // console.log(res);
                     if(res && res.data && res.data.results && Array.isArray(res.data.results)) {
                         this.isEdit = true; // 是否编辑
                         if(res.data.results.length>0) {
                             const data = res.data.results[0];
                             const content = JSON.parse(data.content);
-                            // {"looptype":"week","tims":[{"starthour":"0","startminute":"0","endhour":"14","endminute":"0"}],"days":[2,3],"controllerid":0}"
                             const strType = content.looptype;// 周期类型
                             // this.days = content.days;
                             this.looptype = strType;
@@ -302,8 +306,9 @@
                             } else {
                                 fxMonth = content.days;
                             }
+                            const arr = [];
+                            const metaInfo = {};
                             if(content.tims && Array.isArray(content.tims)) {
-                                const arr = [];
                                 content.tims.forEach(v => {
                                     let st = '';
                                     let et = '';
@@ -318,11 +323,22 @@
                                         id: this.createUUID(),
                                         stTime: st,
                                         enTime: et,
+                                        startvalue: v.startvalue || 0
                                     });
                                 });
-                                this.taskList = arr;
+                                metaInfo.tims = content.tims;
+                                metaInfo.type = strType;
+                                this.firstList = arr;
+                                if(this.pro.ctrl ==='3') {
+                                    this.taskList = arr.filter(v => v.startvalue === this.currentZx);
+                                } else {
+                                    this.taskList = arr;
+                                }
                                 this.$store.commit('setTaskList',this.taskList);
                             }
+                            metaInfo.days = content.days;
+                            metaInfo.status = data.status;
+                            this.oldArrStr = JSON.stringify(metaInfo);
                             this.autoCheck = data.status ===1;
                             this.setChongFu(strType,fxWeek,fxMonth);
                             this.fxAction({type: strType,value:content.days});
@@ -380,6 +396,9 @@
                     sk.content.tims = [];
                     sk.content.days = this.days;
                     sk.content.controllerid = this.id;
+                    if(sk.type===2) {
+                       this.taskList = this.firstList.slice(0);
+                    }
                     this.taskList.forEach(v => {
                         let fw = {
                             starthour: "",
@@ -397,7 +416,11 @@
                             fw.endhour = a && a.replace(/^0/,'');
                             fw.endminute = b && b.replace(/^0/,'');
                         }
+                        if(sk.type===2) {
+                            fw.startvalue = v.startvalue;
+                        }
                         sk.content.tims.push(fw);
+                        this.newArrStr = JSON.stringify({tims:sk.content.tims,type:fxType,days:sk.content.days,status:1});
                     });
                 } else {
                     const {token,ctrlId} = this.$store.state;
@@ -416,11 +439,14 @@
                     sk.content = {};
                 }
                 if(this.isEdit) {
-                    modifyAutoTask(sk.controllerid,sk.token,sk.content,sk.status,sk.type).then(res => {
-                        if(res.data && res.data.code ===1 && res.data.msg==='ok') {
-                          Toast.success('修改成功');
-                        }
-                    });
+                    const isMatch = this.oldArrStr === this.newArrStr;
+                    if(!isMatch) {
+                        modifyAutoTask(sk.controllerid,sk.token,sk.content,sk.status,sk.type).then(res => {
+                            if(res.data && res.data.code ===1 && res.data.msg==='ok') {
+                                Toast.success('修改成功');
+                            }
+                        });
+                    }
                 } else {
                     addAutoTasks(sk.controllerid,sk.token,sk.content,sk.status,sk.type).then(res => {
                         if(res.data && res.data.code ===1 && res.data.msg==='ok') {
@@ -446,11 +472,17 @@
                     message: txt
                 }).then(() => {
                     if(check) {
-                        this.taskList.push({
+                        const obj = {
                             id: this.createUUID(),
                             stTime: '00:00',
                             enTime: '23:59',
-                        });
+                            startvalue: this.currentZx
+                        };
+                        this.taskList.push(obj);
+                        if(this.pro.ctrl ==='3') {
+                            this.firstList.push(obj);
+                            localStorage.setItem('firstList',this.firstList);
+                        }
                     }
                     this.autoCheck = check;
                     this.$store.commit('setControlAuto',check);
@@ -458,11 +490,17 @@
                 });
             },
             addTask() {
-                this.taskList.push({
+                const obj ={
                     id: this.createUUID(),
                     stTime: '00:00',
-                    enTime: '23:59'
-                });
+                    enTime: '23:59',
+                    startvalue: this.currentZx
+                };
+                this.taskList.push(obj);
+                if(this.pro.ctrl ==='3') {
+                    this.firstList.push(obj);
+                    localStorage.setItem('firstList',this.firstList);
+                }
                 this.$store.commit('setTaskList',this.taskList);
             },
             onSwipeRight() {

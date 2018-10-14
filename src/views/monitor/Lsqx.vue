@@ -17,7 +17,7 @@
                                 </div>
                             </van-tab>
                         </van-tabs>
-                        <div class="chart-wrapper">
+                        <div class="chart-wrapper" @click="toHengPage">
                             <canvas id="mountNode"></canvas>
                         </div>
                     </div>
@@ -100,7 +100,8 @@
                     {title:'年',index:3}
                 ],
                 chartData: [],
-                currentTime:'2018-09-20'
+                currentTime:'2018-09-20',
+                currentIndex: 1
             };
         },
         components: {
@@ -123,6 +124,7 @@
         methods: {
             tabChange(index) {
                 //console.log(index);
+                this.currentIndex = index;
                if(index ===1) { // 按月统计
                   //this.drawMonthChart(261,2,201809);
                   this.currentTime = '2018-09';
@@ -189,6 +191,9 @@
             },
             onSwipeRight() {
                 this.$router.push({name:'main'});
+            },
+            toHengPage() {
+                this.$router.push({name:'heng',params:{dateType: this.currentIndex}});
             }
         }
 

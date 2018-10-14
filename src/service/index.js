@@ -42,6 +42,11 @@ export const getControllers = (pid,token) => axios.get('/apps/controllers?token=
  */
 export const getControllerStatus = (pid) => axios.get(`${DEVICE_URL}/stat/controllerStatus?pengId=${pid}`);
 /**
+ *  获取控制器状态
+ *  @param  deviceId
+ */
+export const getCtrlStatusByDeviceId = (deviceId) => axios.get(`${DEVICE_URL}/stat/controllerStatus?deviceId=${deviceId}`);
+/**
  * 设置值
  * */
 export const setController = (deviceId,sensorChannel,val,gatewayID) => axios.get(`${DEVICE_URL}/gateway/tcpcmd?cmd=control_power&value=${deviceId}:${sensorChannel}*${val}&gatewayId=${gatewayID}`);
