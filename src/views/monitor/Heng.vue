@@ -93,6 +93,9 @@
                 console.log('app height:'+document.body.offsetHeight);
                 initChart(that.chartData);
             }
+            setTimeout(() => {
+                initChart(that.chartData);
+            },1500);
         },
         methods: {
             drawDayChart(id,type,day) {
