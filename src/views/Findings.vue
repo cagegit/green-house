@@ -19,7 +19,7 @@
                 <van-cell class="card-list" v-for="(item,index) in cardList" :key="index">
                     <a href="javascript:void(0);" @click="toAppBrowser(item.url)">
                         <div class="card-img">
-                            <img :src="item.imgUrl" alt=""/>
+                            <img :src="imgSrc(item.imgUrl)" alt=""/>
                             <div class="card-date flex">
                                 <span>{{item.ctime}}</span>
                             </div>
@@ -63,7 +63,7 @@
                 check:false
             }
         },
-        mounted() {
+        created() {
             this.getTabList();
         },
         methods: {
@@ -114,8 +114,20 @@
                 this.$router.replace(link)
             },
             toAppBrowser(url){
-                url = 'https://'+url;
+                if(url.indexOf('https://')>=0 || url.indexOf('http://')>=0) {
+                    url = url;
+                } else {
+                    url = 'https://'+url;
+                }
                 window.open(url,'_blank', 'location=yes');
+            },
+            imgSrc: function (url) {
+                if(url.indexOf('https://')>=0 || url.indexOf('http://')>=0) {
+                    url = url;
+                } else {
+                    url = 'https://'+url;
+                }
+                return url;
             }
         }
     }
