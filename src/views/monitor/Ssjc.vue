@@ -32,7 +32,7 @@
                     </div>
                     <div style="height: 100px;"></div>
                 </div>
-            <van-dialog class="dialog-wrap" :closeOnClickOverlay="true"	 v-model="show" :show-cancel-button="true">
+            <van-dialog class="dialog-wrap" :closeOnClickOverlay="true"	 :before-close="beforeClose" v-model="show" :show-cancel-button="true">
                 <div class="dia-content" v-for="(item,index) in sendLimitArr">
                     <div class="title">{{item.name}}值设置</div>
                     <div class="gj-box">
@@ -144,6 +144,15 @@
                 this.limit_high = limit_high+readout_unit;
                 this.show = true;
             },
+            beforeClose(action, done) {
+                if (action === 'confirm') {
+                    console.log("pppppppppppppppppppp")
+                    this.sendLimitRequest(this.sendLimitArr)
+                    setTimeout(done, 1000);
+                } else {
+                    done();
+                }
+            },
             getLimitRequest(pid,sensorld){
                 console.log(sensorld)
                 getLimitValue(175,326).then(res=>{
@@ -155,22 +164,10 @@
                 })
             },
             sendLimitRequest(limitArr){
-                let sendLimitArr = new Array();
-                sendLimitArr.length = limitArr.length;
-                limitArr.map((item,index) =>{
-                    if(typeof(limitArr[index].warningId) != "undefined" && typeof(limitArr[index].min) != "undefined" && typeof(limitArr[index].max) != "undefined"){
-                        sendLimitArr[index].warningId = item.warningId;
-                        sendLimitArr[index].min = item.min;
-                        sendLimitArr[index].max = item.max;
-                    }
-
-                })
-                console.log("sendLimitArr：")
-                console.log(sendLimitArr)
-                setLimitValue(sendLimitArr).then(res=>{
+                let sendItemArr = this.coppyArray(this.sendLimitArr);
+                setLimitValue(sendItemArr).then(res=>{
                     console.log("res  setLimitValue:")
                     console.log(res)
-                    this.show = true;
                 })
             },
             coppyArray(arr){

@@ -87,16 +87,16 @@
             if(screen.orientation) {
                 console.log('Orientation is ' + screen.orientation.type);
                 screen.orientation.lock('landscape');
-                // screen.orientation.onchange =  function(){
-                //     initChart(that.chartData);
-                // };
+                screen.orientation.onchange =  function(){
+                    initChart(that.chartData);
+                };
             }
             window.onresize = function () {
                 initChart(that.chartData);
             };
             setTimeout(() => {
-                initChart(that.chartData);
-            },500);
+                initChart(this.chartData);
+            },1500);
         },
         methods: {
             showClose() {

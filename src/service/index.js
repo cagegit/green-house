@@ -247,5 +247,12 @@ export const getLimitValue = (pid,sensorld) => {
  * @param sensorld 设备id
  */
 export const setLimitValue = (limitArr) => {
-    return axios.post(`${DEVICE_URL}/device/warningConfig`,limitArr);
+    return axios({
+        url:`${DEVICE_URL}/device/warningConfig`,
+        method: 'post',
+        data: JSON.stringify(limitArr),
+        headers:{
+            'Content-Type':'text/plain'
+        }
+    })
 };
