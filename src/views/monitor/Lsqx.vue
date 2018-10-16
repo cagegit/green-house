@@ -5,15 +5,15 @@
             <DpTab :active="3"></DpTab>
                 <div class="main-body">
                     <div class="sb-input-box">
-                        <button type="button"><div class="in-box"><span>光照</span> <img src="@/assets/img/Group 3.png"/></div></button>
+                        <button type="button" @click="dqShow=!dqShow"><div class="in-box"><span>{{currentDevice}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
                     </div>
                     <div class="date-panel">
                         <van-tabs v-model="active" @click="tabChange">
                             <van-tab class="sb-tab" v-for="item in dataList" :key="item.index" :title="item.title">
-                                <div class="time-control">
-                                    <span class="ctrl" @click="preByTab"><van-icon name="arrow-left" /></span>
+                                <div class="time-control" @click="selectDate">
+                                    <span class="ctrl"><van-icon name="arrow-left" /></span>
                                     <span class="title">{{currentTime}}</span>
-                                    <span class="ctrl" @click="nextByTab"><van-icon name="arrow" /></span>
+                                    <span class="ctrl"><van-icon name="arrow" /></span>
                                 </div>
                             </van-tab>
                         </van-tabs>
@@ -22,13 +22,49 @@
                         </div>
                     </div>
                 </div>
+            <van-popup v-model="dqShow" position="bottom">
+                <van-picker show-toolbar
+                        :title="pickerTitle"
+                        :columns="pickerList"
+                        @cancel="onCancel"
+                        @confirm="onConfirm"/>
+            </van-popup>
+            <!--// 选择日-->
+            <van-popup v-model="isDayShow" position="bottom">
+                <van-datetime-picker
+                        v-model="currentDay"
+                        type="date"
+                        :min-date="minDate"
+                        :max-date="maxDate"
+                        @confirm="dayConfirm"
+                        @cancel="isDayShow=false"
+                />
+            </van-popup>
+            <!--// 选择月-->
+            <van-popup v-model="isMonthShow" position="bottom">
+                <van-datetime-picker
+                        v-model="currentMonth"
+                        type="year-month"
+                        :min-date="minMonth"
+                        :max-date="maxMonth"
+                        @confirm="monthConfirm"
+                        @cancel="isMonthShow=false"
+                />
+            </van-popup>
+            <!--// 选择年-->
+            <van-popup v-model="isYearShow" position="bottom">
+                <van-picker show-toolbar
+                            :columns="yearList"
+                            @cancel="isYearShow=false"
+                            @confirm="yearConfirm"/>
+            </van-popup>
         </div>
     </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
-    import { Tab, Tabs,Icon } from 'vant';
+    import { Tab, Tabs,Icon,Picker,Popup,DatetimePicker } from 'vant';
     import F2 from '@antv/f2/lib';
     import {getDayLs,getMonthLs,getYearLs} from '../../service';
     import _ from 'lodash/fp';
@@ -88,6 +124,23 @@
         });
         chart.render();
     }
+    Date.prototype.dateFormat = function(fmt) { //author: meizz
+        let o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt))
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        for(let k in o)
+            if(new RegExp("("+ k +")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length===1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        return fmt;
+    };
     export default {
         name: 'Lsqx',
         data() {
@@ -101,19 +154,50 @@
                 ],
                 chartData: [],
                 currentTime:'2018-09-20',
-                currentIndex: 1
+                deviceId:'',
+                currentIndex: 0,
+                pickerTitle: '传感器',
+                pickerList: [],
+                currentDevice: '光照',
+                dqShow:false,
+                isDayShow: false,
+                currentDay: new Date(2018, 9, 1),
+                minDate: new Date(2018, 8, 1),
+                maxDate: new Date(),
+                isMonthShow:false,
+                currentMonth: new Date(2018,9),
+                minMonth: new Date(2018,8),
+                maxMonth: new Date(),
+                currentYear: 2018,
+                yearList: [],
+                isYearShow:false,
+                deviceList: []
             };
         },
         components: {
             [Tab.name]:Tab,
             [Tabs.name]:Tabs,
             [Icon.name]:Icon,
+            [Picker.name]:Picker,
+            [Popup.name]:Popup,
+            [DatetimePicker.name]:DatetimePicker,
             HeadBar,
             DpTab
         },
         mounted() {
-           // this.tabChange(1);
-           this.drawDayChart(261,1,20180901);
+           const { sensorList } = this.$store.state;
+           this.deviceList = sensorList;
+           this.pickerList = sensorList.map(item => {
+               return item.name.replace(/(传感器|\(.*\)|（.*）)/g,'');
+           });
+           // 年
+            const date = new Date();
+            const cYear = date.getFullYear();
+            this.yearList = [cYear];
+            if(sensorList.length>0) {
+                this.deviceId = sensorList[0].id;
+                this.drawDayChart(this.deviceId,1,20180901);
+            }
            const that = this;
             window.onresize = function () {
                _.debounce(function () {
@@ -123,30 +207,37 @@
         },
         methods: {
             tabChange(index) {
-                //console.log(index);
+                console.log(index);
                 this.currentIndex = index;
                if(index ===1) { // 按月统计
                   //this.drawMonthChart(261,2,201809);
+                  // this.currentTime = new Date().dateFormat("yyyy-MM");
                   this.currentTime = '2018-09';
-               } else if(index ===2) {// 按年统计
+               } else if(index ===2) {// 季度统计
                    // this.drawYearChart(261,3,2018);
-                   this.currentTime = '2018';
+                   // 季度
                } else if(index ===3) {// 历年统计
-
+                   this.currentTime = '2018';
                } else { // 按日统计
                  // this.drawDayChart(261,1,20180901);
-                   this.currentTime = '2018-09-01'
+                   this.currentTime = '2018-09-01';
+                   // this.currentTime = new Date().dateFormat("yyyy-MM-dd");
                }
             },
-            preByTab() {
-                //console.log(this.active);
-            },
-            nextByTab() {
-                //console.log(this.active);
+            selectDate() {
+               const index = this.currentIndex;
+               if(index ===1) { // 月
+                   this.isMonthShow = true;
+               } else if(index ===2) { // 季度
+
+               } else if(index === 3) {
+                   this.isYearShow = true;
+               } else {
+                   this.isDayShow = true; // 日
+               }
             },
             drawDayChart(id,type,day) {
                 getDayLs(id,type,day).then(res => {
-                    //console.log(res.data);
                     if(res.data && res.data.results) {
                         this.chartData =res.data.results.map(val => {
                             const ctime = val.day.toString().replace(/^(\d{4})(\d{2})(\d{2})/,'$1-$2-$3') + " "+val.hour+':'+val.min;
@@ -197,6 +288,31 @@
             toHengPage() {
                 this.$store.commit('setChartData',this.chartData);
                 this.$router.push({name:'heng'});
+            },
+            onConfirm(value, index) {
+                this.currentDevice = value;
+                this.deviceId = (this.deviceList[index]&& this.deviceList[index].id) || this.deviceId ;
+                this.dqShow = false;
+                this.tabChange(this.currentIndex);
+            },
+            onCancel() {
+                this.dqShow = false;
+            },
+            dayConfirm(val) {
+                console.log(val);
+                this.currentTime = new Date(val).dateFormat("yyyy-MM-dd");
+                this.isDayShow = false;
+            },
+            monthConfirm(val) {
+                console.log(val);
+                this.currentTime = new Date(val).dateFormat("yyyy-MM");
+                this.isMonthShow = false;
+            },
+            yearConfirm(val) {
+                console.log(val);
+                this.currentTime = val;
+                this.isYearShow = false;
+                // this.drawYearChart();
             }
         }
 
