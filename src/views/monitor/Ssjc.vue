@@ -216,6 +216,7 @@
                             val['properties'] = {};
                         }
                     });
+                    this.$store.commit('setSensorList',results[0]); // 保存传感器列表
                     this.devices = results[0];
                 }).catch(err => {
                     console.log(err);
