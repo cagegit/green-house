@@ -119,12 +119,6 @@ export default new Router({
                   name: 'dp-area',
                   component: () => import('./views/monitor/DpAddress.vue'),
                   props: true
-              },
-              {
-                  path: 'videoMonitor',// 修改大棚地址
-                  name: 'videoMonitor',
-                  component: () => import('./views/monitor/VideoMonitor.vue'),
-                  props: true
               }
           ]
       }, {

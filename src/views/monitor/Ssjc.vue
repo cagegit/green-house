@@ -30,6 +30,15 @@
                             </div>
                         </div>
                     </div>
+
+                    <van-collapse class="ss-card" v-model="activeNames"  accordion>
+                        <van-collapse-item :name="index" icon="play" :title="item.name" v-for="(item,index) in videoList" :key="index">
+                            <video  class="video-content" id="'myPlayer'index" poster="" controls playsInline webkit-playsinline autoplay>
+                                <source :src="item.properties.url_rtmp" type="" />
+                                <source :src="item.properties.url_hls" type="application/x-mpegURL" />
+                            </video>
+                        </van-collapse-item>
+                    </van-collapse>
                     <div style="height: 100px;"></div>
                 </div>
             <van-dialog class="dialog-wrap" :closeOnClickOverlay="true"	 :before-close="beforeClose" v-model="show" :show-cancel-button="true">
@@ -75,12 +84,12 @@
     </v-touch>
 </template>
 <script>
-    import { Tabbar, TabbarItem,Icon,Dialog,Stepper } from 'vant'
+    import { Tabbar, TabbarItem, Icon, Dialog, Stepper, Collapse, CollapseItem } from 'vant'
     import Vue from 'vue'
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
     import Weather from '../../components/Weather'
-    import {getWarings,getSensors,getLatestSensorData,getLimitValue,setLimitValue} from '../../service'
+    import {getWarings,getSensors,getLatestSensorData,getLimitValue,setLimitValue,getVideoListServe} from '../../service'
     Date.prototype.dateFormat = function(fmt) { //author: meizz
         let o = {
             "M+" : this.getMonth()+1,                 //月份
@@ -99,6 +108,8 @@
         return fmt;
     };
     Vue.use(Dialog);
+    Vue.use(Collapse);
+    Vue.use(CollapseItem);
     export default {
         name: 'Ssjc',
         components: {
@@ -124,7 +135,9 @@
                 limit_low:0,
                 limit_high:0,
                 limitValue:[],
-                sendLimitArr:[]
+                sendLimitArr:[],
+                activeNames: ['1'],
+                videoList:[]
             }
         },
         created(){
@@ -136,6 +149,26 @@
             }
             this.getConcatData(pid,token);
             this.countWarings();
+            this.getVideoListData(pid,token);
+        },
+        mounted() {
+            let videoLength = this.videoList.length;
+            let playArr = [];
+            for(let i;i<videoLength;i++){
+                console.log("lllllllllll")
+                console.log(item)
+                playArr[i] = new EZUIPlayer('myPlayer'+i);
+                playArr[i].on('error', function(){
+                    console.log('error');
+                });
+                playArr[i].on('play', function(){
+                    console.log('play');
+                });
+                playArr[i].on('pause', function(){
+                    console.log('pause');
+                });
+            }
+
         },
         methods: {
             changeWaring({limit_low,limit_high,readout_unit}){
@@ -148,14 +181,14 @@
                 if (action === 'confirm') {
                     console.log("pppppppppppppppppppp")
                     this.sendLimitRequest(this.sendLimitArr)
-                    setTimeout(done, 1000);
+                    setTimeout(done, 500);
                 } else {
                     done();
                 }
             },
             getLimitRequest(pid,sensorld){
                 console.log(sensorld)
-                getLimitValue(175,326).then(res=>{
+                getLimitValue(pid,sensorld).then(res=>{
                     console.log("limitValue:")
                     console.log(res)
                     this.limitValue = this.coppyArray(res.data.results);
@@ -235,6 +268,16 @@
                 dw = dw ? dw.replace(/RH/g,''): '';
                 return item.data + dw;
             },
+            getVideoListData(pid,token){
+                getVideoListServe(pid,token).then(res=>{
+                    this.videoList = res.data.results;
+                    for(let item in this.videoList){
+                        this.videoList[item].properties = JSON.parse(this.videoList[item].properties)
+                    }
+                    console.log("gggggggggggg")
+                    console.log(this.videoList)
+                })
+            },
             onSwipeRight() {
                 this.$router.push({name:'main'});
             }
@@ -243,6 +286,11 @@
 </script>
 <style lang="scss" scoped>
     @import "../../sass/variable";
+    .video-content{
+        width:100%;
+        height:300px;
+        background: #ccc;
+    }
     .ss-tip {
         margin: 10px auto;
         button {

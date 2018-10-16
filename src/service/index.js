@@ -256,3 +256,12 @@ export const setLimitValue = (limitArr) => {
         }
     })
 };
+
+/**
+ * 获取视频列表
+ * @param pid 大棚id
+ * @param sensorld 设备id
+ */
+export const getVideoListServe = (pid,token) => {
+    return axios.get(`${DEVICE_URL_PORT}/apps/videos?pid=${pid}&token=${token}`);
+};
