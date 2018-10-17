@@ -7,7 +7,7 @@
 <script>
     import F2 from '@antv/f2/lib';
     import {Icon } from 'vant';
-    function initChart(data) {
+    function initChart(data,alias,mask) {
         const chart = new F2.Chart({
             id: 'mountNode',
             pixelRatio: window.devicePixelRatio || 1,
@@ -17,14 +17,13 @@
         const defs = {
             ctime: {
                 type: 'timeCat',
-                mask: 'HH:MM',
-                tickCount: 5,
+                mask: mask,
                 range: [0, 1]
             },
             data: {
                 tickCount: 5,
                 min: 0,
-                alias: '日均光照'
+                alias: alias
             }
         };
         chart.source(data, defs);
@@ -50,14 +49,8 @@
         chart.tooltip({
             showCrosshairs: true
         });
-        chart.line().position('ctime*data').shape('smooth').style({
-            stroke: '#fff',
-            lineWidth: 1
-        });
-        chart.point().position('ctime*data').shape('smooth').style({
-            stroke: '#fff',
-            lineWidth: 6
-        });
+        chart.line().position('ctime*data').shape('smooth').color('#EED5FF').size(2);
+        chart.point().position('ctime*data').shape('smooth').color('#EED5FF').size(4);
         chart.render();
     }
     export default {
@@ -69,10 +62,15 @@
             return {
                 isShow:false,
                 chartData: [],
-                showTime: 6000
+                showTime: 6000,
+                alias: '光照',
+                mask:''
             }
         },
         mounted() {
+            const { alias,mask} = this.$store.state.chartParams;
+            this.alias =alias;
+            this.mask = mask;
             const arr = this.$store.state.chartData;
             const newArr = [];
             if(arr) {
@@ -81,21 +79,20 @@
                 });
             }
             this.chartData = newArr;
-            console.log(this.chartData);
             const that = this;
-            initChart(that.chartData);
+            this.createChart();
             if(screen.orientation) {
                 console.log('Orientation is ' + screen.orientation.type);
                 screen.orientation.lock('landscape');
                 screen.orientation.onchange =  function(){
-                    initChart(that.chartData);
+                    this.createChart();
                 };
             }
             window.onresize = function () {
-                initChart(that.chartData);
+                this.createChart();
             };
             setTimeout(() => {
-                initChart(this.chartData);
+                this.createChart();
             },1500);
         },
         methods: {
@@ -107,6 +104,9 @@
             },
             goBack() {
                 this.$router.back();
+            },
+            createChart() {
+                initChart(this.chartData,this.alias,this.mask);
             }
         },
         destroyed() {
@@ -129,4 +129,7 @@
        font-size: 18px;
        color: #333;
    }
+   #mountNode {
+        background-image: linear-gradient(-138deg, #2EF4D0 0%, #21BBEF 100%);
+    }
 </style>

@@ -24,7 +24,12 @@ const state = {
     relations: [], // 图片对应关系
     tasks: [],
     ctrlId: 0,
-    chartData: []
+    chartData: [], // 图标数据
+    chartParams: {
+        alias:'光照',
+        mask:''
+    },
+    sensorList: [] // 传感器列表
 };
 
 export default new Vuex.Store({
@@ -83,6 +88,12 @@ export default new Vuex.Store({
         },
         setChartData(state,data) {
            state.chartData = data;
+        },
+        setSensorList(state,data) {
+           state.sensorList = data;
+        },
+        setCharParams(state,params) {
+            state.chartParams = params;
         }
     },
     actions: {

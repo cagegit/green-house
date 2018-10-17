@@ -3,6 +3,7 @@
 import Vue from 'vue';
 import axios from "axios";
 import router from "../router";
+import { Toast } from 'vant';
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -34,6 +35,12 @@ _axios.interceptors.response.use(
       if(response.data && response.data.code === -1 && response.data.msg.indexOf('token失效')>=0){
           router.replace('/login');
           return Promise.reject('token time out');
+          Toast.fail('登录超时！');
+      } else if(response.data && response.data.code === -2){
+          localStorage.clear();
+          router.replace('/login');
+          return Promise.reject('该账号在其它设备登录，强迫下线！');
+          Toast('该账号在其它设备登录，强迫下线！');
       } else  {
           return response;
       }

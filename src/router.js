@@ -119,12 +119,6 @@ export default new Router({
                   name: 'dp-area',
                   component: () => import('./views/monitor/DpAddress.vue'),
                   props: true
-              },
-              {
-                  path: 'videoMonitor',// 视频列表
-                  name: 'videoMonitor',
-                  component: () => import('./views/monitor/VideoMonitor.vue'),
-                  props: true
               }
           ]
       }, {

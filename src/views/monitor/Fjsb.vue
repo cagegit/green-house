@@ -199,7 +199,6 @@
             HeadBar
         },
         created() {
-            console.log(this.id);
             if(this.id) {
                 this.$store.commit('setCtrlId',this.id);
             }
