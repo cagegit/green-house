@@ -121,7 +121,7 @@ export default new Router({
                   props: true
               },
               {
-                  path: 'videoMonitor',// 修改大棚地址
+                  path: 'videoMonitor',// 视频列表
                   name: 'videoMonitor',
                   component: () => import('./views/monitor/VideoMonitor.vue'),
                   props: true
