@@ -2,30 +2,33 @@
     <div class="weather-box" v-if="isShow">
         <div class="wea-box current-day">
             <div class="w-pic">
-                <img :src="currentDay.src" :title="currentDay.weather"/>
+                <img :src="src" :title="weather"/>
+            </div>
+            <div class="w-area">
+                <p class="de-area">{{currentCity}}</p>
             </div>
             <div class="w-degree">
-                <p class="de-1">{{currentDay.degree +'℃'}}</p>
-                <p class="de-2">{{weatherArea}}</p>
+                <p class="de-1">{{degree +'℃'}}</p>
+                <p class="de-2">{{weatherArea()}}</p>
             </div>
             <div class="w-air">
-                 <p class="air-1">空气质量：{{currentDay.aqi_name}}</p>
-                 <p class="air-2">{{windInfo}}</p>
+                 <p class="air-1">空气质量：{{aqi_name}}</p>
+                 <p class="air-2">{{windInfo()}}</p>
             </div>
         </div>
         <div class="b-f-bay">
             <div class="wea-box">
                 <div class="bf-title">明天</div>
                 <div class="bf-desc">
-                    <img :src="tomorrow.src">
-                    <span>{{ tomorrow.minDegree +'～'+tomorrow.maxDegree +'℃'}}</span>
+                    <img :src="tom_src">
+                    <span>{{ tom_minDegree +'～'+tom_maxDegree +'℃'}}</span>
                 </div>
             </div>
             <div class="wea-box">
                 <div class="bf-title">后天</div>
                 <div class="bf-desc">
-                    <img :src="another.src">
-                    <span>{{ tomorrow.minDegree +'～'+tomorrow.maxDegree +'℃'}}</span>
+                    <img :src="ano_src">
+                    <span>{{ ano_minDegree +'～'+ano_maxDegree +'℃'}}</span>
                 </div>
             </div>
         </div>
@@ -50,39 +53,26 @@
        data() {
            return {
                 isShow: false,
-                currentDay: {
-                    src:pic_url+'01.png',
-                    degree:25,
-                    minDegree:23,
-                    maxDegree:32,
-                    windPower:3,
-                    wind:'东风',
-                    aqi:49,
-                    aqi_name:'优',
-                    weather: '晴'
-                },
-               tomorrow: {
-                   minDegree: 10,
-                   maxDegree:30,
-                   src: pic_url+ '03.png'
-               },
-               another: {
-                   minDegree: 20,
-                   maxDegree: 36,
-                   src: pic_url+ '11.png'
-               }
+                src:pic_url+'01.png',
+                degree:25,
+                minDegree:23,
+                maxDegree:32,
+                windPower:3,
+                wind:'东风',
+                aqi:49,
+                aqi_name:'优',
+                weather: '晴',
+                tom_minDegree: 10,
+                tom_maxDegree:30,
+                tom_src: pic_url+ '03.png',
+                ano_minDegree: 20,
+                ano_maxDegree: 36,
+                ano_src: pic_url+ '11.png',
+                currentCity:'北京'
            }
        },
        mounted() {
            this.getLocationAndWeather();
-       },
-       computed: {
-           weatherArea: function () {
-              return `${this.currentDay.minDegree}～${this.currentDay.maxDegree}℃`;
-           },
-           windInfo: function () {
-               return `${this.currentDay.wind}：${this.currentDay.windPower}级`;
-           }
        },
        methods: {
            getLocationAndWeather() {
@@ -97,6 +87,7 @@
                    if(data && data.content && data.content.address_detail) {
                        this.isShow = true;
                        const {province,city} = data.content.address_detail;
+                       this.currentCity = city;
                        this.getWeather(province,city);
                        this.getAir(province,city);
                    }
@@ -113,28 +104,26 @@
                    // console.log(res);
                    if(res.status ===200 && res.data && res.data.forecast_24h && res.data.observe) {
                        const {degree,weather_code,weather,wind_power,wind_direction} = res.data.observe;
-                       this.currentDay.degree = degree;
-                       this.currentDay.src = pic_url + weather_code + '.png';
-                       this.currentDay.weather = weather;
-                       this.currentDay.wind = WIND[wind_direction];
-                       this.currentDay.windPower = wind_power;
+                       this.degree = degree;
+                       this.src = pic_url + weather_code + '.png';
+                       this.weather = weather;
+                       this.wind = WIND[wind_direction];
+                       this.windPower = wind_power;
                        const weatherList =  res.data.forecast_24h;
-                       if(weatherList.length>0) {
+                       if(weatherList) {
                            if(weatherList[1]){
-                               // this.currentDay.wind =weatherList[1].day_wind_direction;
-                               // this.currentDay.windPower = weatherList[1].day_wind_power;
-                               this.currentDay.minDegree = weatherList[1].min_degree;
-                               this.currentDay.maxDegree = weatherList[1].max_degree;
+                               this.minDegree = weatherList[1].min_degree;
+                               this.maxDegree = weatherList[1].max_degree;
                            }
                            if(weatherList[2]){
-                               this.tomorrow.minDegree = weatherList[2].min_degree;
-                               this.tomorrow.maxDegree = weatherList[2].max_degree;
-                               this.tomorrow.src = pic_url+ weatherList[2].day_weather_code +'.png';
+                               this.tom_minDegree = weatherList[2].min_degree;
+                               this.tom_maxDegree = weatherList[2].max_degree;
+                               this.tom_src = pic_url+ weatherList[2].day_weather_code +'.png';
                            }
                            if(weatherList[3]){
-                               this.another.minDegree = weatherList[3].min_degree;
-                               this.another.maxDegree = weatherList[3].max_degree;
-                               this.another.src = pic_url+ weatherList[3].day_weather_code +'.png';
+                               this.ano_minDegree = weatherList[3].min_degree;
+                               this.ano_maxDegree = weatherList[3].max_degree;
+                               this.ano_src = pic_url+ weatherList[3].day_weather_code +'.png';
                            }
                        }
                    }
@@ -149,10 +138,16 @@
                    }
                    if(res.status ===200 && res.data && res.data.air) {
                        const {aqi,aqi_name}= res.data.air;
-                       this.currentDay.aqi = aqi;
-                       this.currentDay.aqi_name = aqi_name;
+                       this.aqi = aqi;
+                       this.aqi_name = aqi_name;
                    }
                });
+           },
+           weatherArea() {
+              return `${this.minDegree}～${this.maxDegree}℃`;
+           },
+           windInfo() {
+               return `${this.wind}：${this.windPower}级`;
            }
        }
    }
@@ -173,6 +168,17 @@
         flex: 1;
         justify-content: space-around;
         padding: 5px 10px;
+    }
+    .w-area{
+        display: flex;
+        margin-left: -10px;
+        .de-area {
+            align-self: center;
+            font-size: 16px;
+            font-weight: 700;
+            word-break: break-all;
+            text-overflow: ellipsis;
+        }
     }
     .w-pic {
         img {
