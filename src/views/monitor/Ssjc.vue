@@ -42,7 +42,7 @@
                     <div style="height: 100px;"></div>
                 </div>
             <van-dialog class="dialog-wrap" :closeOnClickOverlay="true"	 :before-close="beforeClose" v-model="show" :show-cancel-button="true">
-                <div class="dia-content" v-for="(item,index) in sendLimitArr">
+                <div class="dia-content" v-for="(item,index) in sendLimitArr" :key="index">
                     <div class="title">{{item.name}}值设置</div>
                     <div class="gj-box">
                         <div class="flex-st">

@@ -29,7 +29,8 @@ const state = {
         alias:'光照',
         mask:''
     },
-    sensorList: [] // 传感器列表
+    sensorList: [], // 传感器列表
+    pengProperty: {} // 大棚属性
 };
 
 export default new Vuex.Store({
@@ -94,6 +95,9 @@ export default new Vuex.Store({
         },
         setCharParams(state,params) {
             state.chartParams = params;
+        },
+        setPengProperty(state,property) {
+             state.pengProperty = property;
         }
     },
     actions: {

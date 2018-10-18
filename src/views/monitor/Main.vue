@@ -9,7 +9,7 @@
                 <button @click="showDqPanel"><div class="in-box"><span>{{area}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
                 <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
-            <DapCell v-for="item in daList" :key="item.id" :title="item.name" :src="src" :isMark="true" @click.native="toNextPage(item.id)"></DapCell>
+            <DapCell v-for="item in daList" :key="item.id" :title="item.name" :src="src" :isMark="true" @click.native="toNextPage(item)"></DapCell>
             <div style="margin-bottom: 60px;"></div>
             <van-popup v-model="dqShow" position="bottom">
                 <van-picker show-toolbar :columns="areaNameList" @cancel="dqShow=false" @confirm="dpConfirm"/>
@@ -64,10 +64,17 @@
             this.locates(this.token);
         },
         methods: {
-            toNextPage(pid) {
+            toNextPage(item) {
                 //console.log('pid:'+pid);
                 // pid = 176;
-                this.$store.commit('setPid',pid);
+                const pro = {};
+                try{
+                   pro =JSON.parse(item.properties);
+                } catch(e) {
+                   console.log(err);
+                }
+                this.$store.commit('setPid',item.id);
+                this.$store.commit('setPengProperty',pro);
                 this.$router.push("/monitor/ssjc");
             },
             showDqPanel(){
