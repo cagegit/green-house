@@ -67,7 +67,7 @@
                 mask:''
             }
         },
-        mounted() {
+        created() {
             const { alias,mask} = this.$store.state.chartParams;
             this.alias =alias;
             this.mask = mask;
@@ -80,20 +80,19 @@
             }
             this.chartData = newArr;
             const that = this;
-            this.createChart();
+            setTimeout(() => {
+                this.createChart();
+            },400);
             if(screen.orientation) {
                 console.log('Orientation is ' + screen.orientation.type);
                 screen.orientation.lock('landscape');
                 screen.orientation.onchange =  function(){
-                    this.createChart();
+                    that.createChart();
                 };
             }
             window.onresize = function () {
-                this.createChart();
+                that.createChart();
             };
-            setTimeout(() => {
-                this.createChart();
-            },1500);
         },
         methods: {
             showClose() {

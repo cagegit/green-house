@@ -149,7 +149,7 @@ export const getWaringList = (userId, status, pageNum) =>{
  * 轮询接口
  */
 export  const  getRepeateWaringList = (id) => {
-    return interval(1000*10).pipe(
+    return interval(1000*20).pipe(
         switchMap(val =>  from(getWarings('1',id,'1','2018-09-01',''))),
         distinctUntilChanged((p,q) => {
             if((p.data && p.data.results) && (q.data && q.data.results)) {
@@ -243,8 +243,7 @@ export const getLimitValue = (pid,sensorld) => {
 
 /**
  * 设定上下限值
- * @param pid 大棚id
- * @param sensorld 设备id
+ * @param limitArr
  */
 export const setLimitValue = (limitArr) => {
     return axios({
@@ -260,8 +259,8 @@ export const setLimitValue = (limitArr) => {
 /**
  * 获取视频列表
  * @param pid 大棚id
- * @param sensorld 设备id
+ * @param token
  */
 export const getVideoListServe = (pid,token) => {
-    return axios.get(`${DEVICE_URL_PORT}/apps/videos?pid=${pid}&token=${token}`);
+    return axios.get(`${DEVICE_URL_PORT}/apps/videos?pid=${pid}&token=${encodeURIComponent(token)}`);
 };

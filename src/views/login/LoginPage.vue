@@ -214,8 +214,8 @@ export default {
     background: #FFFFFF;
     box-shadow: 0 0.16rem 0.32rem 0 rgba(84,160,156,0.09);
     border-radius: 0.213333rem;
-    height:1.493333rem;
     margin-bottom:0.48rem;
+    padding: 16px 0;
     text-align:center;
 }
 .van-cell__title{

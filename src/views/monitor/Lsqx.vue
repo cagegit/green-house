@@ -67,7 +67,7 @@
     import F2 from '@antv/f2/lib';
     import {getDayLs,getMonthLs,getYearLs} from '../../service';
     import _ from 'lodash/fp';
-    const can_width = document.getElementById('app').offsetWidth - 50;
+    const can_width = document.body.offsetWidth - 45;
     const can_height = 250;
     function initChart(data,aliasName,masks) {
         let ticks = 5;

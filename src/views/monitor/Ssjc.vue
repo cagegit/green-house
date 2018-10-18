@@ -25,8 +25,8 @@
                                 <img :src="toImg(item.name)"/> <span>{{toLiang(item)}}</span>
                             </div>
                             <div class="sb-next">
-                                <p>更新时间：{{item.time}}</p>
-                                <p><span class="sb-pink">{{item.properties.sensorType}}级</span></p>
+                                <p style="color:#D3D1CF">更新时间</p>
+                                <p>{{item.time}}</p>
                             </div>
                         </div>
                     </div>
@@ -129,9 +129,9 @@
                 weather: [],
                 warings: 0,
                 devices: [],
-                sfImg: require("@/assets/img/tr@2x.png"),
-                phImg: require("@/assets/img/PH@2x.png"),
-                wdImg: require("@/assets/img/wd@2x.png"),
+                sfImg: require("@/assets/img/tr@3x.png"),
+                phImg: require("@/assets/img/PH@3x.png"),
+                wdImg: require("@/assets/img/wd@3x.png"),
                 limit_low:0,
                 limit_high:0,
                 limitValue:[],
@@ -143,6 +143,7 @@
         created(){
            // this.getLocationAndWeather();
             const {pid,token} = this.$store.state;
+            // console.log(pid);
             if(!pid) {
                 this.$router.back();
                 return;
@@ -179,18 +180,17 @@
             },
             beforeClose(action, done) {
                 if (action === 'confirm') {
-                    // console.log("pppppppppppppppppppp")
-                    this.sendLimitRequest(this.sendLimitArr)
+                    this.sendLimitRequest(this.sendLimitArr);
                     setTimeout(done, 500);
                 } else {
                     done();
                 }
             },
             getLimitRequest(pid,sensorld){
-                console.log(sensorld)
+                // console.log(sensorld)
                 getLimitValue(pid,sensorld).then(res=>{
-                    console.log("limitValue:")
-                    console.log(res)
+                    // console.log("limitValue:");
+                    // console.log(res);
                     this.limitValue = this.coppyArray(res.data.results);
                     this.sendLimitArr = this.coppyArray(res.data.results);
                     this.show = true;
@@ -199,8 +199,8 @@
             sendLimitRequest(limitArr){
                 let sendItemArr = this.coppyArray(this.sendLimitArr);
                 setLimitValue(sendItemArr).then(res=>{
-                    console.log("res  setLimitValue:")
-                    console.log(res)
+                    // console.log("res  setLimitValue:")
+                    // console.log(res)
                 })
             },
             coppyArray(arr){
@@ -273,11 +273,11 @@
                 getVideoListServe(pid,token).then(res=>{
                     this.videoList = res.data.results;
                     for(let item in this.videoList){
-                        this.videoList[item].properties = JSON.parse(this.videoList[item].properties)
+                        this.videoList[item].properties = JSON.parse(this.videoList[item].properties);
                     }
-                    // console.log("gggggggggggg")
-                    // console.log(this.videoList)
-                })
+                }).catch(err => {
+                   console.log(err);
+                });
             },
             onSwipeRight() {
                 this.$router.push({name:'main'});
