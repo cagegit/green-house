@@ -43,7 +43,8 @@
                 token: this.$store.state.token,
                 dqShow: false,
                 yqShow: false,
-                user: {}
+                user: {},
+                currentPengInfo: '' // 当前园区信息
             }
         },
         components: {
@@ -67,11 +68,12 @@
             toNextPage(item) {
                 //console.log('pid:'+pid);
                 // pid = 176;
-                const pro = {};
+                let pro = null;
                 try{
-                   pro =JSON.parse(item.properties);
+                   pro =JSON.parse(this.currentPengInfo);
                 } catch(e) {
-                   console.log(err);
+                   console.log(e);
+                   pro = {};
                 }
                 this.$store.commit('setPid',item.id);
                 this.$store.commit('setPengProperty',pro);
@@ -96,6 +98,7 @@
                         if(this.areaList.length>0) {
                             this.areaNameList = this.areaList.map(v => v.name);
                             this.area = this.areaList[0].name;
+                            this.currentPengInfo = this.areaList[0].properties;
                             this.yqList = this.areaList[0].children;
                             if(this.yqList.length>0) {
                                 this.yqNameList = this.yqList.map(v => v.name);
@@ -115,6 +118,7 @@
                 this.areaList.forEach((val) => {
                     if(this.area === val.name) {
                         area = Object.assign({},val);
+                        this.currentPengInfo = area.properties;
                     }
                 });
                 if(area && area.children) {

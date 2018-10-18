@@ -72,10 +72,11 @@
            }
        },
        mounted() {
-           const {province,city,district} = this.$store.state;
-           const prov = province || '北京市';
-           const cit = city || '北京市';
-           const distr = district || '';
+           const {province,city,district} = this.$store.state.pengProperty;
+           let prov = province || '北京市';
+           let cit = city || '北京市';
+           let distr = district || '';
+           this.currentCity = distr || cit;
            // this.getLocationAndWeather();
            this.getWeather(prov,cit,distr); // 园区的天气
        },
@@ -92,7 +93,6 @@
                    if(data && data.content && data.content.address_detail) {
                        this.isShow = true;
                        const {province,city} = data.content.address_detail;
-                       this.currentCity = city;
                        this.getWeather(province,city);
                        this.getAir(province,city);
                    }

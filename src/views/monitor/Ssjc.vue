@@ -31,7 +31,7 @@
                         </div>
                     </div>
 
-                    <van-collapse class="ss-card" v-model="activeNames"  accordion>
+                    <van-collapse class="ss-card" v-if="videoList.length>0" v-model="activeNames"  accordion>
                         <van-collapse-item :name="index" icon="play" :title="item.name" v-for="(item,index) in videoList" :key="index">
                             <video  class="video-content" id="'myPlayer'index" poster="" controls playsInline webkit-playsinline autoplay>
                                 <source :src="item.properties.url_rtmp" type="" />
@@ -155,8 +155,8 @@
             let videoLength = this.videoList.length;
             let playArr = [];
             for(let i;i<videoLength;i++){
-                console.log("lllllllllll")
-                console.log(item)
+                // console.log("lllllllllll")
+                // console.log(item)
                 playArr[i] = new EZUIPlayer('myPlayer'+i);
                 playArr[i].on('error', function(){
                     console.log('error');
@@ -179,7 +179,7 @@
             },
             beforeClose(action, done) {
                 if (action === 'confirm') {
-                    console.log("pppppppppppppppppppp")
+                    // console.log("pppppppppppppppppppp")
                     this.sendLimitRequest(this.sendLimitArr)
                     setTimeout(done, 500);
                 } else {
@@ -275,8 +275,8 @@
                     for(let item in this.videoList){
                         this.videoList[item].properties = JSON.parse(this.videoList[item].properties)
                     }
-                    console.log("gggggggggggg")
-                    console.log(this.videoList)
+                    // console.log("gggggggggggg")
+                    // console.log(this.videoList)
                 })
             },
             onSwipeRight() {
