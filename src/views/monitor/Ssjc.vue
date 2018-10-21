@@ -32,17 +32,21 @@
                     </div>
 
                     <van-collapse class="ss-card" v-if="videoList.length>0" v-model="activeNames"  accordion>
-                        <van-collapse-item :name="index" icon="play" :title="item.name" v-for="(item,index) in videoList" :key="index">
-                            <video  class="video-content" id="'myPlayer'index" poster="" controls playsInline webkit-playsinline autoplay>
-                                <source :src="item.properties.url_rtmp" type="" />
-                                <source :src="item.properties.url_hls" type="application/x-mpegURL" />
-                            </video>
-                        </van-collapse-item>
+                        <div class="video-item-wrap" v-for="(item,index) in videoList" :key="index">
+                            <img class="video-logo" style=" display: block !important;" src="@/assets/img/视频copy@3x.png" alt="">
+                            <van-collapse-item :name="index" :title="item.name"  class="call-item">
+                                <video  class="video-content" id="'myPlayer'index" poster="" controls playsInline webkit-playsinline autoplay>
+                                    <source :src="item.properties.url_rtmp" type="" />
+                                    <source :src="item.properties.url_hls" type="application/x-mpegURL" />
+                                </video>
+                            </van-collapse-item>
+                        </div>
                     </van-collapse>
                     <div style="height: 100px;"></div>
                 </div>
             <van-dialog class="dialog-wrap" :closeOnClickOverlay="true"	 :before-close="beforeClose" v-model="show" :show-cancel-button="true">
-                <div class="dia-content" v-for="(item,index) in sendLimitArr" :key="index">
+                <div v-if="sendLimitArr.length == 0" class="dia-content no-limite">无极限值设置</div>
+                <div  v-else class="dia-content" v-for="(item,index) in sendLimitArr" :key="index">
                     <div class="title">{{item.name}}值设置</div>
                     <div class="gj-box">
                         <div class="flex-st">
@@ -337,6 +341,20 @@
                 margin-right: 5px;
             }
         }
+        .video-item-wrap{
+            position: relative;
+            .video-logo{
+                position: absolute;
+                width:22px;
+                height:18px;
+                top:14px;
+                left:2px;
+                display: block !important;
+            }
+            .call-item{
+                margin-left:24px;
+            }
+        }
     }
     .sb-pre{
         img {
@@ -382,60 +400,70 @@
         padding: 0 3px !important;
     }
     .dialog-wrap{
-        height:450px;
+        min-height:256px;
+        max-height: 450px;
+        height: auto;
         overflow: scroll;
-    }
-    .dia-content {
-        padding: 20px;
-        border-bottom:1px solid #ccc;
-        .title{
-            font-size: 16px;
-            /*font-weight: bold;*/
-            color: #4D4C4C;
-            letter-spacing: 1.7px;
-        }
-        .gj-box{
-            padding: 20px 40px 0;
-        }
-        .flex-st{
-            display: flex;
-            flex: 1;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            line-height: 40px;
-            .st-left{
-                padding-right: 20px;
-                width: 30%;
+        .dia-content {
+            padding: 15px 15px 4px 15px;
+            border-bottom:1px solid #ccc;
+            .title{
+                font-size: 16px;
+                /*font-weight: bold;*/
                 color: #4D4C4C;
+                letter-spacing: 1.7px;
             }
+            .gj-box{
+                padding: 10px 20px 0;
+            }
+            .flex-st{
+                display: flex;
+                flex: 1;
+                justify-content: space-between;
+                margin-bottom: 2px;
+                line-height: 40px;
+                .st-left{
+                    padding-right: 20px;
+                    width: 30%;
+                    color: #4D4C4C;
+                }
+            }
+            .gj-set {
+                display: flex;
+                flex: 1;
+                justify-content: space-between;
+                width: 100%;
+                .sb {
+                    text-align: center;
+                }
+                button {
+                    border: 1px solid #191A1D;
+                    width: 39px;
+                    /* height: 35px; */
+                    text-align: center;
+                    color: #191A1D;
+                    background-color: #fff;
+                    line-height: 20px;
+                    height: 20px;
+                    margin-top: 10px;
+                }
+            }
+
         }
-        .gj-set {
+        .no-limite{
+            width:100%;
+            height:200px;
             display: flex;
-            flex: 1;
-            justify-content: space-between;
-            width: 100%;
-            .sb {
-                text-align: center;
-            }
-            button {
-                border: 1px solid #191A1D;
-                width: 39px;
-                /* height: 35px; */
-                text-align: center;
-                color: #191A1D;
-                background-color: #fff;
-                line-height: 20px;
-                height: 20px;
-                margin-top: 10px;
-            }
-            input {
-                width: 80%;
-                background: #EFEFEF;
-                border-radius: 5px;
-                padding: 0 5px;
-                text-align: center;
-                height: 30px;
-            }
+            justify-content: center;
+            align-items: center;
         }
+    }
+
+</style>
+<style>
+    .van-stepper__input{
+        width: 45% !important;
+        border-radius: 4px;
+        text-align: center;
     }
 </style>
