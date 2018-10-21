@@ -1,5 +1,5 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+    <v-touch v-on:swiperight="onSwipeRight" v-on:swipeleft="onSwipeLeft" tag="div">
         <div>
             <HeadBar title="历史曲线" link="/monitor/main"></HeadBar>
             <DpTab :active="3"></DpTab>
@@ -65,8 +65,7 @@
     import DpTab from '../../components/DpTab'
     import { Tab, Tabs,Icon,Picker,Popup,DatetimePicker } from 'vant';
     import F2 from '@antv/f2/lib';
-    import {getDayLs,getMonthLs,getYearLs} from '../../service';
-    import _ from 'lodash/fp';
+    import {getDayLs,getMonthLs,getYearLs,axiosSource} from '../../service';
     const can_width = document.body.offsetWidth - 45;
     const can_height = 250;
     function initChart(data,aliasName,masks) {
@@ -174,7 +173,8 @@
                     day:1,
                     month:2,
                     year: 3
-                }
+                },
+                isFetchIng: false
             };
         },
         components: {
@@ -203,7 +203,7 @@
             }
            const that = this;
             window.onresize = function () {
-               _.debounce(function () {
+               setTimeout(function () {
                    initChart(that.chartData);
                },300);
             };
@@ -211,6 +211,9 @@
         methods: {
             tabChange(index) {
                 console.log(index);
+                if(this.isFetchIng) {
+                    axiosSource.cancel('666');
+                }
                if(index ===1) { // 按月统计
                   if(this.currentIndex===0) {
                       this.currentTime = this.currentTime.slice(0,-3);
@@ -221,7 +224,11 @@
                } else if(index ===2) {// 季度统计
                    // 季度
                } else if(index ===3) {// 历年统计
-                   this.currentTime = this.currentTime.slice(0,4);
+                    if(this.currentTime) {
+                        this.currentTime = this.currentTime.slice(0,4);
+                    } else {
+                        this.currentTime = '2018';
+                    }
                    this.drawYearChart(this.currentTime);
                } else { // 按日统计
                    if(this.currentIndex===1) {
@@ -229,7 +236,7 @@
                    } else {
                       this.currentTime = '2018-09-01';
                    }
-                   this.drawYearChart(this.currentTime.replace(/-/g,''));
+                   this.drawDayChart(this.currentTime.replace(/-/g,''));
                }
                this.currentIndex = index;
             },
@@ -252,11 +259,14 @@
                    return;
                 }
                  this.currentMask = 'HH:MM';
+                this.isFetchIng = true;
                 getDayLs(id,type,day).then(res => {
+                    this.isFetchIng = false;
                     if(res.data && res.data.results && Array.isArray(res.data.results)) {
                         this.chartData =res.data.results.map(val => {
                             const ctime = val.day.toString().replace(/^(\d{4})(\d{2})(\d{2})/,'$1-$2-$3') + " "+val.hour+':'+val.min;
-                            return {data:val.data,ctime:ctime};
+                            let num = typeof(val.data)==='number'?val.data.toFixed(2):val.data;
+                            return {data:num,ctime:ctime};
                         });
                         if(this.chartData.length>0) {
                             this.currentTime = this.chartData[0].ctime.substr(0,10);
@@ -267,6 +277,7 @@
                     }
                 }).catch(err => {
                     console.log(err);
+                    this.isFetchIng = false;
                 });
             },
             drawMonthChart(month) {
@@ -276,13 +287,14 @@
                    return;
                 }
                 this.currentMask = 'YYYY-MM-DD';
+                this.isFetchIng = true;
                 getMonthLs(id,type,month).then(res => {
-                    //console.log(res.data);
-                         if(res.data && res.data.results && Array.isArray(res.data.results)) {
-
+                         this.isFetchIng = false;
+                     if(res.data && res.data.results && Array.isArray(res.data.results)) {
                         this.chartData =res.data.results.map(item => {
                              const dateStr = item._id.toString().replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3');
-                             return {data:item.data_avg,ctime:dateStr};
+                             let num = typeof(item.data_avg)==='number'?item.data_avg.toFixed(2):item.data_avg;
+                             return {data:num,ctime:dateStr};
                         });
                         setTimeout(() => {
                            initChart(this.chartData,this.currentDevice,this.currentMask);
@@ -290,6 +302,7 @@
                     }
                 }).catch(err => {
                     console.log(err);
+                    this.isFetchIng = false;
                 });
             },
             drawYearChart(year) {
@@ -299,12 +312,15 @@
                    return;
                 }
                 this.currentMask = 'YYYY-MM';
+                this.isFetchIng = true;
                 getYearLs(id,type,year).then(res => {
-                    //console.log(res.data);
+                    this.isFetchIng = false;
                     if(res.data && res.data.results && Array.isArray(res.data.results)) {
                         this.chartData =res.data.results.map(item => {
-                            const dateStr = item._id.toString().replace(/(\d{4})(\d{2})/,'$1-$2');
-                             return {data:item.avg,ctime:dateStr};
+                            let dateStr = item._id.toString().replace(/(\d{4})(\d{2})/,'$1-$2');
+                            let num = typeof(item.avg)==='number'?item.avg.toFixed(2):item.avg;
+                            console.log(num,dateStr);
+                             return {data: num,ctime: dateStr};
                         });
                         setTimeout(() => {
                            initChart(this.chartData,this.currentDevice,this.currentMask);
@@ -312,10 +328,14 @@
                     }
                 }).catch(err => {
                     console.log(err);
+                    this.isFetchIng = false;
                 });
             },
             onSwipeRight() {
-                this.$router.push({name:'main'});
+                this.$router.push({name:'sbkz'});
+            },
+            onSwipeLeft() {
+                this.$router.push({name:'ssxx'});
             },
             toHengPage() {
                 this.$store.commit('setChartData',this.chartData);
@@ -387,12 +407,6 @@
         margin: 15px auto;
         padding: 10px 15px;
         line-height: 24px;
-        .van-tab--active span{
-                color: $main-border-color !important;
-        }
-        .van-tabs__line {
-            background-color: $main-border-color !important;
-        }
     }
     #mountNode {
         background-image: linear-gradient(-138deg, #2EF4D0 0%, #21BBEF 100%);

@@ -80,9 +80,13 @@
             }
             this.chartData = newArr;
             const that = this;
+            let timer = 400;
+            if (cordova && cordova.platformId === 'android') {
+                timer = 1200;
+            }
             setTimeout(() => {
                 this.createChart();
-            },400);
+            },timer);
             if(screen.orientation) {
                 console.log('Orientation is ' + screen.orientation.type);
                 screen.orientation.lock('landscape');

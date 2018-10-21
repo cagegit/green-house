@@ -1,9 +1,12 @@
 import { Observable,from,pipe,interval } from 'rxjs';
 import { switchMap,map,distinctUntilChanged } from 'rxjs/operators';
+import  { Source} from "./cancelToken";
 let warObservable$;
 const DEVICE_URL= 'http://giot.kjxt.tech:3030';
 const DEVICE_URL_PORT= 'http://giot.kjxt.tech:3000';
 const FORGET_PASSWORD_URL='http://127.0.0.1:3000';
+
+export  const  axiosSource = Source;
 /**
  * 登录
  * */
@@ -49,19 +52,25 @@ export const getCtrlStatusByDeviceId = (deviceId) => axios.get(`${DEVICE_URL}/st
 /**
  * 设置值
  * */
-export const setController = (deviceId,sensorChannel,val,gatewayID) => axios.get(`${DEVICE_URL}/gateway/tcpcmd?cmd=control_power&value=${deviceId}:${sensorChannel}*${val}&gatewayId=${gatewayID}`);
+export const setController = (deviceId,sensorChannel,val,gatewayID,ctrlId) => axios.get(`${DEVICE_URL}/gateway/tcpcmd?cmd=control_power&value=${deviceId}:${sensorChannel}*${val}&gatewayId=${gatewayID}&id=${ctrlId}`);
 /**
  *  获取日 监控数据
  * */
-export const getDayLs = (id,type,day) => axios.get(`${DEVICE_URL}/stat/sensordata?id=${id}&type=${type}&day=${day}`);
+export const getDayLs = (id,type,day) => axios.get(`${DEVICE_URL}/stat/sensordata?id=${id}&type=${type}&day=${day}`, {
+    cancelToken: Source.token
+});
 /**
  *  获取月 监控数据
  * */
-export const getMonthLs = (id,type,month) => axios.get(`${DEVICE_URL}/stat/sensordata?id=${id}&type=${type}&month=${month}`);
+export const getMonthLs = (id,type,month) => axios.get(`${DEVICE_URL}/stat/sensordata?id=${id}&type=${type}&month=${month}`, {
+    cancelToken: Source.token
+});
 /**
  *  获取年 监控数据
  * */
-export const getYearLs = (id,type,year) => axios.get(`${DEVICE_URL}/stat/sensordata?id=${id}&type=${type}&yeart=${year}`);
+export const getYearLs = (id,type,year) => axios.get(`${DEVICE_URL}/stat/sensordata?id=${id}&type=${type}&yeart=${year}`, {
+    cancelToken: Source.token
+});
 /**
  *  获取我的
  * */

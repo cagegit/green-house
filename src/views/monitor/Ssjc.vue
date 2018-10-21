@@ -1,5 +1,5 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+    <v-touch v-on:swiperight="onSwipeRight" v-on:swipeleft="onSwipeLeft" tag="div">
         <div>
             <HeadBar title="实时监测" link="/monitor/main"></HeadBar>
             <DpTab :active="1"></DpTab>
@@ -133,9 +133,9 @@
                 weather: [],
                 warings: 0,
                 devices: [],
-                sfImg: require("@/assets/img/tr@3x.png"),
-                phImg: require("@/assets/img/PH@3x.png"),
-                wdImg: require("@/assets/img/wd@3x.png"),
+                sfImg: require("@/assets/tr@3x.png"),
+                phImg: require("@/assets/ph@3x.png"),
+                wdImg: require("@/assets/wd@3x.png"),
                 limit_low:0,
                 limit_high:0,
                 limitValue:[],
@@ -285,6 +285,9 @@
             },
             onSwipeRight() {
                 this.$router.push({name:'main'});
+            },
+            onSwipeLeft() {
+                this.$router.push({name:'sbkz'});
             }
         }
     }

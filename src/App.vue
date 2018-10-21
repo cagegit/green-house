@@ -106,4 +106,10 @@
        color: $btn-color !important;
        font-size: 16px;
    }
+   .van-tab--active span{
+       color: $main-border-color !important;
+   }
+   .van-tabs__line {
+       background-color: $main-border-color !important;
+   }
 </style>

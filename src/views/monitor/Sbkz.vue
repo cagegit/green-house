@@ -1,5 +1,5 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
+    <v-touch v-on:swiperight="onSwipeRight" v-on:swipeleft="onSwipeLeft" tag="div">
         <div>
             <HeadBar title="设备控制" link="/monitor/main"></HeadBar>
             <DpTab :active="2"></DpTab>
@@ -109,7 +109,10 @@
                },5000);
             },
             onSwipeRight() {
-               this.$router.push({name:'main'});
+               this.$router.push({name:'ssjc'});
+            },
+            onSwipeLeft() {
+                this.$router.push({name:'lsqx'});
             }
         }
     }
