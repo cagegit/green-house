@@ -68,21 +68,23 @@
     import {getDayLs,getMonthLs,getYearLs,axiosSource} from '../../service';
     const can_width = document.body.offsetWidth - 45;
     const can_height = 250;
-    function initChart(data,aliasName,masks) {
+    const initLsqxChart = function(data,aliasName,masks) {
         let ticks = 5;
+        let type = 'timeCat';
         if(masks==='YYYY-MM-DD') {
             ticks = 4;
-        }
+        } else if(masks ==='YYYY-MM') {
+            type = 'cat';
+        } else {}
         const chart = new F2.Chart({
             id: 'mountNode',
             pixelRatio: window.devicePixelRatio || 1,
             width: can_width,
             height: can_height
         });
-
         const defs = {
             ctime: {
-                type: 'timeCat',
+                type: type,
                 mask: masks,
                 tickCount: ticks,
                 range: [0, 1]
@@ -119,7 +121,7 @@
         chart.line().position('ctime*data').shape('smooth').color('#EED5FF').size(2);
         chart.point().position('ctime*data').shape('smooth').color('#EED5FF').size(4);
         chart.render();
-    }
+    };
     Date.prototype.dateFormat = function(fmt) { //author: meizz
         let o = {
             "M+" : this.getMonth()+1,                 //月份
@@ -145,8 +147,8 @@
                 dataList: [
                     {title:'日',index:1},
                     {title:'月',index:2},
-                    {title:'季度',index:4},
-                    {title:'年',index:3}
+                    {title:'季度',index:3},
+                    {title:'年',index:4}
                 ],
                 chartData: [],
                 currentTime:'2018-09-20',
@@ -204,38 +206,25 @@
            const that = this;
             window.onresize = function () {
                setTimeout(function () {
-                   initChart(that.chartData);
+                   initLsqxChart(that.chartData);
                },300);
             };
         },
         methods: {
             tabChange(index) {
-                console.log(index);
                 if(this.isFetchIng) {
                     axiosSource.cancel('666');
                 }
                if(index ===1) { // 按月统计
-                  if(this.currentIndex===0) {
-                      this.currentTime = this.currentTime.slice(0,-3);
-                   } else {
-                       this.currentTime = '2018-09';
-                   }
+                   this.currentTime = '2018-09';
                   this.drawMonthChart(this.currentTime.replace(/-/g,''));
                } else if(index ===2) {// 季度统计
                    // 季度
                } else if(index ===3) {// 历年统计
-                    if(this.currentTime) {
-                        this.currentTime = this.currentTime.slice(0,4);
-                    } else {
-                        this.currentTime = '2018';
-                    }
-                   this.drawYearChart(this.currentTime);
+                   this.currentTime = '2018';
+                   this.drawYChart(this.currentTime);
                } else { // 按日统计
-                   if(this.currentIndex===1) {
-                      this.currentTime = this.currentTime+'-01';
-                   } else {
-                      this.currentTime = '2018-09-01';
-                   }
+                   this.currentTime = '2018-09-01';
                    this.drawDayChart(this.currentTime.replace(/-/g,''));
                }
                this.currentIndex = index;
@@ -272,7 +261,7 @@
                             this.currentTime = this.chartData[0].ctime.substr(0,10);
                         }
                         setTimeout(() => {
-                           initChart(this.chartData,this.currentDevice,this.currentMask);
+                            initLsqxChart(this.chartData,this.currentDevice,this.currentMask);
                         },500);
                     }
                 }).catch(err => {
@@ -291,13 +280,13 @@
                 getMonthLs(id,type,month).then(res => {
                          this.isFetchIng = false;
                      if(res.data && res.data.results && Array.isArray(res.data.results)) {
-                        this.chartData =res.data.results.map(item => {
+                         this.chartData =res.data.results.map(item => {
                              const dateStr = item._id.toString().replace(/(\d{4})(\d{2})(\d{2})/,'$1-$2-$3');
                              let num = typeof(item.data_avg)==='number'?item.data_avg.toFixed(2):item.data_avg;
                              return {data:num,ctime:dateStr};
                         });
                         setTimeout(() => {
-                           initChart(this.chartData,this.currentDevice,this.currentMask);
+                            initLsqxChart(this.chartData,this.currentDevice,this.currentMask);
                         },500);
                     }
                 }).catch(err => {
@@ -305,7 +294,7 @@
                     this.isFetchIng = false;
                 });
             },
-            drawYearChart(year) {
+            drawYChart(year) {
                 const type = this.selType.year;
                 const id = this.deviceId;
                 if(!id) {
@@ -316,14 +305,14 @@
                 getYearLs(id,type,year).then(res => {
                     this.isFetchIng = false;
                     if(res.data && res.data.results && Array.isArray(res.data.results)) {
-                        this.chartData =res.data.results.map(item => {
+                        const arr =res.data.results.map(item => {
                             let dateStr = item._id.toString().replace(/(\d{4})(\d{2})/,'$1-$2');
                             let num = typeof(item.avg)==='number'?item.avg.toFixed(2):item.avg;
-                            console.log(num,dateStr);
                              return {data: num,ctime: dateStr};
                         });
+                        this.chartData = arr.reverse();
                         setTimeout(() => {
-                           initChart(this.chartData,this.currentDevice,this.currentMask);
+                           initLsqxChart(this.chartData,this.currentDevice,this.currentMask);
                         },500);
                     }
                 }).catch(err => {
@@ -367,7 +356,7 @@
                 console.log(val);
                 this.currentTime = val;
                 this.isYearShow = false;
-               this.drawYearChart(this.currentTime);
+               this.drawYChart(this.currentTime);
             }
         }
 
