@@ -127,8 +127,9 @@
         line-height: 1.5;
     }
     .item-value{
-        color:#B2B2B2;
+        color:#4169E1;
         line-height: 1.5;
+        border-bottom:1px solid #4169E1;
     }
     .copyright{
         color: #999999;
