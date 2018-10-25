@@ -65,7 +65,7 @@
     import DpTab from '../../components/DpTab'
     import { Tab, Tabs,Icon,Picker,Popup,DatetimePicker } from 'vant';
     import F2 from '@antv/f2/lib';
-    import {getDayLs,getMonthLs,getYearLs,axiosSource} from '../../service';
+    import {getDayLs,getMonthLs,getYearLs} from '../../service';
     const can_width = document.body.offsetWidth - 45;
     const can_height = 250;
     const initLsqxChart = function(data,aliasName,masks) {
@@ -212,9 +212,6 @@
         },
         methods: {
             tabChange(index) {
-                if(this.isFetchIng) {
-                    axiosSource.cancel('666');
-                }
                if(index ===1) { // 按月统计
                    this.currentTime = '2018-09';
                   this.drawMonthChart(this.currentTime.replace(/-/g,''));

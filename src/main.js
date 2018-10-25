@@ -7,14 +7,17 @@ import 'lib-flexible'   //移动端布局框架
 import jsonp from 'jsonp';
 import VueRx from 'vue-rx';
 import VueTouch from 'vue-touch'
-
+import {Toast} from 'vant';
+Vue.use(Toast);
 Vue.use(VueTouch, {name: 'v-touch'});
 
 VueTouch.config.swipe = {
     threshold: 100, //手指左右滑动距离
     direction: 'horizontal'
 };
-window.$store = store;
+if(process.env.NODE_ENV !== 'production') {
+    window.$store = store;
+}
 Vue.prototype.$jsonp= jsonp;
 Vue.config.productionTip = false;
 Vue.use(VueRx);
@@ -48,23 +51,60 @@ router.beforeEach((to, from,next) => {
         }
     }
 });
-// Vue.prototype.$eventHub = new Vue();// 设置全局$emit $on
-
 let vueIns = null;
 if(process.env.NODE_ENV === 'production') {
+    // 网络断开检测
+    const offlineCallback = function() {
+        if(store.state.token) {
+            vueIns && vueIns.$router.replace('/404');
+        }
+    };
+    const onLine = function() {
+        //console.log('on line');
+        if(store.state.token) {
+            vueIns &&  vueIns.$router.replace('/monitor/main');
+        }
+    };
+    const exitApp = function() {
+        navigator.app.exitApp();
+    };
+    const onBackKeyDown = function(e) {
+        e.preventDefault();
+        const curRoute = vueIns.$route.path;
+        if(curRoute==='/monitor/main' || curRoute==='/control' || curRoute.indexOf('warning/')>=0
+            || curRoute.indexOf('findings')>=0 || curRoute==='/about/usermess' || curRoute==='/login'){
+            Toast('再按一次退出APP');
+            document.removeEventListener("backbutton", onBackKeyDown, false); // 注销返回键
+            document.addEventListener("backbutton", exitApp, false);//绑定退出事件
+            // 3秒后重新注册
+            setTimeout(function() {
+                document.removeEventListener("backbutton", exitApp, false); // 注销返回键
+                document.addEventListener("backbutton", onBackKeyDown, false); // 返回键
+            }, 3000);
+        } else {
+            navigator.app.backHistory();
+        }
+    };
     const deviceReady = function() {
-        window.open = cordova.InAppBrowser.open; // 替换 window.open方法
-        if (cordova.platformId === 'android') {
-            StatusBar.backgroundColorByHexString("#F5F7F9");//#95abc0
-        }
-        if(screen.orientation) {
-            screen.orientation.lock('portrait');
-        }
         vueIns = new Vue({
             router,
             store,
             render: h => h(App)
         }).$mount('#app');
+        // 重置window.open 方法
+        window.open = cordova.InAppBrowser.open; // 替换 window.open方法
+        // 设置android的状态栏颜色
+        if (cordova.platformId === 'android') {
+            StatusBar.backgroundColorByHexString("#F5F7F9");//#95abc0
+        }
+        // 锁定竖屏
+        if(screen.orientation) {
+            screen.orientation.lock('portrait');
+        }
+        // 监听返回按钮
+        document.addEventListener("backbutton", onBackKeyDown, false);
+        document.addEventListener("offline", offlineCallback, false);
+        document.addEventListener("online", onLine, false);
     };
     document.addEventListener("deviceready", deviceReady, false);
 } else {
@@ -74,20 +114,4 @@ if(process.env.NODE_ENV === 'production') {
         render: h => h(App)
     }).$mount('#app');
 }
-// 网络断开检测
-const offlineCallback = function() {
-    log('off line!');
-    if(store.state.token) {
-        vueIns && vueIns.$router.replace('/404');
-    }
-};
-const onLine = function() {
-    // Handle the online event
-    //console.log('on line');
-    if(store.state.token) {
-        vueIns &&  vueIns.$router.replace('/monitor/main');
-    }
-};
-document.addEventListener("offline", offlineCallback, false);
-document.addEventListener("online", onLine, false);
 

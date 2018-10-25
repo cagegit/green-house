@@ -9,7 +9,7 @@
                 <button @click="showDqPanel"><div class="in-box"><span>{{area}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
                 <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
-            <div class="control-panel">
+            <div class="control-panel" v-if="controlList && controlList.length>0">
                 <div class="flex-row">
                     <div class="sb-box" v-for="item in controlList" :key="item.info.id" @click="toSbList(item)">
                         <img :src="getImg(item.info.value)"/>
@@ -52,6 +52,7 @@
                 token: this.$store.state.token,
                 dqShow: false,
                 yqShow: false,
+                pid:0,
                 img_1: require("@/assets/img_1.png"),
                 img_2: require("@/assets/img_2.png"),
                 img_3: require("@/assets/img_3.png"),
@@ -68,11 +69,9 @@
             this.locates(this.token);
         },
         methods: {
-            toSbList(list) {
-                this.$router.push({ name: 'fjs', params: { itemList: list }});
-            },
-            toVideo(){
-                this.$router.push({ name: 'VideoMonitor'});
+            toSbList(item) {
+                this.$store.commit('setDeviceInfo',{list:item.items,name:item.info.name,pid:this.pid});
+                this.$router.push({ name: 'fjs'});
             },
             showDqPanel(){
                 if(this.areaNameList.length>0){
@@ -150,12 +149,14 @@
                 this.daList = Object.assign([],res.data.results) || [];
             },
             getControList(pid){
-                getControList(this.token,176).then(res =>{
-                    if(res.data && res.data.code===1){
+                this.pid = pid;
+                getControList(this.token,pid).then(res =>{
+                    if(res.data && Array.isArray(res.data.results)){
                         this.controlList = Object.assign([],res.data.results);
-                        // console.log(this.controlList);
                     }
-                })
+                }).catch(err => {
+                    console.log(err);
+                });
             },
             getImg(num) {
                 // const pics = this.$store.state.relations.filter(item => item.type===num);

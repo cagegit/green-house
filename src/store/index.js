@@ -30,7 +30,12 @@ const state = {
         mask:''
     },
     sensorList: [], // 传感器列表
-    pengProperty: {} // 大棚属性
+    pengProperty: {}, // 大棚属性
+    deviceInfo: {
+        name: '',
+        list: [],
+        pid: 0
+    } // 分类的设备列表
 };
 
 export default new Vuex.Store({
@@ -98,6 +103,9 @@ export default new Vuex.Store({
         },
         setPengProperty(state,property) {
              state.pengProperty = property;
+        },
+        setDeviceInfo(state,info) {
+           state.deviceInfo = info;
         }
     },
     actions: {

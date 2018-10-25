@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="add-button-area" @click="addTask">
+                <div class="add-button-area" v-if="autoCheck" @click="addTask">
                     <van-icon name="add-o" />
                 </div>
             </div>
@@ -243,10 +243,16 @@
                 }
             },
             setZx(num) {
-                this.currentZx = num;
-                this.pro.value = num;
-                this.taskList = this.firstList.filter(v => v.startvalue === this.currentZx);
-                this.setCtrl();
+                Dialog.confirm({
+                    message: `确认要更改设置吗？`
+                }).then(() => {
+                    this.currentZx = num;
+                    this.pro.value = num;
+                    this.taskList = this.firstList.filter(v => v.startvalue === this.currentZx);
+                    this.setCtrl();
+                }).catch(err => {
+                    console.log(err);
+                });
             },
             setCtrl() {
                 clearTimeout(this.timeoutId);
@@ -295,54 +301,59 @@
                         this.isEdit = true; // 是否编辑
                         if(res.data.results.length>0) {
                             const data = res.data.results[0];
-                            const content = JSON.parse(data.content);
-                            const strType = content.looptype;// 周期类型
-                            // this.days = content.days;
-                            this.looptype = strType;
-                            let fxWeek = [];
-                            let fxMonth = [];
-                            if(strType ==='week') {
-                                fxWeek = content.days;
+                            if(data.content === '{}') {
+                                this.isEdit = false;
+                                this.autoCheck = false;
                             } else {
-                                fxMonth = content.days;
-                            }
-                            const arr = [];
-                            const metaInfo = {};
-                            if(content.tims && Array.isArray(content.tims)) {
-                                content.tims.forEach(v => {
-                                    let st = '';
-                                    let et = '';
-                                    st += v.starthour.length>1?v.starthour:'0'+v.starthour;
-                                    st += ':';
-                                    st += v.startminute.length>1?v.startminute:'0'+v.startminute;
-
-                                    et += v.endhour.length>1?v.endhour:'0'+v.endhour;
-                                    et += ':';
-                                    et += v.endminute.length>1?v.endminute:'0'+v.endminute;
-                                    arr.push({
-                                        id: this.createUUID(),
-                                        stTime: st,
-                                        enTime: et,
-                                        startvalue: v.startvalue || 0
-                                    });
-                                });
-                                metaInfo.tims = content.tims;
-                                metaInfo.type = strType;
-                                this.firstList = arr;
-                                if(this.pro.ctrl ==='3') {
-                                    this.taskList = arr.filter(v => v.startvalue === this.currentZx);
+                                const content = JSON.parse(data.content);
+                                const strType = content.looptype;// 周期类型
+                                // this.days = content.days;
+                                this.looptype = strType;
+                                let fxWeek = [];
+                                let fxMonth = [];
+                                if(strType ==='week') {
+                                    fxWeek = content.days;
                                 } else {
-                                    this.taskList = arr;
+                                    fxMonth = content.days;
                                 }
-                                this.$store.commit('setTaskList',this.taskList);
+                                const arr = [];
+                                const metaInfo = {};
+                                if(content.tims && Array.isArray(content.tims)) {
+                                    content.tims.forEach(v => {
+                                        let st = '';
+                                        let et = '';
+                                        st += v.starthour.length>1?v.starthour:'0'+v.starthour;
+                                        st += ':';
+                                        st += v.startminute.length>1?v.startminute:'0'+v.startminute;
+
+                                        et += v.endhour.length>1?v.endhour:'0'+v.endhour;
+                                        et += ':';
+                                        et += v.endminute.length>1?v.endminute:'0'+v.endminute;
+                                        arr.push({
+                                            id: this.createUUID(),
+                                            stTime: st,
+                                            enTime: et,
+                                            startvalue: v.startvalue || 0
+                                        });
+                                    });
+                                    metaInfo.tims = content.tims;
+                                    metaInfo.type = strType;
+                                    this.firstList = arr;
+                                    if(this.pro.ctrl ==='3') {
+                                        this.taskList = arr.filter(v => v.startvalue === this.currentZx);
+                                    } else {
+                                        this.taskList = arr;
+                                    }
+                                    this.$store.commit('setTaskList',this.taskList);
+                                }
+                                metaInfo.days = content.days;
+                                metaInfo.status = data.status;
+                                this.oldArrStr = JSON.stringify(metaInfo);
+                                this.autoCheck = data.status ===1;
+                                this.setChongFu(strType,fxWeek,fxMonth);
+                                this.fxAction({type: strType,value:content.days});
+                                this.$store.commit('setControlAuto',this.autoCheck);
                             }
-                            metaInfo.days = content.days;
-                            metaInfo.status = data.status;
-                            this.oldArrStr = JSON.stringify(metaInfo);
-                            this.autoCheck = data.status ===1;
-                            this.setChongFu(strType,fxWeek,fxMonth);
-                            this.fxAction({type: strType,value:content.days});
-                            this.$store.commit('setControlAuto',this.autoCheck);
                         }
                     }
                 }).catch(err => {
@@ -444,14 +455,28 @@
                         modifyAutoTask(sk.controllerid,sk.token,sk.content,sk.status,sk.type).then(res => {
                             if(res.data && res.data.code ===1 && res.data.msg==='ok') {
                                 Toast.success('修改成功');
+                            } else {
+                                Toast.fail('修改失败');
                             }
+                        }).catch(err => {
+                            console.log(err);
+                            Toast.fail('网络错误');
                         });
                     }
                 } else {
+                    console.log(sk);
+                    if(!sk.content || JSON.stringify(sk.content)==='{}') {
+                        return;
+                    }
                     addAutoTasks(sk.controllerid,sk.token,sk.content,sk.status,sk.type).then(res => {
                         if(res.data && res.data.code ===1 && res.data.msg==='ok') {
                             Toast.success('保存成功');
+                        } else {
+                            Toast.fail('保存失败');
                         }
+                    }).catch(err => {
+                        console.log(err);
+                        Toast.fail('网络错误');
                     });
                 }
             },
@@ -464,6 +489,8 @@
                     this.$store.commit('setControlHand',check);
                     this.pro.value = check?1:0;
                     this.setCtrl();
+                }).catch(err => {
+                    console.log(err);
                 });
             },
             onAutoInput(check) {
@@ -487,6 +514,8 @@
                     this.autoCheck = check;
                     this.$store.commit('setControlAuto',check);
                     this.$store.commit('setTaskList',this.taskList);
+                }).catch(err => {
+                    console.log(err);
                 });
             },
             addTask() {
@@ -524,15 +553,6 @@
             next();
         },
         watch: {
-            // 'handCheck':function (isCheck) {
-            //     console.log('isCheck:'+isCheck);
-            //     this.$store.commit('setControlHand',isCheck);
-            //     this.pro.value = isCheck?1:0;
-            //     // this.setCtrl();
-            // },
-            // 'autoCheck':function (isCheck) {
-            //     this.$store.commit('setControlAuto',isCheck);
-            // },
             'current': function (val) {
                 this.pro.value = val;
             }

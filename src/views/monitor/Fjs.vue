@@ -3,7 +3,7 @@
         <div>
             <HeadBar :title="titName" link="/control"></HeadBar>
             <div class="main-body">
-                <div class="fj-cell" style="margin-top: 10px" v-for="item in controList" :key="item.id" @click="toSetPage(item)">
+                <div class="fj-cell" style="margin-top: 10px" v-for="item in itemList" :key="item.id" @click="toSetPage(item)">
                     <div class="sb-c-left">
                         <img :src="getImg(item.properties.type)">
                         <span>{{item.name}}</span>
@@ -25,38 +25,30 @@
 </template>
 <script>
     import HeadBar from '../../components/HeadBar';
-    import {getCtrlStatusByDeviceId} from '../../service';
+    import {getControllerStatus} from '../../service';
     export default {
         name:'Fjs',
         components:{
             HeadBar
         },
-        props: {
-            itemList:Object
-        },
-        mounted() {
-            try{
-                if(this.itemList){
-                    localStorage.setItem('controList',JSON.stringify(this.itemList));
-                    this.controList = this.itemList.items;
-                    this.titName = this.itemList.info.name;
-                }
-                else{
-                    if(localStorage.controList){
-                        this.controList = JSON.parse(localStorage.getItem("controList")).items;
-                        this.titName = JSON.parse(localStorage.getItem("controList")).info.name;
-                    }
-                }
-                if(this.controList && Array.isArray(this.controList)) {
-                    this.getCtrlStatus(100);
-                }
-            }catch(e){}
+        created() {
+             const {list,name,pid} = this.$store.state.deviceInfo;
+             this.itemList = list;
+             this.titName = name;
+             this.itemList.forEach(v => {
+                 if(v.status === undefined) {
+                     v.status = 0;
+                 }
+             });
+            if(this.itemList) {
+                this.getStatusRepeat(pid);
+            }
         },
         data(){
             return {
-                controList:[],
                 titName:"",
                 intervalId:0,
+                itemList: [],
                 img_1: require("@/assets/img_1.png"),
                 img_2: require("@/assets/img_2.png"),
                 img_3: require("@/assets/img_3.png"),
@@ -84,23 +76,29 @@
             onSwipeRight() {
                 this.$router.push({name:'control'});
             },
-            getCtrlStatus(deviceId) {
-                getCtrlStatusByDeviceId(deviceId).then(res => {
+            getCtrlStatus(pid) {
+                getControllerStatus(pid).then(res => {
                     if(res.data && res.data.results && Array.isArray(res.data.results)) {
                         const arr = res.data.results;
                         const newArr = [];
-                        this.controList.forEach(item => {
+                        this.itemList.forEach(item => {
                             const ob = arr.find(val => val._id === item.id);
                             if(ob) {
                                 item.status = ob.status || 0;
                             }
                             newArr.push(item);
                         });
-                        this.controList = Object.assign([],newArr);
+                        this.itemList = Object.assign([],newArr);
                     }
                 }, err => {
                     console.log(err);
                 });
+            },
+            getStatusRepeat(pid) {
+                this.getCtrlStatus(pid);
+                this.intervalId = setInterval(() => {
+                    this.getCtrlStatus(pid);
+                },10000);
             }
         }
     }
