@@ -12,7 +12,14 @@
                     <div class="logo-txt">康吉物联 V1.1.0</div>
                 </div>
                 <div class="qrcode flex">
-                    <img class="codeImg" :src="qrcodeUrl" alt=""/>
+                    <div class="flex qrcode-box">
+                        <img class="codeImg" :src="qrcodeUrl" alt=""/>
+                        <div>付款二维码</div>
+                    </div>
+                    <div class="flex qrcode-box">
+                        <img class="codeImg" :src="qrcodeMp" alt=""/>
+                        <div>公众号</div>
+                    </div>
                 </div>
                 <div class="contact-way">
                     <div class="contact-item flex">
@@ -40,19 +47,21 @@
         components: {
             [NavBar.name]: NavBar,
         },
-        props:['qrcode'],
+        props:['qrcode','qrcodeMp'],
         data() {
             return {
                 areaLis:"",
                 show:false,
                 userAddr:"辽宁省沈阳市皇姑屯",
                 companyWebUrl:'',
-                qrcodeUrl:""
+                qrcodeUrl:"",
+                qrcodeMpUrl:""
             }
         },
         created: function () {
             this.companyWebUrl = this.$store.state.aboutMes.websate;
-            this.qrcodeUrl = this.qrcode
+            this.qrcodeUrl = this.qrcode;
+            this.qrcodeMpUrl = this.qrcodeMp
         },
         methods:{
             onClickLeft(){
@@ -155,5 +164,12 @@
             font-size:0.453333rem;
             color:#fff;
         }
+    }
+    .qrcode-box{
+        flex-direction: column;
+        margin:0 5px;
+    }
+    .qrcode{
+        margin-bottom:30px;
     }
 </style>

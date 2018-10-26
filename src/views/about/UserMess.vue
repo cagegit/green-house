@@ -80,7 +80,7 @@
                 </div>
             </div>
             <div class="contact-way">
-                <div @click="toAboutMe(aboutInfo.QRCode_Pay)">
+                <div @click="toAboutMe(aboutInfo.QRCode_Pay,aboutInfo.QRCode_mp)">
                     <div class="contact-item flex">
                         <div class="item-name flex">
                             <img src="@/assets/img/my/about.png" alt="">
@@ -173,8 +173,8 @@
             getUploaderData($event) {
                 this.user.icon = $event;
             },
-            toAboutMe(qrcode){
-                this.$router.push({ name: 'aboutme', params: { qrcode: 'http://'+qrcode }});
+            toAboutMe(qrcode,qrcodeMp){
+                this.$router.push({ name: 'aboutme', params: { qrcode: qrcode, qrcodeMp:qrcodeMp}});
             }
         }
     }
