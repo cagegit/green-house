@@ -147,8 +147,7 @@
                 dataList: [
                     {title:'日',index:1},
                     {title:'月',index:2},
-                    {title:'季度',index:3},
-                    {title:'年',index:4}
+                    {title:'年',index:3}
                 ],
                 chartData: [],
                 currentTime:'2018-09-20',
@@ -215,9 +214,7 @@
                if(index ===1) { // 按月统计
                    this.currentTime = '2018-09';
                   this.drawMonthChart(this.currentTime.replace(/-/g,''));
-               } else if(index ===2) {// 季度统计
-                   // 季度
-               } else if(index ===3) {// 历年统计
+               } else if(index ===2) {// 历年统计
                    this.currentTime = '2018';
                    this.drawYChart(this.currentTime);
                } else { // 按日统计
@@ -230,9 +227,7 @@
                const index = this.currentIndex;
                if(index ===1) { // 月
                    this.isMonthShow = true;
-               } else if(index ===2) { // 季度
-
-               } else if(index === 3) {
+               } else if(index === 2) {
                    this.isYearShow = true;
                } else {
                    this.isDayShow = true; // 日
@@ -338,19 +333,19 @@
                 this.dqShow = false;
             },
             dayConfirm(val) {
-                console.log(val);
+                // console.log(val);
                 this.currentTime = new Date(val).dateFormat("yyyy-MM-dd");
                 this.isDayShow = false;
                 this.drawDayChart(this.currentTime.replace(/-/g,''));
             },
             monthConfirm(val) {
-                console.log(val);
+                // console.log(val);
                 this.currentTime = new Date(val).dateFormat("yyyy-MM");
                 this.isMonthShow = false;
                 this.drawMonthChart(this.currentTime.replace(/-/g,''));
             },
             yearConfirm(val) {
-                console.log(val);
+                // console.log(val);
                 this.currentTime = val;
                 this.isYearShow = false;
                this.drawYChart(this.currentTime);

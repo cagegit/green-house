@@ -71,8 +71,7 @@ if(process.env.NODE_ENV === 'production') {
     const onBackKeyDown = function(e) {
         e.preventDefault();
         const curRoute = vueIns.$route.path;
-        if(curRoute==='/monitor/main' || curRoute==='/control' || curRoute.indexOf('warning/')>=0
-            || curRoute.indexOf('findings')>=0 || curRoute==='/about/usermess' || curRoute==='/login'){
+        if(curRoute==='/monitor/main' || curRoute==='/about/usermess' || curRoute==='/login'){
             Toast('再按一次退出APP');
             document.removeEventListener("backbutton", onBackKeyDown, false); // 注销返回键
             document.addEventListener("backbutton", exitApp, false);//绑定退出事件

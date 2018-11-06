@@ -9,8 +9,8 @@
 
                 <van-cell class="warn-item" v-for="(item,index) in warnList" :key="index" @click="toDetail(item)">
                     <div class="flex item-top">
-                        <div class="house-name">{{item.peng.name}}</div>
-                        <div class="warn-time"><span>{{item.peng.ctime}} </span></div>
+                        <div class="house-name">{{item.pengName}}</div>
+                        <div class="warn-time"><span>{{formatDate(item.time1)}} </span></div>
                     </div>
                     <div class="item-bottom flex">
                         <span>{{item.name}}：</span>
@@ -53,29 +53,31 @@
             onLoad() {
                 this.loading = true;
                 getWaringList(this.$store.state.user.id,1,this.currentPage).then(res =>{
-                    if (res.data.results) {
+                    this.finished = false;
+                    if (res.data && Array.isArray(res.data.results)) {
                         this.currentPage += 1;
-                        this.loading = false;
-                        this.finished = true;
-                        if (res.data.results.length > 0) {
-                            this.warnList = Object.assign([], this.warnList, res.data.results);
-                            for (let i = 0; i < this.warnList.length; i++) {
-                                let date = new Date(this.warnList[i].peng.ctime);
-                                let year = date.getFullYear();
-                                let month = date.getMonth() + 1;
-                                let today = date.getDate();
-                                let hour = date.getHours();
-                                let minutes = date.getMinutes();
-                                let seconds = date.getSeconds();
-                                let formatTime = year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds;
-                                this.warnList[i].peng.ctime = formatTime;
-                            }
+                        // this.warnList = Object.assign([], res.data.results);
+                        this.warnList = this.warnList.concat(res.data.results);
+                        const total = res.data.Total || 0;
+                        if(this.warnList.length>=total) {
+                          this.finished = true;
                         }
                     }
+                    this.loading = false;
                 }).catch(err => {
                     console.log(err);
                     this.loading = false;
                 });
+            },
+            formatDate(dateStr) {
+                let date = new Date(dateStr);
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let today = date.getDate();
+                let hour = date.getHours();
+                let minutes = date.getMinutes();
+                let seconds = date.getSeconds();
+                return (year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds);
             },
             onSwipeLeft() {
                 this.$router.push({name:'historywarn'});

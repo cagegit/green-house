@@ -6,7 +6,7 @@
                 <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='1' || pro.ctrl==='2'">
                     <div class="fj-flex">
                         <div class="sb-c-left">
-                            <span>手动</span>
+                            <span>开关</span>
                         </div>
                         <div class="sb-c-right">
                             <van-switch :value="handCheck" @input="changeDanlu"/>
@@ -17,7 +17,7 @@
                 <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='3'">
                     <div class="fj-flex">
                         <div class="sb-c-left">
-                            <span>手动</span>
+                            <span>开关</span>
                         </div>
                         <div class="sb-c-right">
                             <van-switch :value="handCheck" @input="changeDanlu" />
@@ -44,7 +44,7 @@
                 <div class="sb-com-cell" style="margin-top: 10px" v-if="pro.ctrl==='4'">
                     <div class="fj-flex">
                         <div class="sb-c-left">
-                            <span>手动</span>
+                            <span>开关</span>
                         </div>
                         <div class="sb-c-right">
                             <van-switch :value="handCheck" @input="changeDanlu" />
@@ -67,7 +67,7 @@
                 <div class="sb-com-cell"  v-if="pro.ctrl==='1' || pro.ctrl==='2' || pro.ctrl==='3'">
                     <div class="fj-flex">
                         <div class="sb-c-left">
-                            <span>自动</span>
+                            <span>自动计划</span>
                         </div>
                         <div class="sb-c-right">
                             <van-switch :value="autoCheck" @input="onAutoInput"/>
@@ -464,7 +464,7 @@
                         });
                     }
                 } else {
-                    console.log(sk);
+                    // console.log(sk);
                     if(!sk.content || JSON.stringify(sk.content)==='{}') {
                         return;
                     }

@@ -16,7 +16,7 @@
                             <div class="ss-title">
                                 <span>{{item.name}}</span>
                             </div>
-                            <div @click="getLimitRequest(item.pid,item.properties.sensorId)">
+                            <div @click="getLimitRequest(item.id)">
                                 <img class="ss-xq" src="@/assets/img/xq@2x.png"/>
                             </div>
                         </div>
@@ -53,10 +53,10 @@
                             <div class="st-left">上限</div>
                             <van-stepper
                                     class="gj-set"
-                                    v-model="sendLimitArr[index].max"
+                                    v-model="item.max"
                                     integer
-                                    :min="sendLimitArr[index].min"
-                                    :max="limitValue[index].max"
+                                    :min="item.min"
+                                    :max="item.static_max"
                                     :step="1"
                             />
                             <!--<div class="gj-set">-->
@@ -69,10 +69,10 @@
                             <div class="st-left">下限</div>
                             <van-stepper
                                     class="gj-set"
-                                    v-model="sendLimitArr[index].min"
+                                    v-model="item.min"
                                     integer
-                                    :min="limitValue[index].min"
-                                    :max="sendLimitArr[index].max"
+                                    :min="item.static_min"
+                                    :max="item.max"
                                     :step="1"
                             />
                             <!--<div class="gj-set">-->
@@ -88,7 +88,7 @@
     </v-touch>
 </template>
 <script>
-    import { Tabbar, TabbarItem, Icon, Dialog, Stepper, Collapse, CollapseItem } from 'vant'
+    import { Tabbar, TabbarItem, Icon, Dialog, Stepper, Collapse, CollapseItem,Toast } from 'vant'
     import Vue from 'vue'
     import HeadBar from '../../components/HeadBar'
     import DpTab from '../../components/DpTab'
@@ -122,6 +122,7 @@
             [TabbarItem.name]:TabbarItem,
             [Icon.name]:Icon,
             [Stepper.name]:Stepper,
+            [Toast.name]:Toast,
             HeadBar,
             DpTab
         },
@@ -141,7 +142,8 @@
                 limitValue:[],
                 sendLimitArr:[],
                 activeNames: ['1'],
-                videoList:[]
+                videoList:[],
+                pid:null
             }
         },
         created(){
@@ -152,6 +154,7 @@
                 this.$router.back();
                 return;
             }
+            this.pid = pid;
             this.getConcatData(pid,token);
             this.countWarings();
             this.getVideoListData(pid,token);
@@ -190,21 +193,37 @@
                     done();
                 }
             },
-            getLimitRequest(pid,sensorld){
-                // console.log(sensorld)
-                getLimitValue(pid,sensorld).then(res=>{
+            getLimitRequest(sensorld){
+                getLimitValue(this.pid,sensorld).then(res=>{
                     // console.log("limitValue:");
                     // console.log(res);
-                    this.limitValue = this.coppyArray(res.data.results);
-                    this.sendLimitArr = this.coppyArray(res.data.results);
-                    this.show = true;
+                    if(res && res.data && Array.isArray(res.data.results)) {
+                        let arr = [];
+                        res.data.results.forEach(item => {
+                            arr.push({...item,static_max:item.max,static_min:item.min});
+                        });
+                        // console.log(arr);
+                        //const arr = this.coppyArray(res.data.results);
+                        // this.limitValue = JSON.parse(JSON.stringify(''));
+                        this.sendLimitArr = arr;
+                        this.show = true;
+                    }
                 })
             },
             sendLimitRequest(limitArr){
-                let sendItemArr = this.coppyArray(this.sendLimitArr);
+                let sendItemArr = this.sendLimitArr.map(item => {
+                     delete item.static_max;
+                     delete item.static_min;
+                    return item;
+                });
+                console.log(sendItemArr);
                 setLimitValue(sendItemArr).then(res=>{
-                    // console.log("res  setLimitValue:")
                     // console.log(res)
+                    if(res && res.data && res.data.status ==1) {
+                        Toast.success('设置成功！');
+                    } else {
+                        Toast.fail('设置失败！');
+                    }
                 })
             },
             coppyArray(arr){
@@ -403,13 +422,10 @@
         padding: 0 3px !important;
     }
     .dialog-wrap{
-        min-height:256px;
-        max-height: 450px;
-        height: auto;
         overflow: scroll;
         .dia-content {
-            padding: 15px 15px 4px 15px;
-            border-bottom:1px solid #ccc;
+            padding: 15px;
+            border-bottom:1px solid #eee;
             .title{
                 font-size: 16px;
                 /*font-weight: bold;*/
@@ -455,7 +471,6 @@
         }
         .no-limite{
             width:100%;
-            height:200px;
             display: flex;
             justify-content: center;
             align-items: center;
