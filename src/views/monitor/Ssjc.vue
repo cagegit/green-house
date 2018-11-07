@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" v-on:swipeleft="onSwipeLeft" tag="div">
         <div>
             <HeadBar title="实时监测" link="/monitor/main"></HeadBar>
             <DpTab :active="1"></DpTab>
@@ -85,7 +84,6 @@
                 </div>
             </van-dialog>
         </div>
-    </v-touch>
 </template>
 <script>
     import { Tabbar, TabbarItem, Icon, Dialog, Stepper, Collapse, CollapseItem,Toast } from 'vant'
@@ -301,12 +299,6 @@
                 }).catch(err => {
                    console.log(err);
                 });
-            },
-            onSwipeRight() {
-                this.$router.push({name:'main'});
-            },
-            onSwipeLeft() {
-                this.$router.push({name:'sbkz'});
             }
         }
     }

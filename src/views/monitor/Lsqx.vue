@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" v-on:swipeleft="onSwipeLeft" tag="div">
         <div>
             <HeadBar title="历史曲线" link="/monitor/main"></HeadBar>
             <DpTab :active="3"></DpTab>
@@ -42,7 +41,7 @@
             <!--// 选择月-->
             <van-popup v-model="isMonthShow" position="bottom">
                 <van-datetime-picker
-                        v-model="currentMonth"
+                        v-model="currentDay"
                         type="year-month"
                         :min-date="minMonth"
                         :max-date="maxMonth"
@@ -58,7 +57,6 @@
                             @confirm="yearConfirm"/>
             </van-popup>
         </div>
-    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
@@ -159,14 +157,12 @@
                 currentMask: 'HH:MM',
                 dqShow:false,
                 isDayShow: false,
-                currentDay: new Date(2018, 9, 1),
+                currentDay: null,
                 minDate: new Date(2018, 8, 1),
                 maxDate: new Date(),
                 isMonthShow:false,
-                currentMonth: new Date(2018,9),
                 minMonth: new Date(2018,8),
                 maxMonth: new Date(),
-                currentYear: 2018,
                 yearList: [],
                 isYearShow:false,
                 deviceList: [],
@@ -189,18 +185,36 @@
             DpTab
         },
         mounted() {
-           const { sensorList } = this.$store.state;
+           const { sensorList,currentLs } = this.$store.state;
            this.deviceList = sensorList;
            this.pickerList = sensorList.map(item => {
                return item.name.replace(/(传感器|\(.*\)|（.*）)/g,'');
            });
-           // 年
-            const date = new Date();
-            const cYear = date.getFullYear();
-            this.yearList = [cYear];
-            if(sensorList.length>0) {
-                this.deviceId = sensorList[0].id;
-                this.drawDayChart(20180901);
+           // currentDay,currentTime,currentIndex,deviceId,currentDevice
+            console.log(currentLs);
+            if(currentLs) {
+                const {currentDay,currentTime,currentIndex,deviceId,currentDevice}= currentLs;
+                this.currentDay =currentDay;
+                this.currentTime = currentTime;
+                this.currentIndex = currentIndex;
+                this.deviceId = deviceId;
+                this.currentDevice = currentDevice;
+                this.active = this.currentIndex;
+                this.tabChange(this.currentIndex);
+            } else {
+                const date = new Date();
+                const cYear = date.getFullYear();
+                const cMonth = date.getMonth() +1;
+                let month = cMonth<10? '0'+cMonth: cMonth;
+                let defaultTime = cYear +''+ month +'01';
+                this.currentTime = defaultTime;
+                // 默认日
+                this.currentDay = new Date(cYear,cMonth-1,1);
+                this.yearList = [cYear];
+                if(sensorList.length>0) {
+                    this.deviceId = sensorList[0].id;
+                    this.drawDayChart(defaultTime);
+                }
             }
            const that = this;
             window.onresize = function () {
@@ -212,13 +226,24 @@
         methods: {
             tabChange(index) {
                if(index ===1) { // 按月统计
-                   this.currentTime = '2018-09';
+                   let date = this.currentDay;
+                   let year = date.getFullYear();
+                   let month = date.getMonth() + 1;
+                   month = month<10? '0'+month:month;
+                   this.currentTime = year+'-'+month;
                   this.drawMonthChart(this.currentTime.replace(/-/g,''));
                } else if(index ===2) {// 历年统计
-                   this.currentTime = '2018';
+                   let date = this.currentDay;
+                   this.currentTime = date.getFullYear();
                    this.drawYChart(this.currentTime);
                } else { // 按日统计
-                   this.currentTime = '2018-09-01';
+                   let date = this.currentDay;
+                   let year = date.getFullYear();
+                   let month = date.getMonth() + 1;
+                   let today = date.getDate();
+                   month = month<10? '0'+month:month;
+                   today = today<10? '0'+today: today;
+                   this.currentTime = year+'-'+month+'-'+today;
                    this.drawDayChart(this.currentTime.replace(/-/g,''));
                }
                this.currentIndex = index;
@@ -249,9 +274,6 @@
                             let num = typeof(val.data)==='number'?val.data.toFixed(2):val.data;
                             return {data:num,ctime:ctime};
                         });
-                        if(this.chartData.length>0) {
-                            this.currentTime = this.chartData[0].ctime.substr(0,10);
-                        }
                         setTimeout(() => {
                             initLsqxChart(this.chartData,this.currentDevice,this.currentMask);
                         },500);
@@ -312,15 +334,12 @@
                     this.isFetchIng = false;
                 });
             },
-            onSwipeRight() {
-                this.$router.push({name:'sbkz'});
-            },
-            onSwipeLeft() {
-                this.$router.push({name:'ssxx'});
-            },
             toHengPage() {
                 this.$store.commit('setChartData',this.chartData);
                 this.$store.commit('setCharParams',{alias:this.currentDevice,mask:this.currentMask});
+                this.$store.commit('setCurrentLs',{
+                    currentDay:this.currentDay,currentTime:this.currentTime,currentIndex:this.currentIndex,
+                    deviceId:this.deviceId,currentDevice:this.currentDevice});
                 this.$router.push({name:'heng'});
             },
             onConfirm(value, index) {
@@ -350,6 +369,13 @@
                 this.isYearShow = false;
                this.drawYChart(this.currentTime);
             }
+        },
+        beforeRouteLeave (to, from , next) {
+            console.log(to.name);
+            if(to.name !== 'heng') {
+                this.$store.commit('setCurrentLs',null);
+            }
+            next();
         }
 
     }

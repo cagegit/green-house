@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <HeadBar title="告警详情" link="" class="top-nav-bar"></HeadBar>
             <div class="main-body">
@@ -23,22 +22,12 @@
                         </div>
                         <div class="detail-item flex">
                             <div class="warn-type">告警时间</div>
-                            <div class="warn-value">{{detailWarn.peng.ctime}}</div>
+                            <div class="warn-value">{{formatDate(detailCard.time1)}}</div>
                         </div>
                     </div>
-                    <!-- <div class="warn-bottom">
-                        <div class="detail-item flex">
-                            <div class="warn-type">告警位置</div>
-                        </div>
-                        <div class="detail-item flex">
-                            <div class="warn-value">房山区农委—园区1—一号西红柿大棚</div>
-                        </div>
-                    </div> -->
-
                 </div>
             </div>
         </div>
-    </v-touch>
 </template>
 <script>
     import HeadBar from '@/components/HeadBar'
@@ -55,12 +44,19 @@
         props: {
             detailWarn:Object
         },
-        mounted(){
+        created(){
             this.detailCard = Object.assign({},JSON.parse(JSON.stringify(this.detailWarn)));
         },
         methods:{
-            onSwipeRight() {
-                this.$router.go(-1);
+            formatDate(dateStr) {
+                let date = new Date(dateStr);
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let today = date.getDate();
+                let hour = date.getHours();
+                let minutes = date.getMinutes();
+                let seconds = date.getSeconds();
+                return (year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds);
             }
         }
     }

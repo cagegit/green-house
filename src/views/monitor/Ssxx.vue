@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <HeadBar title="设施信息" link="/monitor/main"></HeadBar>
             <DpTab :active="4"></DpTab>
@@ -52,12 +51,8 @@
                     <div class="sb-button">
                         <button type="button" :disabled="isSaving" @click="modifyDpInfo()">保存</button>
                     </div>
-                    <!--<van-actionsheet v-model="showTimePanel">-->
-                        <!--<van-area :area-list="addressList" @confirm="getArea" @cancel="showTimePanel=false;" />-->
-                    <!--</van-actionsheet>-->
                 </div>
         </div>
-    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
@@ -113,9 +108,6 @@
                         this.isSaving = false;
                         Toast('保存失败！');
                     });
-            },
-            onSwipeRight() {
-                this.$router.push({name:'lsqx'});
             }
         }
     }

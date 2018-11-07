@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <van-nav-bar
               class="top-nav-bar"
@@ -17,7 +16,6 @@
             <div class="sure-btn flex" @click="resetPass">确定</div>
             <FootBar :active="3"></FootBar>
         </div>
-    </v-touch>
 </template>
 <script>
     import { NavBar, Field, CellGroup, Toast, Button } from 'vant'
@@ -47,13 +45,12 @@
                 this.$router.back();
             },
             resetPass(){
-                var that = this;
-                if(this.newPassword === this.sureNewPassword && this.sureNewPassword!="" && this.sureNewPassword && this.sendMes){
+                const that = this;
+                if(this.newPassword === this.sureNewPassword && this.sureNewPassword!=="" && this.sureNewPassword && this.sendMes){
                     resetPassword(MD5(this.oldPassword),MD5(this.newPassword),this.sendMes,this.$store.state.token).then(res=>{
-                        console.log("res:")
-                        console.log(res)
-                        if(res.data.code==1){
-                            let userSave = localStorage.getItem("userAccount")
+
+                        if(res.data && res.data.code==1){
+                            let userSave = localStorage.getItem("userAccount");
                             if(userSave != null){
                                 localStorage.removeItem("userAccount")
                             }
@@ -78,19 +75,11 @@
                 }
             },
             sendPhoneMes(){
-                console.log("this.$store.state.user")
-                console.log(this.$store.state.user)
-
                 getPhoneCode(this.$store.state.user.phone).then(res=>{
-                    console.log("res：")
                     console.log(res)
                 }).catch(err=>{
-                    console.log("err：")
                     console.log(err)
                 })
-            },
-            onSwipeRight() {
-                this.$router.go(-1);
             }
         }
     }

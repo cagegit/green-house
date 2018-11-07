@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <van-nav-bar
                     class="top-nav-bar"
@@ -18,7 +17,6 @@
                 </div>
             </div>
         </div>
-    </v-touch>
 </template>
 <script>
     import { NavBar, Field, Button } from 'vant'
@@ -56,9 +54,6 @@
                         that.$router.back();
                     }
                 })
-            },
-            onSwipeRight() {
-                this.$router.go(-1);
             }
         },
         filters: {

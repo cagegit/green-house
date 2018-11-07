@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <HeadBar title="重复选择" link="/monitor/fjsb"></HeadBar>
             <div class="main-body">
@@ -40,7 +39,6 @@
                 </div>
             </div>
         </div>
-    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar';
@@ -122,9 +120,6 @@
                 }
                 this.week = type;
                 return list;
-            },
-            onSwipeRight() {
-                this.$router.go(-1);
             }
         }
     }

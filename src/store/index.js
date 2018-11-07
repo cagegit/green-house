@@ -35,7 +35,8 @@ const state = {
         name: '',
         list: [],
         pid: 0
-    } // 分类的设备列表
+    }, // 分类的设备列表
+   currentLs: null
 };
 
 export default new Vuex.Store({
@@ -106,6 +107,9 @@ export default new Vuex.Store({
         },
         setDeviceInfo(state,info) {
            state.deviceInfo = info;
+        },
+        setCurrentLs(state,info) {
+           state.currentLs = info;
         }
     },
     actions: {

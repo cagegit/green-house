@@ -1,6 +1,9 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
            <div>
+               <div class="dp-tab2">
+                   <button type="button" @click="switchBtn(0)">当前告警</button>
+                   <button type="button" @click="switchBtn(1)" class="active">历史告警</button>
+               </div>
             <van-list
                 v-model="loading"
                 :finished="finished"
@@ -19,14 +22,13 @@
                 </van-cell>
             </van-list>
             </div>
-    </v-touch>
 </template>
 <script>
     import FootBar from '@/components/FootBar'
     import { Cell, List } from 'vant'
     import { getWaringList } from '@/service'
     export default {
-        name: "currentWarn",
+        name: "historyWarn",
          components: {
             [List.name]: List,
             [Cell.name]: Cell,
@@ -45,6 +47,13 @@
             this.detailCard = Object.assign({},this.detailWarn);
         },
         methods:{
+            switchBtn(num) {
+                if(num ===1) {
+                    this.$router.push({name:'historywarn'});
+                } else {
+                    this.$router.push({name:'currentwarn'});
+                }
+            },
             toDetail(item){
                this.$router.push({name:'warningDetail',params:{detailWarn:item}});
             },
@@ -75,9 +84,6 @@
                 let minutes = date.getMinutes();
                 let seconds = date.getSeconds();
                 return (year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds);
-            },
-            onSwipeRight() {
-                this.$router.push({name:'currentwarn'});
             }
         }
     }

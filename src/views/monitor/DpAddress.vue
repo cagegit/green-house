@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <HeadBar title="修改地址详情" link="/monitor/ssxx"></HeadBar>
             <div class="main-body">
@@ -11,7 +10,6 @@
                 </div>
             </div>
         </div>
-    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar'
@@ -37,9 +35,6 @@
                 // console.log(this.value);
                 Toast('更新成功！');
                 this.sbInfoAction({area:this.value});
-            },
-            onSwipeRight() {
-                this.$router.go(-1);
             }
         }
     }

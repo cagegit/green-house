@@ -1,12 +1,14 @@
 <template>
-    <v-touch v-on:swipeleft="onSwipeLeft" tag="div">
         <div>
+            <div class="dp-tab2">
+                <button type="button" @click="switchBtn(0)" class="active">当前告警</button>
+                <button type="button" @click="switchBtn(1)">历史告警</button>
+            </div>
             <van-list
                 v-model="loading"
                 :finished="finished"
                 @load="onLoad"
                 class="warn-list">
-
                 <van-cell class="warn-item" v-for="(item,index) in warnList" :key="index" @click="toDetail(item)">
                     <div class="flex item-top">
                         <div class="house-name">{{item.pengName}}</div>
@@ -18,10 +20,8 @@
                         <!-- <span>{{item.addr}}</span>       -->
                     </div>
                 </van-cell>
-
             </van-list>
         </div>
-    </v-touch>
 </template>
 <script>
     import FootBar from '@/components/FootBar'
@@ -43,10 +43,14 @@
             }
              
         },
-        mounted(){
-            // this.getWaringListFn(this.$store.state.user.id,1,0);
-        },
         methods:{
+            switchBtn(num) {
+                if(num ===1) {
+                    this.$router.push({name:'historywarn'});
+                } else {
+                    this.$router.push({name:'currentwarn'});
+                }
+            },
             toDetail(item){
                 this.$router.push({name:'warningDetail',params:{detailWarn:item}});
             },
@@ -78,9 +82,6 @@
                 let minutes = date.getMinutes();
                 let seconds = date.getSeconds();
                 return (year + "-" + month + "-" + today + " " + hour + ":" + minutes + ":" + seconds);
-            },
-            onSwipeLeft() {
-                this.$router.push({name:'historywarn'});
             }
         }
     }

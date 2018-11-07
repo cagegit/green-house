@@ -6,15 +6,8 @@ import store from './store/index'
 import 'lib-flexible'   //移动端布局框架
 import jsonp from 'jsonp';
 import VueRx from 'vue-rx';
-import VueTouch from 'vue-touch'
 import {Toast} from 'vant';
 Vue.use(Toast);
-Vue.use(VueTouch, {name: 'v-touch'});
-
-VueTouch.config.swipe = {
-    threshold: 100, //手指左右滑动距离
-    direction: 'horizontal'
-};
 if(process.env.NODE_ENV !== 'production') {
     window.$store = store;
 }
@@ -23,7 +16,6 @@ Vue.config.productionTip = false;
 Vue.use(VueRx);
 // 路由变化更新tabNum
 router.beforeEach((to, from,next) => {
-    // //console.log('router change from:'+from.path +', to:'+to.path);
     if (store.state.token) {// 判断是否登录
         const path = to.path || '';
         if(path.indexOf('/monitor')>=0) {

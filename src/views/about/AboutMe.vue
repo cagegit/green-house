@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <van-nav-bar
                     class="top-nav-bar"
@@ -37,11 +36,9 @@
                 </div>
             </div>
         </div>
-    </v-touch>
 </template>
 <script>
     import { NavBar } from 'vant'
-
     export default {
         name: "AboutMe",
         components: {
@@ -73,9 +70,6 @@
             logOut() {
                 localStorage.clear();
                this.$router.replace('/login');
-            },
-            onSwipeRight() {
-                this.$router.go(-1);
             }
         }
     }

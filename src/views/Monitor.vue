@@ -7,13 +7,7 @@
 </template>
 <script>
    export default {
-       name: 'Monitor',
-       methods: {
-           onSwipeRight() {
-               console.log(this.$route.path);
-               this.$router.push({name:'main'});
-           }
-       }
+       name: 'Monitor'
    }
 </script>
 <style lang="scss"></style>

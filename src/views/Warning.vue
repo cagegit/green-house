@@ -2,12 +2,6 @@
     <div>
         <HeadBar title="告警" :left="false" link=""></HeadBar>
         <div class="content-warp">
-            <div class="dp-tab2">
-                <button type="button"  v-for="tab in tabs"
-                        :key="tab.id"
-                        @click="switchBtn(tab.id)"
-                        :class="{'active':currentTab===tab.id}">{{ tab.name }}</button>
-            </div>
             <div style="position: relative;">
                 <transition name="slide-left">
                     <router-view class="child-view"></router-view>
@@ -25,30 +19,6 @@
          components: {
             FootBar,
             HeadBar
-        },
-        data() {
-            return {
-               currentTab: 0,
-               tabs: [{id:0,name:'当前警告'}, {id:1,name:'历史警告'}]
-            }
-        },
-        methods:{
-            switchBtn(num) {
-                this.currentTab = num;
-                if(num ===1) {
-                    this.$router.push({name:'historywarn'});
-                } else {
-                    this.$router.push({name:'currentwarn'});
-                }
-            }
-        },
-        beforeRouteUpdate  (to, from, next) {
-            if(to.name==='historywarn') {
-                this.currentTab = 1;
-            } else {
-                this.currentTab = 0;
-            }
-            next();
         }
     }
 </script>

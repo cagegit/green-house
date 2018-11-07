@@ -198,7 +198,7 @@ export default new Router({
 
       },
       {
-          path: 'warningDetail',// 告警详情页
+          path: '/warningDetail',// 告警详情页
           name: 'warningDetail',
           component: () => import('./views/warning/WarningDetail.vue'),
           props: true

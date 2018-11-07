@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <HeadBar :title="name+'设备'" link="/monitor/main"></HeadBar>
             <div class="main-body">
@@ -130,7 +129,6 @@
                 />
             </van-actionsheet>
         </div>
-    </v-touch>
 </template>
 <script>
     import { Switch,Slider,DatetimePicker,Actionsheet,Dialog,Toast } from 'vant'
@@ -531,9 +529,6 @@
                     localStorage.setItem('firstList',this.firstList);
                 }
                 this.$store.commit('setTaskList',this.taskList);
-            },
-            onSwipeRight() {
-                this.$router.go(-1);
             },
             createUUID() {
                 const uuid = 'xxxxxxxx-xxxx-xxxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,

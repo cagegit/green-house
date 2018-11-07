@@ -1,7 +1,7 @@
 <template>
     <div class="monitor-main">
         <HeadBar :title="user.corpname" :left="false" link=""></HeadBar>
-        <div class="main-body">
+        <div class="main-body box-bottom">
             <div class="banner">
                 <img src="@/assets/img/topimg@2x.png" alt=""/>
             </div>
@@ -10,7 +10,7 @@
                 <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
             <DapCell v-for="item in daList" :key="item.id" :title="item.name" :src="src" :isMark="true" @click.native="toNextPage(item)"></DapCell>
-            <div style="margin-bottom: 60px;"></div>
+            <!--<div style="margin-bottom: 60px;"></div>-->
             <van-popup v-model="dqShow" position="bottom">
                 <van-picker show-toolbar :columns="areaNameList" @cancel="dqShow=false" @confirm="dpConfirm"/>
             </van-popup>
@@ -219,6 +219,9 @@
                     padding-left: 5px;
                 }
             }
+        }
+        .box-bottom {
+            padding-bottom: 2rem;
         }
     }
 </style>

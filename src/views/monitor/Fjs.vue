@@ -1,5 +1,4 @@
 <template>
-    <v-touch v-on:swiperight="onSwipeRight" tag="div">
         <div>
             <HeadBar :title="titName" link="/control"></HeadBar>
             <div class="main-body">
@@ -21,7 +20,6 @@
                 </div>
             </div>
         </div>
-    </v-touch>
 </template>
 <script>
     import HeadBar from '../../components/HeadBar';
@@ -72,9 +70,6 @@
                 const arr = [1,2,3,4,5,6,7,8,9];
                 num = arr.indexOf(+num)>=0 ? +num: 1;
                 return this['img_'+num];
-            },
-            onSwipeRight() {
-                this.$router.push({name:'control'});
             },
             getCtrlStatus(pid) {
                 getControllerStatus(pid).then(res => {
