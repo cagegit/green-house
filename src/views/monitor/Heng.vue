@@ -14,9 +14,13 @@
             width: document.body.offsetWidth,
             height: document.body.offsetHeight
         });
+        let type = 'timeCat';
+        if(mask ==='YYYY-MM') {
+            type = 'cat';
+        }
         const defs = {
             ctime: {
-                type: 'timeCat',
+                type: type,
                 mask: mask,
                 range: [0, 1]
             },

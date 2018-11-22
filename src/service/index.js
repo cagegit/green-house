@@ -148,9 +148,9 @@ export const getWaringList = (userId, status, pageNum) =>{
 /**
  * 轮询接口
  */
-export  const  getRepeateWaringList = (id) => {
+export  const  getRepeateWaringList = (wType,id) => {
     return interval(1000*20).pipe(
-        switchMap(val =>  from(getWarings('1',id,'1','2018-09-01',''))),
+        switchMap(val =>  from(getWarings(wType,id,'1','2018-09-01',''))),
         distinctUntilChanged((p,q) => {
             if((p.data && p.data.results) && (q.data && q.data.results)) {
                 return JSON.stringify(p.data.results) === JSON.stringify(q.data.results);

@@ -9,7 +9,7 @@
                 <button @click="showDqPanel"><div class="in-box"><span>{{area}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
                 <button @click="showYqPanel"><div class="in-box"><span>{{yq}}</span> <img src="@/assets/img/Group 3.png"/></div></button>
             </div>
-            <DapCell v-for="item in daList" :key="item.id" :title="item.name" :src="src" :isMark="true" @click.native="toNextPage(item)"></DapCell>
+            <DapCell v-for="item in daList" :key="item.id" :title="item.name" :src="src" :isMark="item.status" @click.native="toNextPage(item)"></DapCell>
             <!--<div style="margin-bottom: 60px;"></div>-->
             <van-popup v-model="dqShow" position="bottom">
                 <van-picker show-toolbar :columns="areaNameList" @cancel="dqShow=false" @confirm="dpConfirm"/>
@@ -26,8 +26,7 @@
     import HeadBar from '../../components/HeadBar'
     import FootBar from "../../components/FootBar";
     import DapCell from "../../components/DpCell";
-    import { getLocates, loginIn,getUtilities} from "@/service";
-
+    import { getLocates, loginIn,getUtilities,getWaringList} from "@/service";
     export default {
         name: 'MonitorMain',
         data() {
@@ -92,7 +91,6 @@
             async locates(token) {
                 try {
                     const res = await getLocates(token);
-                    // console.log(res.data);
                     if(res.data && res.data.results) {
                         this.areaList = Object.assign([],res.data.results) || [];
                         if(this.areaList.length>0) {
@@ -152,16 +150,48 @@
                 });
             },
             async login() {
-                const res = await loginIn('wq','123456');
-                //console.log(res.data.token);
-                this.locates(res.data.token);
+                try {
+                    const res = await loginIn('wq','123456');
+                    this.locates(res.data.token);
+                } catch (err) {
+                    console.log(err);
+                }
             },
             async getDp(pid) {
-                const res = await getUtilities(pid,this.token);
-                // console.log('da:');
-                // console.log('pid:'+pid);
-                // console.log(res.data);
-                this.daList = Object.assign([],res.data.results) || [];
+                try {
+                    let war = await getWaringList(this.$store.state.user.id,1,0);
+                    const res = await getUtilities(pid,this.token);
+                    if(res.data && Array.isArray(res.data.results)) {
+                        let arr  = Object.assign([],res.data.results);
+                        if (war.data && Array.isArray(war.data.results)) {
+                            const list = war.data.results.map(item => item.pengId);
+                            arr.forEach((item) => {
+                                if(list.indexOf(item.id)>=0) {
+                                    item.status = true;
+                                } else {
+                                    item.status = false;
+                                }
+                            });
+                        }
+                        this.daList = arr;
+                    }
+                }catch (err) {
+                    console.log(err);
+                    this.getDpList(pid);
+                }
+            },
+            getDpList(pid) {
+                getUtilities(pid,this.token).then(res => {
+                    if(res.data && Array.isArray(res.data.results)) {
+                        let arr  = Object.assign([],res.data.results);
+                        arr.forEach(item => {
+                            item.status =false;
+                        });
+                        this.daList = arr;
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
             }
         }
     }

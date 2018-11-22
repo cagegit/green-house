@@ -141,7 +141,8 @@
                 sendLimitArr:[],
                 activeNames: ['1'],
                 videoList:[],
-                pid:null
+                pid:null,
+                intervalId:null
             }
         },
         created(){
@@ -156,6 +157,14 @@
             this.getConcatData(pid,token);
             this.countWarings();
             this.getVideoListData(pid,token);
+            this.clearJsq();
+            this.intervalId = setInterval(() => {
+                this.getConcatData(pid,token);
+                this.countWarings();
+                setTimeout(() => {
+                    this.getVideoListData(pid,token);
+                },5000);
+            },(10*1000));
         },
         mounted() {
             let videoLength = this.videoList.length;
@@ -176,12 +185,20 @@
             }
 
         },
+        destroyed() {
+            this.clearJsq();
+        },
         methods: {
             changeWaring({limit_low,limit_high,readout_unit}){
                 readout_unit = readout_unit? readout_unit.replace(/RH/g,'') : '';
                 this.limit_low = limit_low+readout_unit;
                 this.limit_high = limit_high+readout_unit;
                 this.show = true;
+            },
+            clearJsq() {
+                if(this.intervalId != null) {
+                    clearInterval(this.intervalId);
+                }
             },
             beforeClose(action, done) {
                 if (action === 'confirm') {
@@ -193,16 +210,11 @@
             },
             getLimitRequest(sensorld){
                 getLimitValue(this.pid,sensorld).then(res=>{
-                    // console.log("limitValue:");
-                    // console.log(res);
                     if(res && res.data && Array.isArray(res.data.results)) {
                         let arr = [];
                         res.data.results.forEach(item => {
                             arr.push({...item,static_max:item.max,static_min:item.min});
                         });
-                        // console.log(arr);
-                        //const arr = this.coppyArray(res.data.results);
-                        // this.limitValue = JSON.parse(JSON.stringify(''));
                         this.sendLimitArr = arr;
                         this.show = true;
                     }
@@ -214,7 +226,6 @@
                      delete item.static_min;
                     return item;
                 });
-                console.log(sendItemArr);
                 setLimitValue(sendItemArr).then(res=>{
                     // console.log(res)
                     if(res && res.data && res.data.status ==1) {
@@ -237,11 +248,14 @@
                 // type=3 //1：按级别 2：按日期 3：按大棚 &corp_id=1// 客户id&status=1 // 1:报警中 0：历史报警
                 const fromTime = "2018-09-01";
                 const toTime = new Date().dateFormat("yyyy-MM-dd");
-                getWarings(3,1,1,fromTime,toTime).then(res => {
-                    if(res && res.data && res.data.status ===1) {
-                        if(res.data.results && res.data.results.length>0) {
-                            this.warings = res.data.results[0].count;
-                        }
+                const id = this.$store.state.user.id;
+                getWarings(2,id,1,fromTime,toTime).then(res => {
+                    if(res.data && Array.isArray(res.data.results)) {
+                       let num = 0;
+                       res.data.results.forEach(item => {
+                           num = num + item.count;
+                       });
+                        this.warings = num;
                     }
                 }).catch(err => {
                     console.log(err);

@@ -87,21 +87,19 @@ export default {
         },
         getWaringCount() {
             const {user} = this.$store.state;
-            if(user.corp_id === undefined) {
+            if(user.id === undefined) {
                return;
             }
-            getWarings('1',user.corp_id,'1','2018-09-01','').then(({data}) => {
-                // console.log(data);
-                if(data && data.status ===1) {
-                    if(data.results && data.results.length>0) {
-                        let warnings = 0;
-                        data.results.forEach(val => {
-                            if(val && val.count) {
-                                warnings = warnings+ val.count;
-                            }
-                        });
-                        this.$store.commit('setWarning',warnings);
-                    }
+            let wType = 2;
+            getWarings(wType,user.id,'1','2018-09-01','').then((res) => {
+                if(res.data && Array.isArray(res.data.results)) {
+                    let warnings = 0;
+                    res.data.results.forEach(val => {
+                        if(val && val.count) {
+                            warnings = warnings+ val.count;
+                        }
+                    });
+                    this.$store.commit('setWarning',warnings);
                 }
             }).catch(err => {
                 console.log(err);
@@ -109,7 +107,7 @@ export default {
             if(observe$) {
                 observe$.unsubscribe();
             }
-            observe$ = getRepeateWaringList(user.corp_id).subscribe(res => {
+            observe$ = getRepeateWaringList(wType,user.id).subscribe(res => {
                 // console.log(res);
                 if(res && res.status ===1) {
                     if(res.results && res.results.length>0) {

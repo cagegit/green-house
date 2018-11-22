@@ -69,7 +69,6 @@
             async getCtrls(pid,token) {
                  try {
                     const res = await getControllers(pid,token);
-                    // console.log(res.data);
                     if(res.data && res.data.results && Array.isArray(res.data.results)) {
                         res.data.results.forEach(val => {
                             if(val.properties) {

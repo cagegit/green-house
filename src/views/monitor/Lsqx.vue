@@ -207,7 +207,7 @@
                 const cMonth = date.getMonth() +1;
                 let month = cMonth<10? '0'+cMonth: cMonth;
                 let defaultTime = cYear +''+ month +'01';
-                this.currentTime = defaultTime;
+                this.currentTime = cYear +'-'+ month +'-01';
                 // 默认日
                 this.currentDay = new Date(cYear,cMonth-1,1);
                 this.yearList = [cYear];
