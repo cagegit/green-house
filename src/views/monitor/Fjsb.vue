@@ -203,7 +203,7 @@
             const {propertys,controlHand,controlAuto,fxType,fxWeek,fxMonth,tasks,ctrlId,token} = this.$store.state;
             this.getAutoTasks(ctrlId,token);
             // console.log('taskId:'+taskItemId);
-            console.log(ctrlId);
+            // console.log(ctrlId);
             if(!propertys) {
                 this.$router.replace('/monitor/sbkz');
                 return;
@@ -256,8 +256,8 @@
                 clearTimeout(this.timeoutId);
                 this.timeoutId = setTimeout(() => {
                     const ctrlId = this.$store.state.ctrlId;
-                    const {deviceId,Channel,value,gatewayId} = this.pro;
-                    setController(deviceId,Channel,value,gatewayId,ctrlId)
+                    const {deviceId,sensorChannel,value,gatewayId} = this.pro;
+                    setController(deviceId,sensorChannel,value,gatewayId,ctrlId)
                         .then(res => {
                         })
                         .catch(err => {
